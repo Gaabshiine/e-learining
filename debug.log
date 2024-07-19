@@ -1,0 +1,219 @@
+Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\home_page_app\views.py", line 6, in home_view
+    return render(request, "home_page_app/index.html")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\template\backends\django.py", line 62, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\template\base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\template\base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\template\base.py", line 958, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\template\base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\template\base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\template\base.py", line 958, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\template\loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\template\base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\template\base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\template\base.py", line 958, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\template\loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\template\base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\template\base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\template\base.py", line 958, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\template\loader_tags.py", line 208, in render
+    return template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\template\base.py", line 177, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\template\base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\template\base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\template\base.py", line 958, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\templatetags\static.py", line 116, in render
+    url = self.url(context)
+          ^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\templatetags\static.py", line 113, in url
+    return self.handle_simple(path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\templatetags\static.py", line 129, in handle_simple
+    return staticfiles_storage.url(path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\contrib\staticfiles\storage.py", line 166, in url
+    return self._url(self.stored_name, name, force)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\contrib\staticfiles\storage.py", line 145, in _url
+    hashed_name = hashed_name_func(*args)
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\contrib\staticfiles\storage.py", line 465, in stored_name
+    raise ValueError(
+ValueError: Missing staticfiles manifest entry for 'home_page_app/images/mobile-bg.jpg);'
+"GET / HTTP/1.1" 500 0
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\offcanvas.html previous mtime: 1721422317.6798923, current mtime: 1721422499.9313738
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\offcanvas.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+"GET / HTTP/1.1" 200 204282
+"GET /static/home_page_app/images/mobile-bg.f85937d01f2c.jpg HTTP/1.1" 200 31279
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html previous mtime: 1721420599.3577564, current mtime: 1721422616.9687412
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+"GET / HTTP/1.1" 200 204249
+Not Found: /assets/images/logo.png
+"GET /assets/images/logo.png HTTP/1.1" 404 9784
+Not Found: /assets/images/logo.png
+"GET /assets/images/logo.png HTTP/1.1" 404 9784
+Not Found: /assets/images/logo.png
+"GET /assets/images/logo.png HTTP/1.1" 404 9784
+"GET / HTTP/1.1" 200 204249
+Not Found: /assets/images/logo.png
+"GET /assets/images/logo.png HTTP/1.1" 404 9784
+Not Found: /assets/images/logo.png
+"GET /assets/images/logo.png HTTP/1.1" 404 9784
+Not Found: /assets/images/logo.png
+"GET /assets/images/logo.png HTTP/1.1" 404 9784
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html previous mtime: 1721422616.9687412, current mtime: 1721422635.176004
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html previous mtime: 1721422635.176004, current mtime: 1721422637.8825417
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html previous mtime: 1721422637.8825417, current mtime: 1721422639.959387
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html previous mtime: 1721422639.959387, current mtime: 1721422651.0378907
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html previous mtime: 1721422651.0378907, current mtime: 1721422653.9115813
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html previous mtime: 1721422653.9115813, current mtime: 1721422655.530409
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html previous mtime: 1721422655.530409, current mtime: 1721422660.7820902
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html previous mtime: 1721422660.7820902, current mtime: 1721422666.8115275
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html previous mtime: 1721422666.8115275, current mtime: 1721422669.6029935
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+"GET / HTTP/1.1" 200 204278
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html previous mtime: 1721422669.6029935, current mtime: 1721422709.3724625
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html previous mtime: 1721422709.3724625, current mtime: 1721422832.4544668
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+"GET / HTTP/1.1" 200 204174
+"GET / HTTP/1.1" 200 204174
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html previous mtime: 1721422832.4544668, current mtime: 1721422873.4833076
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html previous mtime: 1721422873.4833076, current mtime: 1721422878.3476827
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html previous mtime: 1721422878.3476827, current mtime: 1721422891.9495847
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html previous mtime: 1721422891.9495847, current mtime: 1721422893.6995485
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_base.html previous mtime: 1721421702.5780797, current mtime: 1721422905.8153832
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_base.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+"GET / HTTP/1.1" 200 204293
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_base.html previous mtime: 1721422905.8153832, current mtime: 1721422917.3453324
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_base.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html previous mtime: 1721422893.6995485, current mtime: 1721422926.063056
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html previous mtime: 1721422926.063056, current mtime: 1721422927.4661791
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+"GET / HTTP/1.1" 200 204180
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html previous mtime: 1721422927.4661791, current mtime: 1721422949.4469876
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html previous mtime: 1721422949.4469876, current mtime: 1721422954.4155378
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html previous mtime: 1721422954.4155378, current mtime: 1721422971.838521
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+"GET / HTTP/1.1" 200 204183
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html previous mtime: 1721422971.838521, current mtime: 1721423004.9316738
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+"GET / HTTP/1.1" 200 203900
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html previous mtime: 1721423004.9316738, current mtime: 1721423027.746166
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html previous mtime: 1721423027.746166, current mtime: 1721423034.5375698
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html previous mtime: 1721423034.5375698, current mtime: 1721423044.619515
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html previous mtime: 1721423044.619515, current mtime: 1721423052.5299437
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html previous mtime: 1721423052.5299437, current mtime: 1721423058.213424
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html previous mtime: 1721423058.213424, current mtime: 1721423062.0072896
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html previous mtime: 1721423062.0072896, current mtime: 1721423064.2513196
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html previous mtime: 1721423064.2513196, current mtime: 1721423068.7738366
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+"GET / HTTP/1.1" 200 203920
+File C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\tzdata\zoneinfo\__init__.py first seen with mtime 1692159504.8854668
+File C:\Program Files\Python311\Lib\zipfile.py first seen with mtime 1686106818.0
+File C:\Program Files\Python311\Lib\importlib\resources\_itertools.py first seen with mtime 1686106818.0
+File C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\tzdata\__init__.py first seen with mtime 1692159504.7491505
+File C:\Program Files\Python311\Lib\importlib\resources\__init__.py first seen with mtime 1686106818.0
+File C:\Program Files\Python311\Lib\importlib\resources\_legacy.py first seen with mtime 1686106818.0
+File C:\Program Files\Python311\Lib\importlib\readers.py first seen with mtime 1686106818.0
+File C:\Program Files\Python311\Lib\importlib\resources\_adapters.py first seen with mtime 1686106818.0
+File C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\conf\locale\en\formats.py first seen with mtime 1697813543.6022205
+File C:\Program Files\Python311\Lib\importlib\resources\abc.py first seen with mtime 1686106818.0
+File C:\Program Files\Python311\Lib\importlib\resources\readers.py first seen with mtime 1686106818.0
+File C:\Program Files\Python311\Lib\importlib\resources\_common.py first seen with mtime 1686106818.0
+File C:\Users\gaabs\AppData\Roaming\Python\Python311\site-packages\django\conf\locale\en\__init__.py first seen with mtime 1697813543.6002567
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html previous mtime: 1721423068.7738366, current mtime: 1721423092.8683364
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+File C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html previous mtime: 1721423092.8683364, current mtime: 1721423096.4650657
+C:\Users\gaabs\Dropbox\all_e-learing\e-learning\e_learning\templates\home_page_partials\main_footer.html notified as changed. Signal results: [(<function template_changed at 0x000002585EA55260>, True), (<function translation_file_changed at 0x000002585F9B4720>, None)].
+"GET / HTTP/1.1" 200 203923
