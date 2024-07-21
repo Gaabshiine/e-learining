@@ -222,7 +222,9 @@
                 <!-- Event list Item Start -->
                 <div class="event-list-item" data-aos="fade-up" data-aos-duration="1000">
                     <div class="event-list-item__image">
-                        <a href="{% url "home_page_app:event_detail" 1 %}"><img src="{% static "home_page_app/images/event/event-thumbnail-10.jpg" %}" alt="Event" width="270" height="171"></a>
+                        <a href="{% url 'home_page_app:event_detail' 1 %}">
+                            <img src="{% static 'home_page_app/images/event/event-thumbnail-10.jpg' %}" alt="Event" width="270" height="171">
+                        </a>
                     </div>
                     <div class="event-list-item__content">
                         <div class="event-list-item__content-wrapper">
@@ -435,41 +437,7 @@
                 </div>
                 <!-- Event list Item End -->
 
-                <!-- Event list Item Start -->
-                <div class="event-list-item" data-aos="fade-up" data-aos-duration="1000">
-                    <div class="event-list-item__image">
-                        <a href="{% url "home_page_app:event_detail" 7 %}"><img src="{% static "home_page_app/images/event/event-thumbnail-10.jpg" %}" alt="Event" width="270" height="171"></a>
-                    </div>
-                    <div class="event-list-item__content">
-                        <div class="event-list-item__content-wrapper">
-                            <h3 class="event-list-item__title"><a href="{% url "home_page_app:event_detail" 7 %}">Things to Do – Virtual Celebration Brunch and Book Signing</a></h3>
-                            <div class="event-list-item__price">$20<span class="separator">.00</span></div>
-                            <div class="event-list-item__excerpt">
-                                <p>This is an excellent marketing opportunity to reach C-Suite level administrators and influential educators. Some limited vendor exhibitor spaces and sponsorships may still be available with speaking slots for vendor …</p>
-                            </div>
-                        </div>
-                        <div class="event-list-item__content-meta">
-                            <ul class="event-list-item__meta-items">
-                                <li class="event-list-item__meta-item">
-                                    <span class="meta-label"><i class="meta-label-icon fas  fa-clock"></i></span>
-                                    <span class="meta-value">9:30 am - 11:30 am</span>
-                                </li>
-                                <li class="event-list-item__meta-item">
-                                    <span class="meta-label"><i class="meta-label-icon fas  fa-calendar"></i></span>
-                                    <span class="meta-value">November 14, 2020</span>
-                                </li>
-                                <li class="event-list-item__meta-item">
-                                    <span class="meta-label"><i class="meta-label-icon fas  fa-map-marker-alt"></i></span>
-                                    <span class="meta-value">United States</span>
-                                </li>
-                            </ul>
-                            <div class="event-list-item__btn">
-                                <a class="btn btn-primary btn-hover-secondary" href="#">Get ticket</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Event list Item End -->
+    
 
                 <!-- Event list Item Start -->
                 <div class="event-list-item" data-aos="fade-up" data-aos-duration="1000">

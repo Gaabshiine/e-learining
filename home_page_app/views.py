@@ -26,5 +26,5 @@ def event_list_view(request):
     return render(request, "home_page_app/event_list.html")
 
 def event_detail_view(request, id):
-    return render(request, "home_page_app/event_detail.html")
+    return render(request, "home_page_app/event_detail.html", {'id': id})
 
