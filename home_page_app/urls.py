@@ -32,6 +32,10 @@ urlpatterns = [
     # intructors
     path("instructor_list/", views.instructor_list_view, name="instructor_list"),
     path("instructor_detail/<int:id>/", views.instructor_detail_view, name="instructor_detail"),
+
+
+
+    path("checkout/", views.checkout_view, name="checkout"),
     
 
 ]

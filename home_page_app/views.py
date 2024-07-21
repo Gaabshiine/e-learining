@@ -55,3 +55,8 @@ def instructor_detail_view(request, id):
 
 
 
+def checkout_view(request):
+    return render(request, "home_page_app/checkout.html")
+
+
+
