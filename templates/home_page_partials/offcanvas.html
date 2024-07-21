@@ -17,23 +17,12 @@
                 <li>
                     <a href="#"><span>Category</span></a>
                     <ul class="sub-menu">
-                        <li><a href="course-grid-01.html"><span>Grid Basic Layout</span></a></li>
-                        <li><a href="course-grid-02.html"><span>Grid Modern Layout</span></a></li>
-                        <li><a href="course-grid-left-sidebar.html"><span>Grid Left Sidebar</span></a></li>
-                        <li><a href="course-grid-right-sidebar.html"><span>Grid Right Sidebar</span></a></li>
-                        <li><a href="course-list.html"><span>List Basic Layout</span></a></li>
-                        <li><a href="course-list-left-sidebar.html"><span>List Left Sidebar</span></a></li>
-                        <li><a href="course-list-right-sidebar.html"><span>List Right Sidebar</span></a></li>
-                        <li><a href="course-category.html"><span>Category Page</span></a></li>
-                        <li>
-                            <a href="#"><span>Single Layout</span></a>
-                            <ul class="sub-menu">
-                                <li><a href="course-single-layout-01.html"><span>Layout 01</span></a></li>
-                                <li><a href="course-single-layout-02.html"><span>Layout 02</span></a></li>
-                                <li><a href="course-single-layout-03.html"><span>Layout 03</span></a></li>
-                                <li><a href="course-single-layout-04.html"><span>Layout 04</span></a></li>
-                            </ul>
-                        </li>
+                        <li><a href="{% url "home_page_app:course_category" 1 %}"><span>Diloma in Architectural Designing</span></a></li>
+                        <li><a href="{% url "home_page_app:course_category" 2 %}"><span>Diloma in Structural Engineering</span></a></li>
+                        <li><a href="{% url "home_page_app:course_category" 3 %}"><span>Diloma In BIM Manager</span></a></li>
+                        <li><a href="{% url "home_page_app:course_category" 4 %}"><span>Diloma in Construction magagment skills</span></a></li>
+                        <li><a href="{% url "home_page_app:course_category" 5 %}"><span>Diloma in computer base</span></a></li>
+                        <li><a href="{% url "home_page_app:course_category" 6 %}"><span>Computerized Accounting</span></a></li>
                     </ul>
                 </li>
                 <li>   
@@ -50,12 +39,12 @@
                         <span>Pages</span>
                     </a>
                     <ul class="sub-menu">
-                        <li><a class=""><span>About us</span></a></li>
-                        <li><a class=""><span>Contact us</span></a></li>
-                        <li><a class=""><span>Membership plans</span></a></li>
-                        <li><a class=""><span>FAQs</span></a></li>
-                        <li><a class=""><span>Our Instructors</span></a></li>
-                        <li><a class=""><span>Courses</span></a></li>
+                        <li><a class="" href="{% url 'home_page_app:about' %}"><span>About us</span></a></li>
+                        <li><a class="" href="{% url 'home_page_app:contact' %}"><span>Contact us</span></a></li>
+                        <li><a class="" href="{% url 'home_page_app:membership' %}"><span>Membership plans</span></a></li>
+                        <li><a class="" href="{% url 'home_page_app:faqs' %}"><span>FAQs</span></a></li>
+                        <li><a class="" href="{% url 'home_page_app:instructor_list' %}"><span>Our Instructors</span></a></li>
+                        <li><a class="" href="{% url "home_page_app:course_list" %}"><span>Courses</span></a></li>
                         <li><a class="" href="#"><span>Instructor Dashboard</span></a></li>
                         <li>
                             <a class="" href="#"><span>Student Dashboard</span></a>
