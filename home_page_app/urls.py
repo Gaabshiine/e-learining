@@ -19,4 +19,19 @@ urlpatterns = [
     # event urls
     path("event_list/", views.event_list_view, name="event_list"),
     path("event_detail/<int:id>/", views.event_detail_view, name="event_detail"),
+
+
+    path("zoom_meeting_list/", views.zoom_meeting_list_view, name="zoom_meeting_list"),
+    path("zoom_meeting_detail/<int:id>/", views.zoom_meeting_detail_view, name="zoom_meeting_detail"),
+
+    # course details
+    path("course_list/", views.course_list_view, name="course_list"),
+    path("course_detail/<int:id>/", views.course_detail_view, name="course_detail"),
+    path("course_category/<int:id>/", views.course_category_view, name="course_category"),
+
+    # intructors
+    path("instructor_list/", views.instructor_list_view, name="instructor_list"),
+    path("instructor_detail/<int:id>/", views.instructor_detail_view, name="instructor_detail"),
+    
+
 ]

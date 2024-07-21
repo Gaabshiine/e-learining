@@ -2628,10 +2628,12 @@ span.flatpickr-weekday {
   background: currentColor;
   transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
-.menu-primary__container > li > a.active {
+.menu-primary__container > li > a.active,
+.menu-primary__container > li > a:hover {
   color: #00b58b;
 }
-.menu-primary__container > li > a.active span::before {
+.menu-primary__container > li > a.active span::before,
+.menu-primary__container > li > a:hover span::before {
   width: 100%;
   background-color: #00b58b;
   left: 0;
@@ -2671,21 +2673,8 @@ span.flatpickr-weekday {
   font-weight: 700;
   margin-left: 8px;
 }
-.menu-primary__container > li:hover > a {
-  color: #00b58b;
-}
-.menu-primary__container > li:hover > a::before {
-  opacity: 1;
-  visibility: visible;
-  transition: all 0.4s cubic-bezier(0.645, 0.045, 0.355, 1);
-}
-.menu-primary__container > li:hover > a span::before {
-  width: 100%;
-  background-color: #00b58b;
-  left: 0;
-  right: auto;
-}
-.menu-primary__container > li:hover .sub-menu, .menu-primary__container > li:hover .mega-menu {
+.menu-primary__container > li:hover .sub-menu,
+.menu-primary__container > li:hover .mega-menu {
   transform: none;
   opacity: 1;
   visibility: visible;
@@ -2723,6 +2712,7 @@ span.flatpickr-weekday {
 .menu-primary__container-03 > li:hover > a span::before {
   background: #ffde59;
 }
+
 .menu-primary .sub-menu {
   margin: 0;
   padding: 13px 0 16px;

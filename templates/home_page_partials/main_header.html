@@ -33,11 +33,77 @@
                     <div class="header-category-dropdown-wrap">
                         <ul class="header-category-dropdown">
                             <li>
-                                <a href="shop-left-sidebar.html"> Design <span class="toggle-sub-menu"></span></a>
+                                <a href="{% url "home_page_app:course_category" 1 %}"> Diloma in Architectural Designing <span class="toggle-sub-menu"></span></a>
 
                                 <ul class="sub-categories children">
-                                    <li><a href="shop-left-sidebar.html">All Business</a></li>
-                                    <li>
+                                    <li><a href="{% url "home_page_app:course_detail" 1 %}">Sketchup 2024</a></li>
+                                    
+                                    <li><a href="{% url "home_page_app:course_detail" 2 %}">AutoCad 2024</a></li>
+                                    <li><a href="{% url "home_page_app:course_detail" 3 %}">Chief Architect</a></li>
+                                    <li><a href="{% url "home_page_app:course_detail" 4 %}">ArchiCad 26</a></li>
+                                    <li><a href="{% url "home_page_app:course_detail" 5 %}">Landscape</a></li>
+                                    <li><a href="{% url "home_page_app:course_detail" 6 %}">Lumion</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="{% url "home_page_app:course_category" 2 %}"> Diloma in Structural Engineering <span class="toggle-sub-menu"></span></a>
+
+                                <ul class="sub-categories children">
+                                    <li><a href="{% url "home_page_app:course_detail" 1 %}">Prokon</a></li>
+                                    
+                                    <li><a href="{% url "home_page_app:course_detail" 2 %}">Excel sheet design</a></li>
+                                    <li><a href="{% url "home_page_app:course_detail" 3 %}">Autocad</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="{% url "home_page_app:course_category" 3 %}"> Diloma In BIM Manager <span class="toggle-sub-menu"></span></a>
+
+                                <ul class="sub-categories children">
+                                    <li><a href="{% url "home_page_app:course_detail" 4 %}">Revit Architecture</a></li>
+  
+                                    <li><a href="{% url "home_page_app:course_detail" 5 %}">Revit Structure</a></li>
+                                    <li><a href="{% url "home_page_app:course_detail" 6 %}">4D</a></li>
+                                    <li><a href="{% url "home_page_app:course_detail" 7 %}">5D</a></li>
+                                    <li><a href="{% url "home_page_app:course_detail" 8 %}">Prota structure</a></li>
+                                    <li><a href="{% url "home_page_app:course_detail" 9 %}">Autocad str detailing</a></li>
+                                    <li><a href="{% url "home_page_app:course_detail" 10 %}">Etab</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="{% url "home_page_app:course_category" 4 %}"> Diloma in Construction magagment skills <span class="toggle-sub-menu"></span></a>
+
+                                <ul class="sub-categories children">
+                                    <li><a href="{% url "home_page_app:course_detail" 11 %}">Sida loo qorsheeyo shaqada Dhismaha</a></li>
+       
+                                    <li><a href="{% url "home_page_app:course_detail" 12 %}">Sida loo maamulo goobta dhisamaha</a></li>
+                                    <li><a href="{% url "home_page_app:course_detail" 13 %}">Sida loo maamulo lacagta Dhismaha</a></li>
+                                    <li><a href="{% url "home_page_app:course_detail" 14 %}">Sida loo Diyaariyo warbixinta Dhismaha</a></li>
+                                    <li><a href="{% url "home_page_app:course_detail" 15 %}">Health & Safety-ga Goobta Dhismaha</a></li>
+                                </ul>
+                            </li>
+
+                            <li>
+                                <a href="{% url "home_page_app:course_detail" 15 %}">Diloma in computer base <span class="toggle-sub-menu"></span></a>
+
+                                <ul class="sub-categories children">
+                                    <li><a href="{% url "home_page_app:course_detail" 16 %}">Windows 10</a></li>
+                                    
+                                    <li><a href="{% url "home_page_app:course_detail" 17 %}">Microsoft word</a></li>
+                                    <li><a href="{% url "home_page_app:course_detail" 18 %}">Microsoft Excel</a></li>
+                                    <li><a href="{% url "home_page_app:course_detail" 19 %}">Microsoft Access</a></li>
+                                    <li><a href="{% url "home_page_app:course_detail" 20 %}">Microsoft Power Point</a></li>
+                                    <li><a href="{% url "home_page_app:course_detail" 21 %}">Microsoft Publisher</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="{% url "home_page_app:course_detail" 22 %}">Diloma in Cost Estimation</a></li>
+                            <li><a href="{% url "home_page_app:course_detail" 23 %}">Diloma In web design</a></li>
+                            <li><a href="{% url "home_page_app:course_detail" 24 %}">diploma in e commerce</a></li>
+                            <li>
+                                <a href="{% url "home_page_app:course_category" 25 %}">Computerized Accounting <span class="toggle-sub-menu"></span></a>
+
+                                <ul class="sub-categories children">
+                                    <li><a href="{% url "home_page_app:course_detail" 26 %}">QuickBooks Enterprise Solution.</a></li>
+                                    {% comment %} <li>
                                         <a href="#">Communications<span class="toggle-sub-menu"></span></a>
 
                                         <ul class="course-list children">
@@ -84,15 +150,10 @@
                                                 </a>
                                             </li>
                                         </ul>
-                                    </li>
-                                    <li><a href="shop-left-sidebar.html">Entrepreneurship</a></li>
-                                    <li><a href="shop-left-sidebar.html">Strategy &amp; Analytics</a></li>
+                                    </li> {% endcomment %}
+                                    <li><a href="{% url "home_page_app:course_detail" 27 %}">Odoo (On-Demand Open Object)</a></li>
                                 </ul>
                             </li>
-                            <li><a href="shop-left-sidebar.html">Business</a></li>
-                            <li><a href="shop-left-sidebar.html">Data Science</a></li>
-                            <li><a href="shop-left-sidebar.html">Development</a></li>
-                            <li><a href="shop-left-sidebar.html">Teaching &amp; Academics</a></li>
                         </ul>
                     </div>
                 </div>
@@ -114,58 +175,44 @@
                     <div class="header-navigation d-none d-xl-block">
                         <nav class="menu-primary">
                             <ul class="menu-primary__container">
-                                <li><a class="active" href="{% url "home_page_app:home" %}"><span>Home</span></a></li>
                                 <li>
-                                    <a href="#"><span>Features</span></a>
+                                    <a class="{% if request.path == '/' %}active{% endif %}" href="{% url 'home_page_app:home' %}">
+                                        <span>Home</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="{% if 'features' in request.path or 'event_list' in request.path or 'checkout' in request.path or 'zoom_meeting_list' in request.path %}active{% endif %}" href="#">
+                                        <span>Features</span>
+                                    </a>
                                     <ul class="sub-menu">
-                                        <li><a href="{% url "home_page_app:event_list" %}"><span>Events</span></a></li>
-                                        <li><a href="checkout.html"><span>Checkout</span></a></li>
-                                        <li><a href="zoom-meetings.html"><span>Zoom Meetings</span></a></li>
+                                        <li><a class="{% if 'event_list' in request.path %}active{% endif %}" href="{% url 'home_page_app:event_list' %}"><span>Events</span></a></li>
+                                        <li><a class="{% if 'checkout' in request.path %}active{% endif %}" href="checkout.html"><span>Checkout</span></a></li>
+                                        <li><a class="{% if 'zoom_meeting_list' in request.path %}active{% endif %}" href="{% url 'home_page_app:zoom_meeting_list' %}"><span>Zoom Meetings</span></a></li>
                                     </ul>
                                 </li>
-
                                 <li>
-                                    <a href="#"><span>Pages</span></a>
+                                    <a class="{% if 'pages' in request.path or 'instructors' in request.path or 'about' in request.path or 'contact' in request.path or 'membership' in request.path or 'faqs' in request.path or 'course_list' in request.path or 'instructor_list' in request.path or 'student-dashboard' in request.path %}active{% endif %}" href="#">
+                                        <span>Pages</span>
+                                    </a>
                                     <ul class="sub-menu">
-                                        
+                                        <li><a class="{% if 'about' in request.path %}active{% endif %}" href="{% url 'home_page_app:about' %}"><span>About us</span></a></li>
+                                        <li><a class="{% if 'contact' in request.path %}active{% endif %}" href="{% url 'home_page_app:contact' %}"><span>Contact us</span></a></li>
+                                        <li><a class="{% if 'membership' in request.path %}active{% endif %}" href="{% url 'home_page_app:membership' %}"><span>Membership plans</span></a></li>
+                                        <li><a class="{% if 'faqs' in request.path %}active{% endif %}" href="{% url 'home_page_app:faqs' %}"><span>FAQs</span></a></li>
+                                        <li><a class="{% if 'instructor_list' in request.path %}active{% endif %}" href="{% url 'home_page_app:instructor_list' %}"><span>Our Instructors</span></a></li>
+                                        <li><a class="{% if 'course_list' in request.path %}active{% endif %}" href="{% url 'home_page_app:course_list' %}"><span>Courses</span></a></li>
+                                        <li><a class="{% if 'instructors' in request.path %}active{% endif %}" href="instructors.html"><span>Instructor Dashboard</span></a></li>
                                         <li>
-                                            <a href="instructors.html"><span>Instructor Dashboard</span></a>
-                                            <ul class="sub-menu">
-                                                <li><a href="dashboard-my-courses.html"><span>My Courses</span></a></li>
-                                                <li><a href="dashboard-announcement.html"><span>Announcements</span></a></li>
-                                                <li><a href="dashboard-withdraw.html"><span>Withdrawals</span></a></li>
-                                                <li><a href="dashboard-quiz-attempts.html"><span>Quiz Attempts</span></a></li>
-                                                <li><a href="dashboard-question-answer.html"><span>Question & Answer</span></a></li>
-                                                <li><a href="dashboard-assignments.html"><span>Assignments</span></a></li>
-                                                <li><a href="dashboard-students.html"><span>My Students</span></a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="{% url "home_page_app:about" %}"><span>About us</span></a></li>
-                                       
-                                        <li><a href="{% url "home_page_app:contact" %}"><span>Contact us</span></a></li>
-                                        
-                                        <li><a href="{% url "home_page_app:membership" %}"><span>Membership plans</span></a></li>
-                                        <li><a href="{% url "home_page_app:faqs" %}"><span>FAQs</span></a></li>
-                                       
-                                        <li>
-                                            <a href="#"><span>Student Dashboard</span></a>
-                                            <ul class="sub-menu">
-                                                <li><a href="dashboard-index.html"><span>Dashboard</span></a></li>
-                                                <li><a href="dashboard-student-index.html"><span>Dashboard Student</span></a></li>
-                                                <li><a href="dashboard-profile.html"><span>My Profile</span></a></li>
-                                                <li><a href="dashboard-all-course.html"><span>Enrolled Courses</span></a></li>
-                                                <li><a href="dashboard-wishlist.html"><span>Wishlist</span></a></li>
-                                                <li><a href="dashboard-reviews.html"><span>Reviews</span></a></li>
-                                                <li><a href="dashboard-my-quiz-attempts.html"><span>My Quiz Attempts</span></a></li>
-                                                <li><a href="dashboard-purchase-history.html"><span>Purchase History</span></a></li>
-                                                <li><a href="dashboard-settings.html"><span>Settings</span></a></li>
-                                            </ul>
+                                            <a class="{% if 'student-dashboard' in request.path %}active{% endif %}" href="#"><span>Student Dashboard</span></a>
                                         </li>
                                     </ul>
                                 </li>
                             </ul>
                         </nav>
                     </div>
+                    
+                    
+                    
                     <!-- Header Navigation End -->
 
                     <!-- Header Mini Cart Start -->

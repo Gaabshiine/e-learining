@@ -28,3 +28,30 @@ def event_list_view(request):
 def event_detail_view(request, id):
     return render(request, "home_page_app/event_detail.html", {'id': id})
 
+
+def zoom_meeting_list_view(request):
+    return render(request, "home_page_app/zoom_meeting_list.html")
+
+def zoom_meeting_detail_view(request, id):
+    return render(request, "home_page_app/zoom_meeting_detail.html", {'id': id})
+
+
+def course_list_view(request):
+    return render(request, "home_page_app/course_list.html")
+
+def course_detail_view(request, id):
+    return render(request, "home_page_app/course_detail.html", {'id': id})
+
+def course_category_view(request, id):
+    return render(request, "home_page_app/course_category.html", {'id': id})
+
+
+
+def instructor_list_view(request):
+    return render(request, "home_page_app/instructor_list.html")
+
+def instructor_detail_view(request, id):
+    return render(request, "home_page_app/intructor_details.html", {'id': id})
+
+
+
