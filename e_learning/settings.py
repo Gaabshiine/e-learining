@@ -62,6 +62,7 @@ LOGGING = {
 # Application definition
 
 INSTALLED_APPS = [
+    'django.contrib.sitemaps',
     'account_app',
     'home_page_app',
     'admin_page_app',

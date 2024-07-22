@@ -1,0 +1,97 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+
+
+{% block title %}Purchase History - Purchase{% endblock %}
+
+{% block dashboard_content %}
+<div class="dashboard-content">
+    <div class="container">
+        <h4 class="dashboard-title">Purchase History</h4>
+        
+        <!-- Dashboard Purchase History Start -->
+        <div class="dashboard-purchase-history">
+            <div class="dashboard-table table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="product">Product</th>
+                            <th class="price text-center">Price</th>
+                            <th class="action text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="product">
+                                <div class="cart-product">
+                                    <div class="cart-product__thumbnail">
+                                        <img src="{% static 'home_page_app/images/product/product-2.png' %}" alt="Product" width="70" height="81">
+                                    </div>
+                                    <div class="cart-product__content">
+                                        <h3 class="cart-product__name">Awesome for Websites</h3>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="price text-center">
+                                <div class="cart-product__price">
+                                    <span class="sale-price">$59.<small class="separator">00</small></span>
+                                </div>
+                            </td>
+                            <td class="action text-center">
+                                <div class="cart-product__remove">
+                                    <a class="remove" href="#">Remove</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="product">
+                                <div class="cart-product">
+                                    <div class="cart-product__thumbnail">
+                                        <img src="{% static 'home_page_app/images/product/product-3.png' %}" alt="Product" width="70" height="81">
+                                    </div>
+                                    <div class="cart-product__content">
+                                        <h3 class="cart-product__name">Business Administration</h3>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="price text-center">
+                                <div class="cart-product__price">
+                                    <span class="sale-price">$26.<small class="separator">00</small></span>
+                                </div>
+                            </td>
+                            <td class="action text-center">
+                                <div class="cart-product__remove">
+                                    <a class="remove" href="#">Remove</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="product">
+                                <div class="cart-product">
+                                    <div class="cart-product__thumbnail">
+                                        <img src="{% static 'home_page_app/images/product/product-14.png' %}" alt="Product" width="70" height="81">
+                                    </div>
+                                    <div class="cart-product__content">
+                                        <h3 class="cart-product__name">The Five Invitations</h3>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="price text-center">
+                                <div class="cart-product__price">
+                                    <span class="sale-price">$42.<small class="separator">00</small></span>
+                                </div>
+                            </td>
+                            <td class="action text-center">
+                                <div class="cart-product__remove">
+                                    <a class="remove" href="#">Remove</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- Dashboard Purchase History End -->
+    </div>
+</div>
+{% endblock %}

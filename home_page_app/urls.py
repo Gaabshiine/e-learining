@@ -3,6 +3,13 @@ from django.urls import path
 from . import views
 
 
+from django.contrib.sitemaps.views import sitemap
+from e_learning.sitemaps import StaticViewSitemap
+
+sitemaps = {
+    'static': StaticViewSitemap,
+}
+
 app_name = "home_page_app"
 
 urlpatterns = [
@@ -40,6 +47,32 @@ urlpatterns = [
    
    # checkout either for purchased or empty purchase for the student
    path("checkout/", views.checkout_view, name="checkout"),
+
+
+    # student dashboard or profile
+    path("student_dasbhoard/<int:id>/", views.student_dashboard, name="student_dashboard"),
+    path("my_profile/<int:id>/", views.student_profile, name="student_profile"),
+    path("enrolled_courses/<int:id>/", views.enrolled_courses, name="enrolled_courses"),
+    path("wish_list/<int:id>/", views.wish_list, name="wish_list"),
+    # review 
+    path("review/<int:id>/", views.review_view, name="review"),
+
+    # quiz attempts
+    path("quiz_attempts/<int:id>/", views.quiz_attempts, name="quiz_attempts"),
+    path("quiz_attempt_detail/<int:id>/", views.quiz_attempt_detail, name="quiz_attempt_detail"),
+
+    
+    path("purchase_history/<int:id>/", views.purchase_history, name="purchase_history"),
+
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='sitemap'),
+
+    
+
+
+
+    
+
+    
    
  
 

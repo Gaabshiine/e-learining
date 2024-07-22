@@ -65,6 +65,37 @@ def checkout_view(request):
 
 
 
+def student_dashboard(request, id):
+    return render(request, "home_page_app/dashboard_student_dashboard.html", {'id': id})
+
+
+def student_profile(request, id):
+    return render(request, "home_page_app/dashboard_student_profile.html", {'id': id})
+
+
+def enrolled_courses(request, id):
+    return render(request, "home_page_app/dashboard_enrolled_courses.html", {'id': id})
+
+
+def wish_list(request, id):
+    return render(request, "home_page_app/dashboard_wish_list.html", {'id': id})
+
+
+def review_view(request, id):
+    return render(request, "home_page_app/dashboard_review.html", {'id': id})
+
+
+def quiz_attempts(request, id):
+    return render(request, "home_page_app/dashboard_quiz_attempts.html", {'id': id})
+
+def quiz_attempt_detail(request, id):
+    return render(request, "home_page_app/dashboard_quiz_attempt_detail.html", {'id': id})
+
+
+def purchase_history(request, id):
+    return render(request, "home_page_app/dashboard_purchase_history.html", {'id': id})
+
+
 
 
 

@@ -10,7 +10,7 @@
                 <div class="col-md-4">
                     <!-- Footer Widget Start -->
                     <div class="footer-widget">
-                        <a href="#" class="footer-widget__logo"><img src="{% static "home_page_app/images/logo.png" %} " width="296" height="100" alt="Logo"></a>
+                        <a href="{% url 'home_page_app:home' %}" class="footer-widget__logo"><img src="{% static "home_page_app/images/logo.png" %}" width="296" height="100" alt="Logo"></a>
 
                         <div class="footer-widget__info">
                             <span class="title">Call us</span>
@@ -40,11 +40,10 @@
                                 <h4 class="footer-widget__title">About</h4>
 
                                 <ul class="footer-widget__link">
-                                    <li><a href="about.html">About Us</a></li>
-                                    <li><a href="course-grid-left-sidebar.html">Courses</a></li>
-                                    <li><a href="instructors.html">Instructor</a></li>
-                                    <li><a href="event-grid-sidebar.html">Events</a></li>
-                                    <li><a href="become-an-instructor.html">Become A Teacher</a></li>
+                                    <li><a href="{% url 'home_page_app:about' %}">About Us</a></li>
+                                    <li><a href="{% url 'home_page_app:course_list' %}">Courses</a></li>
+                                    <li><a href="{% url 'home_page_app:instructor_list' %}">Instructor</a></li>
+                                    <li><a href="{% url 'home_page_app:event_list' %}">Events</a></li>
                                 </ul>
                             </div>
                             <!-- Footer Widget End -->
@@ -55,8 +54,6 @@
                                 <h4 class="footer-widget__title">Links</h4>
 
                                 <ul class="footer-widget__link">
-                                    <li><a href="blog-grid-left-sidebar.html">News & Blogs</a></li>
-                                    <li><a href="#">Library</a></li>
                                     <li><a href="#">Gallery</a></li>
                                     <li><a href="#">Partners</a></li>
                                     <li><a href="#">Career</a></li>
@@ -71,9 +68,9 @@
 
                                 <ul class="footer-widget__link">
                                     <li><a href="#">Documentation</a></li>
-                                    <li><a href="faqs.html">FAQs</a></li>
+                                    <li><a href="{% url 'home_page_app:faqs' %}">FAQs</a></li>
                                     <li><a href="#">Forum</a></li>
-                                    <li><a href="#">Sitemap</a></li>
+                                    <li><a href="{% url "home_page_app:sitemap" %}">Sitemap</a></li>
                                 </ul>
                             </div>
                             <!-- Footer Widget End -->

@@ -46,7 +46,8 @@
     {% block main %}
     <main class="main-wrapper">
         <!-- Header Start -->
-        {% block header %}{% endblock  %}
+        {% block header %}
+        {% endblock  %}
         <!-- Header End -->
 
         <!-- slider Start -->
@@ -282,8 +283,8 @@
 
     <!-- Activation JS -->
     <script src="{% static "home_page_app/js/main.js" %}"></script>
-
     
-
-
+    {% block js_files %}{% endblock %}
 </body>
+
+</html>
