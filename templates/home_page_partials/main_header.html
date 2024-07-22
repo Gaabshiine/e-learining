@@ -186,7 +186,7 @@
                                     </a>
                                     <ul class="sub-menu">
                                         <li><a class="{% if 'event_list' in request.path %}active{% endif %}" href="{% url 'home_page_app:event_list' %}"><span>Events</span></a></li>
-                                        <li><a class="{% if 'checkout' in request.path %}active{% endif %}" href="checkout.html"><span>Checkout</span></a></li>
+                                        <li><a class="{% if 'checkout' in request.path %}active{% endif %}" href="{% url "home_page_app:checkout" %}"><span>Checkout</span></a></li>
                                         <li><a class="{% if 'zoom_meeting_list' in request.path %}active{% endif %}" href="{% url 'home_page_app:zoom_meeting_list' %}"><span>Zoom Meetings</span></a></li>
                                     </ul>
                                 </li>

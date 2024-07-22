@@ -35,7 +35,15 @@ urlpatterns = [
 
 
 
-    path("checkout/", views.checkout_view, name="checkout"),
+    path("purchase/", views.purchase_view, name="purchase"),
+
+   
+   # checkout either for purchased or empty purchase for the student
+   path("checkout/", views.checkout_view, name="checkout"),
+   
+ 
+
+
     
 
 ]
