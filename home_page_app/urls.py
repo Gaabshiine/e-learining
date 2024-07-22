@@ -66,6 +66,8 @@ urlpatterns = [
 
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='sitemap'),
 
+    path('certificates/<int:id>/', views.certificates_view, name='certificates'),
+
     
 
 

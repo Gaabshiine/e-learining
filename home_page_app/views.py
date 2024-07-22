@@ -96,6 +96,10 @@ def purchase_history(request, id):
     return render(request, "home_page_app/dashboard_purchase_history.html", {'id': id})
 
 
+def certificates_view(request, id):
+    return render(request, 'home_page_app/dashboard_certificates.html', {id: id})
+
+
 
 
 

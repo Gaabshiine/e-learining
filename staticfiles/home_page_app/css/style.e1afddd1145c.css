@@ -338,8 +338,8 @@ hr {
   mask-repeat: no-repeat;
   -webkit-mask-size: contain;
   mask-size: contain;
-  -webkit-mask-image: url(../images/headline-curve.svg);
-  mask-image: url(../images/headline-curve.svg);
+  -webkit-mask-image: url("../images/headline-curve.b64d83c167c6.svg");
+  mask-image: url("../images/headline-curve.b64d83c167c6.svg");
 }
 .section-title__title span {
   color: #00b58b;
@@ -386,8 +386,8 @@ hr {
   mask-repeat: no-repeat;
   -webkit-mask-size: contain;
   mask-size: contain;
-  -webkit-mask-image: url(../images/headline-curve.svg);
-  mask-image: url(../images/headline-curve.svg);
+  -webkit-mask-image: url("../images/headline-curve.b64d83c167c6.svg");
+  mask-image: url("../images/headline-curve.b64d83c167c6.svg");
 }
 .section-title__title-02 span {
   color: #00b58b;
@@ -434,8 +434,8 @@ hr {
   mask-repeat: no-repeat;
   -webkit-mask-size: contain;
   mask-size: contain;
-  -webkit-mask-image: url(../images/headline-curve.svg);
-  mask-image: url(../images/headline-curve.svg);
+  -webkit-mask-image: url("../images/headline-curve.b64d83c167c6.svg");
+  mask-image: url("../images/headline-curve.b64d83c167c6.svg");
 }
 .section-title__title-03 span {
   color: #00b58b;
@@ -445,16 +445,16 @@ hr {
 }
 
 .mark-title.section-title__title mark::after {
-  -webkit-mask-image: url(../images/headline-curve-02.svg);
-  mask-image: url(../images/headline-curve-02.svg);
+  -webkit-mask-image: url("../images/headline-curve-02.4b5383bbd2a5.svg");
+  mask-image: url("../images/headline-curve-02.4b5383bbd2a5.svg");
 }
 .mark-title.section-title__title-02 mark::after {
-  -webkit-mask-image: url(../images/headline-curve-02.svg);
-  mask-image: url(../images/headline-curve-02.svg);
+  -webkit-mask-image: url("../images/headline-curve-02.4b5383bbd2a5.svg");
+  mask-image: url("../images/headline-curve-02.4b5383bbd2a5.svg");
 }
 .mark-title.section-title__title-03 mark::after {
-  -webkit-mask-image: url(../images/headline-curve-02.svg);
-  mask-image: url(../images/headline-curve-02.svg);
+  -webkit-mask-image: url("../images/headline-curve-02.4b5383bbd2a5.svg");
+  mask-image: url("../images/headline-curve-02.4b5383bbd2a5.svg");
 }
 
 .section-btn {
@@ -5565,8 +5565,8 @@ span.flatpickr-weekday {
   mask-repeat: no-repeat;
   -webkit-mask-size: contain;
   mask-size: contain;
-  -webkit-mask-image: url(../images/headline-curve.svg);
-  mask-image: url(../images/headline-curve.svg);
+  -webkit-mask-image: url("../images/headline-curve.b64d83c167c6.svg");
+  mask-image: url("../images/headline-curve.b64d83c167c6.svg");
 }
 .slider-caption p {
   font-size: 18px;
@@ -5645,8 +5645,8 @@ span.flatpickr-weekday {
   mask-repeat: no-repeat;
   -webkit-mask-size: contain;
   mask-size: contain;
-  -webkit-mask-image: url(../images/headline-curve.svg);
-  mask-image: url(../images/headline-curve.svg);
+  -webkit-mask-image: url("../images/headline-curve.b64d83c167c6.svg");
+  mask-image: url("../images/headline-curve.b64d83c167c6.svg");
 }
 .slider-caption-02 p {
   font-size: 24px;
@@ -5745,8 +5745,8 @@ span.flatpickr-weekday {
   mask-repeat: no-repeat;
   -webkit-mask-size: contain;
   mask-size: contain;
-  -webkit-mask-image: url(../images/headline-curve.svg);
-  mask-image: url(../images/headline-curve.svg);
+  -webkit-mask-image: url("../images/headline-curve.b64d83c167c6.svg");
+  mask-image: url("../images/headline-curve.b64d83c167c6.svg");
 }
 
 .slider-caption-04__sub-title {
@@ -5963,8 +5963,8 @@ span.flatpickr-weekday {
   mask-repeat: no-repeat;
   -webkit-mask-size: contain;
   mask-size: contain;
-  -webkit-mask-image: url(../images/headline-curve.svg);
-  mask-image: url(../images/headline-curve.svg);
+  -webkit-mask-image: url("../images/headline-curve.b64d83c167c6.svg");
+  mask-image: url("../images/headline-curve.b64d83c167c6.svg");
 }
 .slider-caption-06__main-title small {
   font-size: 48px;
@@ -6094,8 +6094,8 @@ span.flatpickr-weekday {
   mask-repeat: no-repeat;
   -webkit-mask-size: contain;
   mask-size: contain;
-  -webkit-mask-image: url(../images/headline-curve.svg);
-  mask-image: url(../images/headline-curve.svg);
+  -webkit-mask-image: url("../images/headline-curve.b64d83c167c6.svg");
+  mask-image: url("../images/headline-curve.b64d83c167c6.svg");
 }
 .slider-caption-07__main-title small {
   font-size: 48px;
@@ -6195,8 +6195,8 @@ span.flatpickr-weekday {
   mask-repeat: no-repeat;
   -webkit-mask-size: contain;
   mask-size: contain;
-  -webkit-mask-image: url(../images/headline-curve.svg);
-  mask-image: url(../images/headline-curve.svg);
+  -webkit-mask-image: url("../images/headline-curve.b64d83c167c6.svg");
+  mask-image: url("../images/headline-curve.b64d83c167c6.svg");
 }
 .slider-caption-08 p {
   max-width: 410px;
@@ -6984,8 +6984,8 @@ span.flatpickr-weekday {
   mask-repeat: no-repeat;
   -webkit-mask-size: contain;
   mask-size: contain;
-  -webkit-mask-image: url(../images/headline-curve.svg);
-  mask-image: url(../images/headline-curve.svg);
+  -webkit-mask-image: url("../images/headline-curve.b64d83c167c6.svg");
+  mask-image: url("../images/headline-curve.b64d83c167c6.svg");
 }
 .courses-tab-menu-03 .nav li button.active {
   color: #252525;
@@ -8935,8 +8935,8 @@ span.flatpickr-weekday {
   mask-repeat: no-repeat;
   -webkit-mask-size: contain;
   mask-size: contain;
-  -webkit-mask-image: url(../images/headline-curve-02.svg);
-  mask-image: url(../images/headline-curve-02.svg);
+  -webkit-mask-image: url("../images/headline-curve-02.4b5383bbd2a5.svg");
+  mask-image: url("../images/headline-curve-02.4b5383bbd2a5.svg");
 }
 
 .testimonial-item-04 {
@@ -12550,8 +12550,8 @@ span.flatpickr-weekday {
   mask-repeat: no-repeat;
   -webkit-mask-size: contain;
   mask-size: contain;
-  -webkit-mask-image: url(../images/headline-curve.svg);
-  mask-image: url(../images/headline-curve.svg);
+  -webkit-mask-image: url("../images/headline-curve.b64d83c167c6.svg");
+  mask-image: url("../images/headline-curve.b64d83c167c6.svg");
 }
 .countdown-title p {
   margin-top: 12px;
@@ -12777,8 +12777,8 @@ span.flatpickr-weekday {
   mask-repeat: no-repeat;
   -webkit-mask-size: contain;
   mask-size: contain;
-  -webkit-mask-image: url(../images/headline-curve-02.svg);
-  mask-image: url(../images/headline-curve-02.svg);
+  -webkit-mask-image: url("../images/headline-curve-02.4b5383bbd2a5.svg");
+  mask-image: url("../images/headline-curve-02.4b5383bbd2a5.svg");
 }
 .download-content-02 p {
   font-size: 15px;

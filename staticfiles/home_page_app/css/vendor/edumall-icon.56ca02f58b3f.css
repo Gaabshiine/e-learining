@@ -2,8 +2,8 @@
 
 @font-face {
     font-family: Edumallicon;
-    src: url(../../fonts/edumi/Edumalldb55.eot?9ajmsy);
-    src: url(../../fonts/edumi/Edumalldb55.eot?9ajmsy#iefix) format("embedded-opentype"), url(../../fonts/edumi/Edumalldb55.ttf?9ajmsy) format("truetype"), url(../../fonts/edumi/Edumalldb55.woff?9ajmsy) format("woff"), url(../../fonts/edumi/Edumalldb55.svg?9ajmsy#Edumall) format("svg");
+    src: url("../../fonts/edumi/Edumalldb55.20da5ff2f0b0.eot?9ajmsy");
+    src: url("../../fonts/edumi/Edumalldb55.20da5ff2f0b0.eot?9ajmsy#iefix") format("embedded-opentype"), url("../../fonts/edumi/Edumalldb55.84b677e97222.ttf?9ajmsy") format("truetype"), url("../../fonts/edumi/Edumalldb55.d16528c59a22.woff?9ajmsy") format("woff"), url("../../fonts/edumi/Edumalldb55.91ed0a2396c2.svg?9ajmsy#Edumall") format("svg");
     font-weight: 400;
     font-style: normal;
     font-display: block
@@ -127,3 +127,5 @@
 .edumi-video-call:before {
     content: "\f117"
 }
+
+.edumi-certificate:before { content: "\e901"; } /* Use the correct Unicode value from your font file */

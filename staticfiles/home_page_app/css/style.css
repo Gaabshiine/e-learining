@@ -20320,3 +20320,34 @@ span.flatpickr-weekday {
 .dashboard-withdraw-method-form > *:first-child {
   margin-top: 0;
 }
+
+
+.certificate-card {
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-bottom: 20px;
+  text-align: center;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.certificate-image img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 15px;
+}
+
+.certificate-info {
+  padding: 10px;
+}
+
+.certificate-title {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.certificate-date {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 15px;
+}
