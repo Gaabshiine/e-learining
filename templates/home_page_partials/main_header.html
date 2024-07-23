@@ -129,7 +129,7 @@
                                         <li><a class="{% if 'faqs' in request.path %}active{% endif %}" href="{% url 'home_page_app:faqs' %}"><span>FAQs</span></a></li>
                                         <li><a class="{% if 'instructor_list' in request.path %}active{% endif %}" href="{% url 'home_page_app:instructor_list' %}"><span>Our Instructors</span></a></li>
                                         <li><a class="{% if 'course_list' in request.path %}active{% endif %}" href="{% url 'home_page_app:course_list' %}"><span>Courses</span></a></li>
-                                        <li><a class="{% if 'instructors' in request.path %}active{% endif %}" href="#"><span>Instructor Dashboard</span></a></li>
+                                        {% comment %} <li><a class="{% if 'instructors' in request.path %}active{% endif %}" href="#"><span>Instructor Dashboard</span></a></li> {% endcomment %}
                                         <li><a class="{% if 'student-dashboard' in request.path %}active{% endif %}" href="{% url "home_page_app:student_dashboard" 1 %}"><span>Student Dashboard</span></a></li>
                                     </ul>
                                 </li>
