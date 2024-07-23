@@ -1,21 +1,19 @@
-  {% load static %}
-  
-  <!-- Header start -->
-  <div class="header-section header-sticky">
+{% load static %}
 
-           
-
+<!-- Header Start -->
+<div class="header-section header-sticky">
     <!-- Header Main Start -->
     <div class="header-main">
         <div class="container">
             <!-- Header Main Wrapper Start -->
             <div class="header-main-wrapper">
-
                 <!-- Header Logo Start -->
                 <div class="header-logo">
-                    <a class="header-logo__logo" href="{% url "home_page_app:home" %}"><img src="{% static "home_page_app/images/logo.png" %} " width="296" height="100" alt="Logo"></a>
+                    <a class="header-logo__logo" href="{% url "home_page_app:home" %}">
+                        <img src="{% static "home_page_app/images/logo.png" %}" width="296" height="100" alt="Logo">
+                    </a>
                 </div>
-                <!-- Header Logo End -->         
+                <!-- Header Logo End -->
 
                 <!-- Header Category Menu Start -->
                 <div class="header-category-menu d-none d-xl-block">
@@ -29,15 +27,12 @@
                         </div>
                         <div class="header-category-toggle__text">Category</div>
                     </a>
-
                     <div class="header-category-dropdown-wrap">
                         <ul class="header-category-dropdown">
                             <li>
-                                <a href="{% url "home_page_app:course_category" 1 %}"> Diloma in Architectural Designing <span class="toggle-sub-menu"></span></a>
-
+                                <a href="{% url "home_page_app:course_category" 1 %}">Diloma in Architectural Designing <span class="toggle-sub-menu"></span></a>
                                 <ul class="sub-categories children">
                                     <li><a href="{% url "home_page_app:course_detail" 1 %}">Sketchup 2024</a></li>
-                                    
                                     <li><a href="{% url "home_page_app:course_detail" 2 %}">AutoCad 2024</a></li>
                                     <li><a href="{% url "home_page_app:course_detail" 3 %}">Chief Architect</a></li>
                                     <li><a href="{% url "home_page_app:course_detail" 4 %}">ArchiCad 26</a></li>
@@ -46,21 +41,17 @@
                                 </ul>
                             </li>
                             <li>
-                                <a href="{% url "home_page_app:course_category" 2 %}"> Diloma in Structural Engineering <span class="toggle-sub-menu"></span></a>
-
+                                <a href="{% url "home_page_app:course_category" 2 %}">Diloma in Structural Engineering <span class="toggle-sub-menu"></span></a>
                                 <ul class="sub-categories children">
                                     <li><a href="{% url "home_page_app:course_detail" 1 %}">Prokon</a></li>
-                                    
                                     <li><a href="{% url "home_page_app:course_detail" 2 %}">Excel sheet design</a></li>
                                     <li><a href="{% url "home_page_app:course_detail" 3 %}">Autocad</a></li>
                                 </ul>
                             </li>
                             <li>
-                                <a href="{% url "home_page_app:course_category" 3 %}"> Diloma In BIM Manager <span class="toggle-sub-menu"></span></a>
-
+                                <a href="{% url "home_page_app:course_category" 3 %}">Diloma In BIM Manager <span class="toggle-sub-menu"></span></a>
                                 <ul class="sub-categories children">
                                     <li><a href="{% url "home_page_app:course_detail" 4 %}">Revit Architecture</a></li>
-  
                                     <li><a href="{% url "home_page_app:course_detail" 5 %}">Revit Structure</a></li>
                                     <li><a href="{% url "home_page_app:course_detail" 6 %}">4D</a></li>
                                     <li><a href="{% url "home_page_app:course_detail" 7 %}">5D</a></li>
@@ -70,24 +61,19 @@
                                 </ul>
                             </li>
                             <li>
-                                <a href="{% url "home_page_app:course_category" 4 %}"> Diloma in Construction magagment skills <span class="toggle-sub-menu"></span></a>
-
+                                <a href="{% url "home_page_app:course_category" 4 %}">Diloma in Construction magagment skills <span class="toggle-sub-menu"></span></a>
                                 <ul class="sub-categories children">
                                     <li><a href="{% url "home_page_app:course_detail" 11 %}">Sida loo qorsheeyo shaqada Dhismaha</a></li>
-       
                                     <li><a href="{% url "home_page_app:course_detail" 12 %}">Sida loo maamulo goobta dhisamaha</a></li>
                                     <li><a href="{% url "home_page_app:course_detail" 13 %}">Sida loo maamulo lacagta Dhismaha</a></li>
                                     <li><a href="{% url "home_page_app:course_detail" 14 %}">Sida loo Diyaariyo warbixinta Dhismaha</a></li>
                                     <li><a href="{% url "home_page_app:course_detail" 15 %}">Health & Safety-ga Goobta Dhismaha</a></li>
                                 </ul>
                             </li>
-
                             <li>
                                 <a href="{% url "home_page_app:course_detail" 15 %}">Diloma in computer base <span class="toggle-sub-menu"></span></a>
-
                                 <ul class="sub-categories children">
                                     <li><a href="{% url "home_page_app:course_detail" 16 %}">Windows 10</a></li>
-                                    
                                     <li><a href="{% url "home_page_app:course_detail" 17 %}">Microsoft word</a></li>
                                     <li><a href="{% url "home_page_app:course_detail" 18 %}">Microsoft Excel</a></li>
                                     <li><a href="{% url "home_page_app:course_detail" 19 %}">Microsoft Access</a></li>
@@ -100,57 +86,8 @@
                             <li><a href="{% url "home_page_app:course_detail" 24 %}">diploma in e commerce</a></li>
                             <li>
                                 <a href="{% url "home_page_app:course_category" 25 %}">Computerized Accounting <span class="toggle-sub-menu"></span></a>
-
                                 <ul class="sub-categories children">
                                     <li><a href="{% url "home_page_app:course_detail" 26 %}">QuickBooks Enterprise Solution.</a></li>
-                                    {% comment %} <li>
-                                        <a href="#">Communications<span class="toggle-sub-menu"></span></a>
-
-                                        <ul class="course-list children">
-                                            <li>
-                                                <a class="categories-course" href="shop-single-list-left-sidebar.html">
-                                                    <div class="categories-course__thumbnail">
-                                                        <img src="{% static "home_page_app/images/courses/courses-1.jpg" %}" alt="Course" width="62" height="50">
-                                                    </div>
-                                                    <div class="categories-course__caption">
-                                                        <h5 class="categories-course__title">Illustrator 2020 MasterClass</h5>
-                                                        <div class="categories-course__price">
-                                                            <span class="categories-course__sale-price">$22.00</span>
-                                                            <span class="categories-course__regular-price">$30.00</span>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="categories-course" href="shop-single-list-left-sidebar.html">
-                                                    <div class="categories-course__thumbnail">
-                                                        <img src="{% static "home_page_app/images/courses/courses-2.jpg" %}" alt="Course" width="62" height="50">
-                                                    </div>
-                                                    <div class="categories-course__caption">
-                                                        <h5 class="categories-course__title">Illustrator 2020 MasterClass</h5>
-                                                        <div class="categories-course__price">
-                                                            <span class="categories-course__sale-price">$22.00</span>
-                                                            <span class="categories-course__regular-price">$30.00</span>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="categories-course" href="shop-single-list-left-sidebar.html">
-                                                    <div class="categories-course__thumbnail">
-                                                        <img src="{% static "home_page_app/images/courses/courses-3.jpg" %}" alt="Course" width="62" height="50">
-                                                    </div>
-                                                    <div class="categories-course__caption">
-                                                        <h5 class="categories-course__title">Illustrator 2020 MasterClass</h5>
-                                                        <div class="categories-course__price">
-                                                            <span class="categories-course__sale-price">$22.00</span>
-                                                            <span class="categories-course__regular-price">$30.00</span>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li> {% endcomment %}
                                     <li><a href="{% url "home_page_app:course_detail" 27 %}">Odoo (On-Demand Open Object)</a></li>
                                 </ul>
                             </li>
@@ -161,7 +98,6 @@
 
                 <!-- Header Inner Start -->
                 <div class="header-inner">
-
                     <!-- Header Search Start -->
                     <div class="header-serach">
                         <form action="#">
@@ -175,15 +111,9 @@
                     <div class="header-navigation d-none d-xl-block">
                         <nav class="menu-primary">
                             <ul class="menu-primary__container">
+                                <li><a class="{% if request.path == '/' %}active{% endif %}" href="{% url 'home_page_app:home' %}"><span>Home</span></a></li>
                                 <li>
-                                    <a class="{% if request.path == '/' %}active{% endif %}" href="{% url 'home_page_app:home' %}">
-                                        <span>Home</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="{% if 'features' in request.path or 'event_list' in request.path or 'checkout' in request.path or 'zoom_meeting_list' in request.path %}active{% endif %}" href="#">
-                                        <span>Features</span>
-                                    </a>
+                                    <a class="{% if 'features' in request.path or 'event_list' in request.path or 'checkout' in request.path or 'zoom_meeting_list' in request.path %}active{% endif %}" href="#"><span>Features</span></a>
                                     <ul class="sub-menu">
                                         <li><a class="{% if 'event_list' in request.path %}active{% endif %}" href="{% url 'home_page_app:event_list' %}"><span>Events</span></a></li>
                                         <li><a class="{% if 'checkout' in request.path %}active{% endif %}" href="{% url "home_page_app:checkout" %}"><span>Checkout</span></a></li>
@@ -191,9 +121,7 @@
                                     </ul>
                                 </li>
                                 <li>
-                                    <a class="{% if 'pages' in request.path or 'instructors' in request.path or 'about' in request.path or 'contact' in request.path or 'membership' in request.path or 'faqs' in request.path or 'course_list' in request.path or 'instructor_list' in request.path or 'student-dashboard' in request.path %}active{% endif %}" href="#">
-                                        <span>Pages</span>
-                                    </a>
+                                    <a class="{% if 'pages' in request.path or 'instructors' in request.path or 'about' in request.path or 'contact' in request.path or 'membership' in request.path or 'faqs' in request.path or 'course_list' in request.path or 'instructor_list' in request.path or 'student-dashboard' in request.path %}active{% endif %}" href="#"><span>Pages</span></a>
                                     <ul class="sub-menu">
                                         <li><a class="{% if 'about' in request.path %}active{% endif %}" href="{% url 'home_page_app:about' %}"><span>About us</span></a></li>
                                         <li><a class="{% if 'contact' in request.path %}active{% endif %}" href="{% url 'home_page_app:contact' %}"><span>Contact us</span></a></li>
@@ -202,17 +130,12 @@
                                         <li><a class="{% if 'instructor_list' in request.path %}active{% endif %}" href="{% url 'home_page_app:instructor_list' %}"><span>Our Instructors</span></a></li>
                                         <li><a class="{% if 'course_list' in request.path %}active{% endif %}" href="{% url 'home_page_app:course_list' %}"><span>Courses</span></a></li>
                                         <li><a class="{% if 'instructors' in request.path %}active{% endif %}" href="#"><span>Instructor Dashboard</span></a></li>
-                                        <li>
-                                            <a class="{% if 'student-dashboard' in request.path %}active{% endif %}" href="{% url "home_page_app:student_dashboard" 1 %}"><span>Student Dashboard</span></a>
-                                        </li>
+                                        <li><a class="{% if 'student-dashboard' in request.path %}active{% endif %}" href="{% url "home_page_app:student_dashboard" 1 %}"><span>Student Dashboard</span></a></li>
                                     </ul>
                                 </li>
                             </ul>
                         </nav>
                     </div>
-                    
-                    
-                    
                     <!-- Header Navigation End -->
 
                     <!-- Header Mini Cart Start -->
@@ -221,16 +144,12 @@
                             <i class="fas fa-shopping-basket"></i>
                             <span class="header-action__number">3</span>
                         </a>
-
-                        <!-- Header Mini Cart Start -->
                         <div class="header-mini-cart">
-
-                            <!-- Header Mini Cart Product List Start -->
                             <ul class="header-mini-cart__product-list ">
                                 <li class="header-mini-cart__item">
                                     <a href="#" class="header-mini-cart__close"></a>
                                     <div class="header-mini-cart__thumbnail">
-                                        <a href="shop-single-list-left-sidebar.html"><img src="{% static "home_page_app/images/product/product-1.png" %} " alt="Product" width="80" height="93"></a>
+                                        <a href="shop-single-list-left-sidebar.html"><img src="{% static "home_page_app/images/product/product-1.png" %}" alt="Product" width="80" height="93"></a>
                                     </div>
                                     <div class="header-mini-cart__caption">
                                         <h3 class="header-mini-cart__name"><a href="shop-single-list-left-sidebar.html">Awesome for Websites</a></h3>
@@ -240,7 +159,7 @@
                                 <li class="header-mini-cart__item">
                                     <a href="#" class="header-mini-cart__close"></a>
                                     <div class="header-mini-cart__thumbnail">
-                                        <a href="shop-single-list-left-sidebar.html"><img src="{% static "home_page_app/images/product/product-2.png" %} " alt="Product" width="80" height="93"></a>
+                                        <a href="shop-single-list-left-sidebar.html"><img src="{% static "home_page_app/images/product/product-2.png" %}" alt="Product" width="80" height="93"></a>
                                     </div>
                                     <div class="header-mini-cart__caption">
                                         <h3 class="header-mini-cart__name"> <a href="shop-single-list-left-sidebar.html">Awesome for Websites</a></h3>
@@ -250,7 +169,7 @@
                                 <li class="header-mini-cart__item">
                                     <a href="#" class="header-mini-cart__close"></a>
                                     <div class="header-mini-cart__thumbnail">
-                                        <a href="shop-single-list-left-sidebar.html"><img src="{% static "home_page_app/images/product/product-3.png" %} " alt="Product" width="80" height="93"></a>
+                                        <a href="shop-single-list-left-sidebar.html"><img src="{% static "home_page_app/images/product/product-3.png" %}" alt="Product" width="80" height="93"></a>
                                     </div>
                                     <div class="header-mini-cart__caption">
                                         <h3 class="header-mini-cart__name"> <a href="shop-single-list-left-sidebar.html">Awesome for Websites</a></h3>
@@ -258,8 +177,6 @@
                                     </div>
                                 </li>
                             </ul>
-                            <!-- Header Mini Cart Product List End -->
-
                             <div class="header-mini-cart__footer">
                                 <div class="header-mini-cart__total">
                                     <p class="header-mini-cart__label">Total:</p>
@@ -270,21 +187,41 @@
                                     <a href="checkout.html" class="btn btn-primary btn-hover-secondary">Checkout</a>
                                 </div>
                             </div>
-
                         </div>
-                        <!-- Header Mini Cart End -->
-
                     </div>
                     <!-- Header Mini Cart End -->
 
                     <!-- Header User Button Start -->
                     <div class="header-user d-none d-lg-flex">
+                        {% if user.is_authenticated %}
+                        <div class="header-user__profile dropdown">
+                            <a class="header-user__avatar dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="{% static 'home_page_app/images/avatar/avatar-02.jpg' %}" class="rounded-circle" alt="Avatar" width="40" height="40">
+                                abdisalan Abdukadir
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+
+                                <li><a class="dropdown-item" href="{% url "home_page_app:student_profile" 1 %}"><span>Profile</span></a></li>
+                                <li><a class="dropdown-item" href="{% url "home_page_app:student_dashboard" 1 %}"><span>Dashboard</span></a></li>
+                                <li><a class="dropdown-item" href="{% url "home_page_app:enrolled_courses" 1 %}"><span>Enrolled Courses</span></a></li>
+                                <li><a class="dropdown-item" href="{% url "home_page_app:wish_list" 1 %}"><span>Wishlist</span></a></li>
+                                <li><a class="dropdown-item" href="{% url "home_page_app:review" 1 %}"><span>Reviews</span></a></li>
+                                <li><a class="dropdown-item" href="{% url "home_page_app:quiz_attempts" 1 %}"><span>Quiz Attempts</span></a></li>
+                                <li><a class="dropdown-item" href="{% url "home_page_app:purchase_history" 1 %}"><span>Purchase History</span></a></li>
+                                <li><a class="dropdown-item" href="{% url "home_page_app:certificates" 1 %}"><span>Certificates</span></a></li>
+                                <li><a class="dropdown-item" href="#"><span>Log Out</span></a></li>
+                            </ul>
+                        </div>
+                        
+                        {% else %}
                         <div class="header-user__button">
                             <button class="header-user__login" data-bs-toggle="modal" data-bs-target="#loginModal">Log In</button>
                         </div>
                         <div class="header-user__button">
                             <button class="header-user__signup btn btn-primary btn-hover-primary" data-bs-toggle="modal" data-bs-target="#registerModal">Sign Up</button>
                         </div>
+                        
+                        {% endif %}
                     </div>
                     <!-- Header User Button End -->
 
@@ -311,6 +248,5 @@
         </div>
     </div>
     <!-- Header Main End -->
-
 </div>
 <!-- Header End -->
