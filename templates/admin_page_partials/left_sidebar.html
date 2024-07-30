@@ -40,15 +40,14 @@
             <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#sidebarUsers" aria-expanded="false" aria-controls="sidebarUsers" class="side-nav-link">
                     <i class="uil-user"></i>
-                    <span> Users </span>
+                    <span> Students </span>
                     <span class="menu-arrow"></span>
                 </a>
                 <div class="collapse" id="sidebarUsers">
                     <ul class="side-nav-second-level">
-                        {% comment %} {% url "admin_page_app:add_user" %} {% url "admin_page_app:view_users" %}{% endcomment %}
                         
-                        <li><a href="#">Add User</a></li>
-                        <li><a href="#">View Users</a></li>
+                        <li><a href="{% url "admin_page_app:add_student" %}">Add Student</a></li>
+                        <li><a href="{% url "admin_page_app:student_list" %}">View Students</a></li>
                     </ul>
                 </div>
             </li>

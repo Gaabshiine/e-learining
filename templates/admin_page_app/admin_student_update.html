@@ -1,0 +1,159 @@
+{% extends "admin_base.html" %}
+
+{% load static %}
+
+{% block wrapper %}
+<div class="wrapper">
+    {% include "admin_page_partials/left_sidebar.html" %}
+
+    <div class="content-page">
+        <div class="content">
+            {% include "admin_page_partials/topbar.html" %}
+
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box">
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Skillup 24</a></li>
+                                    <li class="breadcrumb-item active">Update Student</li>
+                                </ol>
+                            </div>
+                            <h4 class="page-title">Update Student Details</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card widget-flat">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <form class="needs-validation" method="post" action="{% url 'admin_page_app:update_student' student.id %}">
+                                            {% csrf_token %}
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="mb-3">
+                                                        <label for="first_name" class="form-label">First Name <span class="text-danger">*</span></label>
+                                                        <input class="form-control" type="text" id="first_name" name="first_name" value="{{ student.first_name }}" required/>
+                                                        <div class="invalid-feedback">
+                                                            Please enter the first name.
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="mb-3">
+                                                        <label for="middle_name" class="form-label">Middle Name <span class="text-danger">*</span></label>
+                                                        <input class="form-control" type="text" id="middle_name" name="middle_name" value="{{ student.middle_name }}" required/>
+                                                        <div class="invalid-feedback">
+                                                            Please enter the middle name.
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="mb-3">
+                                                        <label for="last_name" class="form-label">Last Name <span class="text-danger">*</span></label>
+                                                        <input class="form-control" type="text" id="last_name" name="last_name" value="{{ student.last_name }}" required/>
+                                                        <div class="invalid-feedback">
+                                                            Please enter the last name.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> <!-- end row -->
+
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="mb-3">
+                                                        <label for="type_email" class="form-label">Email Address <span class="text-danger">*</span></label>
+                                                        <input type="email" id="type_email" class="form-control" name="type_email" value="{{ student.email_address }}" required>
+                                                        <div class="invalid-feedback">
+                                                            Please enter the email address.
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="mb-3">
+                                                        <label for="phone_number" class="form-label">Phone Number <span class="text-danger">*</span></label>
+                                                        <input type="text" id="phone_number" name="phone_number" class="form-control" value="{{ student.phone_number }}" required>
+                                                        <div class="invalid-feedback">
+                                                            Please enter the phone number.
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="mb-3">
+                                                        <label for="gender" class="form-label">Gender <span class="text-danger">*</span></label>
+                                                        <select class="form-select" id="gender" name="gender" required>
+                                                            <option value="">Choose Gender</option>
+                                                            <option value="male" {% if student.gender == 'male' %}selected{% endif %}>Male</option>
+                                                            <option value="female" {% if student.gender == 'female' %}selected{% endif %}>Female</option>
+                                                        </select>
+                                                        <div class="invalid-feedback">
+                                                            Please choose the gender.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> <!-- end row -->
+
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="mb-3">
+                                                        <label for="date_of_birth" class="form-label">Date of Birth <span class="text-danger">*</span></label>
+                                                        <input class="form-control" type="date" id="date_of_birth" name="date_of_birth" value="{{ student.date_of_birth }}" required>
+                                                        <div class="invalid-feedback">
+                                                            Please enter the date of birth.
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="mb-3">
+                                                        <label for="address" class="form-label">Address <span class="text-danger">*</span></label>
+                                                        <input class="form-control" type="text" id="address" name="address" value="{{ student.address }}" required/>
+                                                        <div class="invalid-feedback">
+                                                            Please enter the address.
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="mb-3">
+                                                        <label for="major" class="form-label">Major <span class="text-danger">*</span></label>
+                                                        <input class="form-control" type="text" id="major" name="major" value="{{ student.major }}" required/>
+                                                        <div class="invalid-feedback">
+                                                            Please enter the major.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> <!-- end row -->
+
+                                            <div class="row mt-4">
+                                                <div class="col-sm-12">
+                                                    <div class="text-sm-end">
+                                                        <button class="btn btn-primary" type="submit">Save Changes</button>
+                                                    </div>
+                                                </div> <!-- end col -->
+                                            </div> <!-- end row -->
+                                        </form>
+                                    </div>
+                                </div> <!-- end row-->
+                            </div> <!-- end card-body-->
+                        </div> <!-- end card-->
+                    </div> <!-- end col -->
+                </div> <!-- end row -->
+            </div> <!-- container -->
+        </div> <!-- content -->
+        {% include "admin_page_partials/footer.html" %}
+    </div> <!-- content-page -->
+</div> <!-- wrapper -->
+{% endblock %}
+
+{% block right_sidebar %}
+{% include "admin_page_partials/right_sidebar.html" %}
+{% endblock %}

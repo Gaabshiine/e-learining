@@ -1,0 +1,154 @@
+{% extends "admin_base.html" %}
+{% load static %}
+
+{% block wrapper %}
+<div class="wrapper">
+    {% include "admin_page_partials/left_sidebar.html" %}
+
+    <div class="content-page">
+        <div class="content">
+            {% include "admin_page_partials/topbar.html" %}
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box">
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Skillup 24</a></li>
+                                    <li class="breadcrumb-item active">Register Student</li>
+                                </ol>
+                            </div>
+                            <h4 class="page-title">Register New Student</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <form class="needs-validation" method="post" action="{% url 'admin_page_app:add_student' %}">
+                                    {% csrf_token %}
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="first_name" class="form-label">First Name<span class="text-danger">*</span></label>
+                                                <input class="form-control" type="text" id="first_name" name="first_name" required>
+                                                <div class="invalid-feedback">Please enter your first name.</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="middle_name" class="form-label">Middle Name<span class="text-danger">*</span></label>
+                                                <input class="form-control" type="text" id="middle_name" name="middle_name" required>
+                                                <div class="invalid-feedback">Please enter your middle name.</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="last_name" class="form-label">Last Name<span class="text-danger">*</span></label>
+                                                <input class="form-control" type="text" id="last_name" name="last_name" required>
+                                                <div class="invalid-feedback">Please enter your last name.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="type_email" class="form-label">Email address<span class="text-danger">*</span></label>
+                                                <input type="email" id="type_email" class="form-control" name="type_email" required>
+                                                <div class="invalid-feedback">Please enter your email address.</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="password" class="form-label">Password<span class="text-danger">*</span></label>
+                                                <div class="input-group input-group-merge">
+                                                    <input type="password" id="password" class="form-control" name="password" required>
+                                                    <div class="input-group-text" data-password="false">
+                                                        <span class="password-eye"></span>
+                                                    </div>
+                                                    <div class="invalid-feedback">Please enter your password.</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="confirm_password" class="form-label">Confirm Password<span class="text-danger">*</span></label>
+                                                <div class="input-group input-group-merge">
+                                                    <input type="password" id="confirm_password" class="form-control" name="confirm_password" required>
+                                                    <div class="input-group-text" data-password="false">
+                                                        <span class="password-eye"></span>
+                                                    </div>
+                                                    <div class="invalid-feedback">Please confirm your password.</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="phone_number" class="form-label">Phone Number<span class="text-danger">*</span></label>
+                                                <input type="text" id="phone_number" name="phone_number" class="form-control" required>
+                                                <div class="invalid-feedback">Please enter your phone number.</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="gender" class="form-label">Gender<span class="text-danger">*</span></label>
+                                                <select class="form-select" id="gender" name="gender" required>
+                                                    <option value="">Choose your gender</option>
+                                                    <option value="male">Male</option>
+                                                    <option value="female">Female</option>
+                                                </select>
+                                                <div class="invalid-feedback">Please choose your gender.</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="date_of_birth" class="form-label">Date of Birth</label>
+                                                <input class="form-control" id="date_of_birth" type="date" name="date_of_birth" required>
+                                                <div class="invalid-feedback">Please enter your date of birth.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="address" class="form-label">Address<span class="text-danger">*</span></label>
+                                                <input class="form-control" type="text" id="address" name="address" required>
+                                                <div class="invalid-feedback">Please enter your address.</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="major" class="form-label">Major<span class="text-danger">*</span></label>
+                                                <input class="form-control" type="text" id="major" name="major" required>
+                                                <div class="invalid-feedback">Please enter your major.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-4">
+                                        <div class="col-sm-12">
+                                            <div class="text-sm-end">
+                                                <button class="btn btn-primary" type="submit">
+                                                    <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                                                    <span class="button-text"> Submit</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div> <!-- end card-body-->
+                        </div> <!-- end card-->
+                    </div> <!-- end col -->
+                </div> <!-- end row -->
+            </div> <!-- container -->
+        </div> <!-- content -->
+        {% include "admin_page_partials/footer.html" %}
+    </div> <!-- end content-page -->
+</div> <!-- end wrapper -->
+{% endblock %}
+
+{% block right_sidebar %}
+{% include "admin_page_partials/right_sidebar.html" %}
+{% endblock %}
