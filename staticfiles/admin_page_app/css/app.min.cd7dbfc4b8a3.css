@@ -14877,7 +14877,7 @@ body[data-layout=detached] .leftside-menu .side-nav .side-nav-title {
 }
 
 body[data-layout=detached] .leftbar-user {
-    background: url(../images/waves.png) no-repeat;
+    background: url("../images/waves.4821d9d1cfc1.png") no-repeat;
     padding: 30px 20px;
     text-align: center
 }
@@ -15972,32 +15972,32 @@ body[data-layout=topnav] .container-xxl {
 
 @font-face {
     font-family: Nunito;
-    src: url(../fonts/Nunito-Light.eot);
-    src: local("Nunito Light"), local("Nunito-Light"), url(../fonts/Nunito-Light.eot?#iefix) format("embedded-opentype"), url(../fonts/Nunito-Light.woff) format("woff"), url(../fonts/Nunito-Light.ttf) format("truetype"), url(../fonts/Nunito-Light.svg#Roboto) format("svg");
+    src: url("../fonts/Nunito-Light.fc9ec7837f12.eot");
+    src: local("Nunito Light"), local("Nunito-Light"), url("../fonts/Nunito-Light.fc9ec7837f12.eot?#iefix") format("embedded-opentype"), url("../fonts/Nunito-Light.0f8590fdc358.woff") format("woff"), url("../fonts/Nunito-Light.60cd5285d05f.ttf") format("truetype"), url("../fonts/Nunito-Light.070fe05f0cd2.svg#Roboto") format("svg");
     font-weight: 300;
     font-style: normal
 }
 
 @font-face {
     font-family: Nunito;
-    src: url(../fonts/Nunito-Regular.eot);
-    src: local("Nunito Regular"), local("Nunito-Regular"), url(../fonts/Nunito-Regular.eot?#iefix) format("embedded-opentype"), url(../fonts/Nunito-Regular.woff) format("woff"), url(../fonts/Nunito-Regular.ttf) format("truetype"), url(../fonts/Nunito-Regular.svg#Roboto) format("svg");
+    src: url("../fonts/Nunito-Regular.663e3719c27d.eot");
+    src: local("Nunito Regular"), local("Nunito-Regular"), url("../fonts/Nunito-Regular.663e3719c27d.eot?#iefix") format("embedded-opentype"), url("../fonts/Nunito-Regular.0b6a4ca6f3ae.woff") format("woff"), url("../fonts/Nunito-Regular.65bb0a158ee1.ttf") format("truetype"), url("../fonts/Nunito-Regular.83288e12526b.svg#Roboto") format("svg");
     font-weight: 400;
     font-style: normal
 }
 
 @font-face {
     font-family: Nunito;
-    src: url(../fonts/Nunito-SemiBold.eot);
-    src: local("Nunito SemiBold"), local("Nunito-SemiBold"), url(../fonts/Nunito-SemiBold.eot?#iefix) format("embedded-opentype"), url(../fonts/Nunito-SemiBold.woff) format("woff"), url(../fonts/Nunito-SemiBold.ttf) format("truetype"), url(../fonts/Nunito-SemiBold.svg#Roboto) format("svg");
+    src: url("../fonts/Nunito-SemiBold.b3cbb9c96a9a.eot");
+    src: local("Nunito SemiBold"), local("Nunito-SemiBold"), url("../fonts/Nunito-SemiBold.b3cbb9c96a9a.eot?#iefix") format("embedded-opentype"), url("../fonts/Nunito-SemiBold.e7ea8f78de53.woff") format("woff"), url("../fonts/Nunito-SemiBold.713ac08dfb71.ttf") format("truetype"), url("../fonts/Nunito-SemiBold.22d4802ef21c.svg#Roboto") format("svg");
     font-weight: 600;
     font-style: normal
 }
 
 @font-face {
     font-family: Nunito;
-    src: url(../fonts/Nunito-Bold.eot);
-    src: local("Nunito Bold"), local("Nunito-Bold"), url(../fonts/Nunito-Bold.eot?#iefix) format("embedded-opentype"), url(../fonts/Nunito-Bold.woff) format("woff"), url(../fonts/Nunito-Bold.ttf) format("truetype"), url(../fonts/Nunito-Bold.svg#Roboto) format("svg");
+    src: url("../fonts/Nunito-Bold.5ed50bbb3742.eot");
+    src: local("Nunito Bold"), local("Nunito-Bold"), url("../fonts/Nunito-Bold.5ed50bbb3742.eot?#iefix") format("embedded-opentype"), url("../fonts/Nunito-Bold.aa7097dd10f7.woff") format("woff"), url("../fonts/Nunito-Bold.6f47bcfc0657.ttf") format("truetype"), url("../fonts/Nunito-Bold.14ee6e097252.svg#Roboto") format("svg");
     font-weight: 700;
     font-style: normal
 }
@@ -17739,7 +17739,7 @@ h6 {
 }
 
 .cta-box {
-    background-image: url(../images/bg-pattern.png);
+    background-image: url("../images/bg-pattern.7c44ae31142b.png");
     background-size: cover
 }
 
@@ -18156,7 +18156,7 @@ h6 {
 }
 
 body.authentication-bg {
-    background-image: url(../images/bg-pattern-light.svg);
+    background-image: url("../images/bg-pattern-light.69836a7b9e86.svg");
     background-size: cover;
     background-position: center
 }
@@ -18197,7 +18197,7 @@ body.auth-fluid-pages[data-leftbar-compact-mode=condensed] {
     -webkit-box-align: stretch;
     -ms-flex-align: stretch;
     align-items: stretch;
-    background: url(../images/bg-auth.jpg) center;
+    background: url("../images/bg-auth.3360e9cc7a78.jpg") center;
     background-size: cover
 }
 

@@ -46,7 +46,7 @@
                 <div class="collapse" id="sidebarUsers">
                     <ul class="side-nav-second-level">
                         
-                        <li><a href="{% url "admin_page_app:add_student" %}">Add Student</a></li>
+                        <li><a href="{% url "account_app:add_student_by_admin" %}">Add Student</a></li>
                         <li><a href="{% url "admin_page_app:student_list" %}">View Students</a></li>
                     </ul>
                 </div>
@@ -77,7 +77,7 @@
                     <ul class="side-nav-second-level">
                         {% comment %} {% url "admin_page_app:add_course" %} {% url "admin_page_app:view_courses" %}{% endcomment %}
                         <li><a href="#">Add Course</a></li>
-                        <li><a href="">View Courses</a></li>
+                        <li><a href="#">View Courses</a></li>
                     </ul>
                 </div>
             </li>
@@ -136,8 +136,8 @@
                 <div class="collapse" id="sidebarSettings">
                     <ul class="side-nav-second-level">
                         {% comment %} {% url "admin_page_app:general_settings" %} {% url "admin_page_app:profile_settings" %}{% endcomment %}
-                        <li><a href="#">General Settings</a></li>
-                        <li><a href="#">Profile Settings</a></li>
+                        <li><a href="#">Create Admin</a></li>
+                        <li><a href="#">View Admins</a></li>
                     </ul>
                 </div>
             </li>

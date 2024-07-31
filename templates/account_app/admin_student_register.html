@@ -22,11 +22,22 @@
                         </div>
                     </div>
                 </div>
+
+                {% if errors %}
+                    <div class="alert alert-danger">
+                        <ul>
+                            {% for error in errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="card">
                             <div class="card-body">
-                                <form class="needs-validation" method="post" action="{% url 'admin_page_app:add_student' %}">
+                                <form class="needs-validation" method="post" action="{% url 'account_app:add_student_by_admin' %}">
                                     {% csrf_token %}
                                     <div class="row">
                                         <div class="col-md-4">
@@ -55,7 +66,7 @@
                                         <div class="col-md-4">
                                             <div class="mb-3">
                                                 <label for="type_email" class="form-label">Email address<span class="text-danger">*</span></label>
-                                                <input type="email" id="type_email" class="form-control" name="type_email" required>
+                                                <input type="email" id="type_email" class="form-control" name="email_address" required>
                                                 <div class="invalid-feedback">Please enter your email address.</div>
                                             </div>
                                         </div>
@@ -122,7 +133,7 @@
                                         <div class="col-md-4">
                                             <div class="mb-3">
                                                 <label for="major" class="form-label">Major<span class="text-danger">*</span></label>
-                                                <input class="form-control" type="text" id="major" name="major" required>
+                                                <input class="form-control" type="text" id="major" name="major_or_department" required>
                                                 <div class="invalid-feedback">Please enter your major.</div>
                                             </div>
                                         </div>

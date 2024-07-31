@@ -49,7 +49,7 @@
                     <button class="toggle-close" data-bs-dismiss="offcanvas"><i class="fas fa-times"></i></button>
                 </div>
                 <div class="dashboard-nav__logo">
-                    <a class="logo" href="{% url "home_page_app:student_dashboard" 1 %}"><img src="{% static 'home_page_app/images/logo.png' %}" style="width:13rem" alt="Logo"></a>
+                    <a class="logo" href="{% url "home_page_app:student_dashboard" %}"><img src="{% static 'home_page_app/images/logo.png' %}" style="width:13rem" alt="Logo"></a>
                 </div>
             </div>
             <!-- Dashboard Nav Header End -->
@@ -59,8 +59,8 @@
                 <!-- Dashboard Nav Menu Start -->
                 <div class="dashboard-nav__menu">
                     <ul class="dashboard-nav__menu-list">
-                        <li><a href="{% url "home_page_app:student_dashboard" 1 %}"><i class="edumi edumi-layers"></i><span class="text">Dashboard</span></a></li>
-                        <li><a href="{% url "home_page_app:student_profile" 1 %}"><i class="edumi edumi-follower"></i><span class="text">My Profile</span></a></li>
+                        <li><a href="{% url "home_page_app:student_dashboard" %}"><i class="edumi edumi-layers"></i><span class="text">Dashboard</span></a></li>
+                        <li><a href="{% url "account_app:update_student_and_profile_by_user" %}"><i class="edumi edumi-follower"></i><span class="text">My Profile</span></a></li>
                         <li><a href="{% url "home_page_app:enrolled_courses" 1 %}"><i class="edumi edumi-open-book"></i><span class="text">Enrolled Courses</span></a></li>
                         <li><a href="{% url "home_page_app:wish_list" 1 %}"><i class="edumi edumi-heart"></i><span class="text">Wishlist</span></a></li>
                         <li><a href="{% url "home_page_app:review" 1 %}"><i class="edumi edumi-star"></i><span class="text">Reviews</span></a></li>
@@ -134,7 +134,8 @@
                             <img src="{% static 'home_page_app/images/avatar/avatar-02.jpg' %}" alt="Avatar" width="90" height="90">
                         </div>
                         <div class="dashboard-header__user-info">
-                            <h4 class="dashboard-header__user-name"><span class="welcome-text">Howdy,</span> Adeniyi David</h4>
+                            <h4 class="dashboard-header__user-name"><span class="welcome-text">{{ student.first_name }} </span> {{ student.middle_name }} {{ student.last_name }}</h4>
+                             
                             <div class="dashboard-header__user-rating">
                                 <div class="rating-star">
                                     <div class="rating-label" style="width: 100%;"></div>

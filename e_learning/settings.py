@@ -114,7 +114,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'fahad2023_skillup24',
         'USER': 'fahad2023_skillup24',
-        'PASSWORD': '0R%f95zy6',
+        'PASSWORD': '4o2*a0W7j',
         'HOST': 'fahad2023.helioho.st',
         'PORT': '3306',
     }
@@ -169,6 +169,11 @@ STATICFILES_DIRS = [
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+# Media files (Images, Videos, etc)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

@@ -141,7 +141,7 @@
                                         <li><a class="{% if 'instructor_list' in request.path %}active{% endif %}" href="{% url 'home_page_app:instructor_list' %}"><span>Our Instructors</span></a></li>
                                         <li><a class="{% if 'course_list' in request.path %}active{% endif %}" href="{% url 'home_page_app:course_list' %}"><span>Courses</span></a></li>
                                         <li><a class="{% if 'instructors' in request.path %}active{% endif %}" href="#"><span>Instructor Dashboard</span></a></li>
-                                        <li><a class="{% if 'student-dashboard' in request.path %}active{% endif %}" href="{% url "home_page_app:student_dashboard" 1 %}"><span>Student Dashboard</span></a></li>
+                                        <li><a class="{% if 'student-dashboard' in request.path %}active{% endif %}" href="{% url "home_page_app:student_dashboard" %}"><span>Student Dashboard</span></a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -201,18 +201,19 @@
 
                     <!-- Header User Button Start -->
                     <div class="header-user d-none d-lg-flex">
-                        {% if user.is_authenticated %}
+                        {% if student %}
                         <div class="header-user__profile dropdown">
                             <a class="header-user__avatar dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <img src="{% static 'home_page_app/images/avatar/avatar-02.jpg' %}" alt="Avatar" width="40" height="40">
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <li><a class="dropdown-item" href="{% url "home_page_app:student_profile" 1 %}">Profile</a></li>
-                                <li><a class="dropdown-item" href="{% url "home_page_app:student_dashboard" 1 %}">Dashboard</a></li>
+                                <li><a class="dropdown-item" href="{% url "account_app:update_student_and_profile_by_user" %}">Profile</a></li>
+                                <li><a class="dropdown-item" href="{% url "home_page_app:student_dashboard" %}">Dashboard</a></li>
                                 <li><a class="dropdown-item" href="#">Logout</a></li>
                             </ul>
                         </div>
                         {% else %}
+                        <!-- Add your header content here -->
                         <div class="header-user__button">
                             <button class="header-user__login" data-bs-toggle="modal" data-bs-target="#loginModal">Log In</button>
                         </div>

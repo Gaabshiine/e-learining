@@ -85,6 +85,7 @@ class Instructor(models.Model):
     phone_number = models.CharField(max_length=15)
     department = models.CharField(max_length=100)
     email_address = models.EmailField(unique=True)
+    password = models.CharField(max_length=255)
     created_by_admin = models.ForeignKey(Admin, on_delete=models.CASCADE)
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)

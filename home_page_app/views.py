@@ -1,4 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from account_app.models import Student
+from account_app.utils import execute_query
+
+
 
 # Create your views here.
 
@@ -21,6 +26,22 @@ def membership_view(request):
 def faqs_view(request):
     return render(request, "home_page_app/FAQs.html")
 
+# -----------------------------------------------------> 1) Start: Student Dashboard and Profile <-----------------------------------------------------
+
+# 1.1) Student Dashboard
+def student_dashboard(request):
+    student_id = request.session.get('student_id')
+    if not student_id:
+        messages.error(request, 'You need to log in first.')
+        return redirect('account_app:home')
+    
+    query = "SELECT * FROM students WHERE id = %s"
+    student = execute_query(query, [student_id], fetchone=True) 
+    
+    return render(request, 'home_page_app/dashboard_student_dashboard.html', {'student': student})
+
+
+# -----------------------------------------------------> End: Student Dashboard and Profile <-----------------------------------------------------
 
 def event_list_view(request):
     return render(request, "home_page_app/event_list.html")
@@ -65,12 +86,10 @@ def checkout_view(request):
 
 
 
-def student_dashboard(request, id):
-    return render(request, "home_page_app/dashboard_student_dashboard.html", {'id': id})
 
 
-def student_profile(request, id):
-    return render(request, "home_page_app/dashboard_student_profile.html", {'id': id})
+
+
 
 
 def enrolled_courses(request, id):

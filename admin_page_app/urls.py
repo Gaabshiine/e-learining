@@ -20,10 +20,10 @@ urlpatterns = [
     # path('instructors/delete/<int:id>/', views.delete_instructor, name='delete_instructor'),
 
     # # Student management
-    path('students/', views.student_list, name='student_list'),
-    path('students/add/', views.add_student, name='add_student'),
-    path('students/update/<int:id>/', views.update_student, name='update_student'),
-    path('students/delete/<int:id>/', views.delete_student, name='delete_student'),
+    path('students/', views.student_list, name='student_list'), 
+    # path('students/add/by_admin/', views.add_student_by_admin, name='add_student_by_admin'),
+    # path('students/add/by_user/', views.add_student_by_user, name='add_student_by_user'),
+    
 
     # # Reports
     # path('reports/enrollment/', views.enrollment_report, name='enrollment_report'),
@@ -31,7 +31,7 @@ urlpatterns = [
     # path('reports/financial/', views.financial_report, name='financial_report'),
 
     # # Event management
-    # path('events/', views.event_list, name='event_list'),
+    # path('events/', views.event_list, name='event_list'), 
     # path('events/add/', views.add_event, name='add_event'),
     # path('events/update/<int:id>/', views.update_event, name='update_event'),
     # path('events/delete/<int:id>/', views.delete_event, name='delete_event'),
@@ -57,6 +57,10 @@ urlpatterns = [
     # path('users/', views.user_list, name='user_list'),
     # path('users/roles/', views.user_roles, name='user_roles'),
     # path('users/permissions/', views.user_permissions, name='user_permissions'),
+
+    # admin mangamenter
+    # path('admins/', views.admin_list, name='admin_list'),
+    # path('admins/add/', views.add_admin, name='add_admin'),
 
     # # System logs
     # path('logs/', views.system_logs, name='system_logs'),

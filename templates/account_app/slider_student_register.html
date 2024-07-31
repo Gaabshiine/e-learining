@@ -1,0 +1,313 @@
+{% extends "home_base.html" %}
+
+{% load static %}
+{% block css_files %}
+<style>
+    /* WhatsApp button */
+    .whatsapp-button {
+    position: fixed;
+    bottom: 116px;
+    right: 34px;
+    z-index: 100;
+    font-size: 60px;
+    color: #00b58b;
+    cursor: pointer;
+    }
+
+    .whatsapp-chat-popup {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 300px;
+    background: #00b58b;
+    color: white;
+    border-radius: 10px;
+    padding: 10px;
+    display: none;
+    z-index: 101;
+    }
+
+    .whatsapp-chat-popup .chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    }
+
+    .whatsapp-chat-popup .chat-body {
+    margin-top: 10px;
+    background-color: #a9cf46;
+    padding: 10px;
+    border-radius: 5px;
+    }
+
+    .whatsapp-chat-popup a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+    background: #00b58b;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    }
+
+    /* btn green style */
+    .btn-green{
+    background-color: #00b58b;
+    color: #ffffff;
+    border-color: #00b58b;
+    }
+
+    .btn-green:hover{
+    background-color: #1a4d3b;
+    color: #ffffff;
+    border-color: #1a4d3b;
+    }
+
+    .btn-green:focus{
+    background-color: #1a4d3b;
+    color: #ffffff;
+    border-color: #1a4d3b;
+    }
+
+    .btn-green:focus, .btn-green.focus {
+    -webkit-shadow: 0 0 0 0.2rem #1a4d3b;
+    box-shadow: 0 0 0 0.2rem #1a4d3b;
+    }
+
+    .btn-green.disabled, .btn-green:disabled {
+    color: #fff;
+    background-color: #00b58b;
+    border-color: #00b58b;
+    }
+    .btn-green:not(:disabled):not(.disabled):active, .btn-green:not(:disabled):not(.disabled).active,
+    .show > .btn-green.dropdown-toggle {
+    color: #fff;
+    background-color: #1a4d3b;
+    border-color: #1a4d3b;
+    }
+    .btn-green:not(:disabled):not(.disabled):active:focus, .btn-green:not(:disabled):not(.disabled).active:focus,
+    .show > .btn-green.dropdown-toggle:focus {
+    -webkit-shadow: 0 0 0 0.2rem #1a4d3b;
+    box-shadow: 0 0 0 0.2rem #1a4d3b;
+    }
+</style>
+
+{% endblock %}
+
+
+{% block main %}
+<main class="main-wrapper">
+
+    <!-- Header Start -->
+    {% block header %}
+    {% include 'home_page_partials/main_header.html' %}
+    {% endblock  %}
+    <!-- Header End -->
+
+    {% block slider %}
+    <!-- Slider Section Start -->
+    <div class="slider-section slider-section-04">
+        <div class="slider-wrapper" style="background-image: url({% static "home_page_app/images/home-education-center-hero-bg.jpg" %});">
+            <div class="container">
+
+                <div class="row gy-10 align-items-center">
+                    <div class="col-lg-6">
+                        <!-- Slider Caption Start -->
+                        <div class="slider-caption-04" data-aos="fade-up" data-aos-duration="1000">
+                            <h4 class="slider-caption-04__sub-title">FOR A BETTER FUTURE</h4>
+                            <h2 class="slider-caption-04__main-title">Build An <span>Incredible</span> Learning Experience</h2>
+                            <a href="#" class="slider-caption-04__btn btn btn-white btn-hover-primary">Find Courses</a>
+                        </div>
+                        <!-- Slider Caption End -->
+                    </div>
+                    <div class="col-lg-6">
+                        
+                        <!-- Slider Register Form Start -->
+                        <div class="slider-register__box text-center" data-aos="fade-up" data-aos-duration="1000">
+                            {% if errors %}
+                            <div class="alert alert-danger">
+                                <ul>
+                                    {% for error in errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            {% endif %}
+                            <h4 class="slider-register__title">Register for A Free Account <br> To Access To <span>1200+</span> Online Courses</h4>
+
+                            <form method="post" action="{% url 'account_app:add_student_from_slider' %}">
+                                {% csrf_token %}
+                                <div class="slider-register__form">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="slider-register__input">
+                                                <i class="fas fa-user"></i>
+                                                <input type="text" class="form-control" placeholder="First Name" name="first_name" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="slider-register__input">
+                                                <i class="fas fa-user"></i>
+                                                <input type="text" class="form-control" placeholder="Middle Name" name="middle_name" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="slider-register__input">
+                                                <i class="fas fa-user"></i>
+                                                <input type="text" class="form-control" placeholder="Last Name" name="last_name" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="slider-register__input">
+                                                <i class="fas fa-envelope"></i>
+                                                <input type="email" class="form-control" placeholder="Your Email" name="email_address" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="slider-register__input">
+                                                <i class="fas fa-key"></i>
+                                                <input type="password" class="form-control" placeholder="Password" name="password" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="slider-register__input">
+                                                <i class="fas fa-key"></i>
+                                                <input type="password" class="form-control" placeholder="Confirm Password" name="confirm_password" required>
+                                            </div>
+                                        </div>
+                                        
+                                        
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="slider-register__input">
+                                                <i class="fas fa-phone"></i>
+                                                <input type="text" class="form-control" placeholder="Phone Number" name="phone_number" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="slider-register__input">
+                                                <i class="fas fa-venus-mars"></i>
+                                                <select class="form-control" name="gender" required>
+                                                    <option value="">-- choose gender --</option>
+                                                    <option value="male">Male</option>
+                                                    <option value="female">Female</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        
+                                        
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="slider-register__input">
+                                                <i class="fas fa-calendar"></i>
+                                                <input type="date" class="form-control" placeholder="Date of Birth" name="date_of_birth" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="slider-register__input">
+                                                <i class="fas fa-map"></i>
+                                                <input type="text" class="form-control" placeholder="Address" name="address" required>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+
+
+                                    <div class="slider-register__input">
+                                        <i class="fas fa-graduation-cap"></i>
+                                        <input type="text" class="form-control" name="major_or_department" placeholder="Major">
+                                    </div>
+                                    <div class="slider-register__input">
+                                        <input type="checkbox" name="terms" required>
+                                        <label for="terms">I agree to the <a href="#">terms and conditions</a></label>
+                                    </div>
+                                    
+
+                                    <div class="slider-register__btn">
+                                        <button class="btn btn-primary btn-hover-secondary w-100" type="submit">Sign up</button>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+                        <!-- Slider Register Form End -->
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Slider Section End -->
+    
+    {% endblock  %}
+ 
+
+
+    <!-- Offcanvas Start -->
+    {% block offcanvas %}
+    {% include "home_page_partials/offcanvas.html" %}
+    {% endblock  %}
+    <!-- Offcanvas End -->
+
+   
+
+    
+
+        <!-- Footer Start -->
+        {% block footer %}
+        {% include 'home_page_partials/main_footer.html' %}
+        {% endblock  %}
+        <!-- Footer End -->
+         <!-- WhatsApp Button -->
+        <div class="whatsapp-button" onclick="toggleChatPopup()">
+            <i class="fab fa-whatsapp"></i>
+        </div>
+
+        <div class="whatsapp-chat-popup" id="whatsapp-chat-popup">
+            <div class="chat-header">
+            <i class="fab fa-whatsapp"></i>
+            <span>WhatsApp</span>
+            <i class="fas fa-times" onclick="toggleChatPopup()"></i>
+            </div>
+            <div class="chat-body">
+            <p>ASC ????</p>
+            <p>Ma u baahan tahay in wax lagaa caawiyo?</p>
+            <a href="https://wa.me/+252615272255" target="_blank">Nala soo xiriir</a>
+            </div>
+        </div>
+
+        {% include "home_page_partials/arrow_up_down.html" %}
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+              document.querySelectorAll('form').forEach(form => {
+                form.addEventListener('submit', function () {
+                  const button = form.querySelector('button[type="submit"]');
+                  const spinner = button.querySelector('.spinner-border');
+                  const buttonText = button.querySelector('.button-text');
+        
+                  spinner.classList.remove('d-none');
+                  buttonText.textContent = 'Processing...';
+                  button.disabled = true;
+                });
+              });
+            });
+        
+            function toggleChatPopup() {
+              const chatPopup = document.getElementById('whatsapp-chat-popup');
+              chatPopup.style.display = chatPopup.style.display === 'none' || chatPopup.style.display === '' ? 'block' : 'none';
+            }
+          </script>
+
+
+</main>
+{% endblock %}
