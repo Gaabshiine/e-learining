@@ -103,7 +103,7 @@ class Profile(models.Model):
     linkedIn = models.CharField(max_length=255, null=True, blank=True)
     github = models.CharField(max_length=255, null=True, blank=True)
     profile_picture = models.ImageField(upload_to='profile_images/', blank=True, null=True)
-    cover_photo = models.ImageField(upload_to='cover_images/', blank=True, null=True)  # Add this line
+    cover_photo = models.ImageField(upload_to='cover_images/', blank=True, null=True)
     user_type = models.CharField(max_length=20, choices=(('admin', 'Admin'), ('student', 'Student'), ('instructor', 'Instructor')))
     user_id = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)

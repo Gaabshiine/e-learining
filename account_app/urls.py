@@ -3,6 +3,7 @@ from . import views
 from django.conf import settings
 from django.conf.urls.static import static
 
+
 app_name = "account_app"
 
 urlpatterns = [
@@ -15,6 +16,8 @@ urlpatterns = [
     path('students/update/by_admin/<int:student_id>/', views.update_student_and_profile_by_admin, name='update_student_and_profile_by_admin'),
     path('students/delete/<int:id>/', views.delete_student, name='delete_student'),
     path('upload_profile_picture/', views.upload_profile_picture, name='upload_profile_picture'),
+    path('upload_cover_photo/', views.upload_cover_photo, name='upload_cover_photo'),  # New URL pattern for cover photo
+    path('delete_photos/', views.delete_photos, name='delete_photos'),  # Add this line
 
      
 

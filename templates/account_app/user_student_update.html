@@ -134,34 +134,47 @@
                                 <p>Upload your profile photo.</p>
 
                                 <div id="dashboard-profile-cover-photo-editor" class="dashboard-settings-profile">
-                                    <input id="dashboard-photo-dialogue-box" class="dashboard-settings-profile__input" type="file" name="profile_picture" accept=".png,.jpg,.jpeg" />
-                                    <div id="dashboard-cover-area" class="dashboard-settings-profile__cover" data-fallback="{% static 'home_page_app/images/cover-photo.jpg' %}" style="background-image:url({% static 'home_page_app/images/cover-photo.jpg' %})">
+
+                                    <!-- Profile Picture Upload -->
+                                    <input id="dashboard-profile-photo-dialogue-box" class="dashboard-settings-profile__input" type="file" name="profile_picture" accept=".png,.jpg,.jpeg" style="display:none;" />
+                                
+                                    <!-- Cover Photo Upload -->
+                                    <input id="dashboard-cover-photo-dialogue-box" class="dashboard-settings-profile__input" type="file" name="cover_photo" accept=".png,.jpg,.jpeg" style="display:none;" />
+                                
+                                    <!-- Cover Photo Area -->
+                                    <div id="dashboard-cover-area" class="dashboard-settings-profile__cover" data-fallback="{% static 'home_page_app/images/cover-photo.jpg' %}" style="background-image:url({% if cover_photo_url %}{{ cover_photo_url }}{% else %}{% static 'home_page_app/images/cover-photo.jpg' %}{% endif %})">
                                         <span class="cover-deleter">
                                             <i class="fas fa-trash-alt"></i>
                                         </span>
                                         <div class="overlay">
-                                            <button class="cover-uploader" type="button">
+                                            <button id="cover-photo-uploader" class="cover-uploader" type="button">
                                                 <i class="fas fa-camera"></i>&nbsp;
                                                 <span>Update Cover Photo</span>
                                             </button>
                                         </div>
                                     </div>
+                                
+                                    <!-- Profile Photo Area -->
+                                    <div id="profile-photo" class="dashboard-settings-profile__photo" style="background-image:url({% if profile_picture_url %}{{ profile_picture_url }}{% else %}{% static 'home_page_app/images/avatar-placeholder.jpg' %}{% endif %})">
+                                        <div class="overlay">
+                                            <button id="profile-photo-uploader" class="border-0 bg-transparent" type="button">
+                                                <i class="fas fa-camera text-white"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                
+                                
                                     <div id="photo-meta-area" class="dashboard-settings-profile__photo-meta">
                                         <img src="{% static 'home_page_app/images/info-icon.svg' %}" alt="icon" />
                                         <span>Profile Photo Size: <strong>200x200</strong> pixels,</span>
                                         <span>Cover Photo Size: <strong>700x430</strong> pixels,</span>
                                         <span class="loader-area">Saving&hellip;</span>
                                     </div>
-                                    <div id="profile-photo" class="dashboard-settings-profile__photo" style="background-image:url({% if profile_picture_url %}{{ profile_picture_url }}{% else %}{% static 'home_page_app/images/avatar-placeholder.jpg' %}{% endif %})">
-                                        <div class="overlay">
-                                            <i class="fas fa-camera"></i>
-                                        </div>
-                                    </div>
-                                    <div id="profile-photo-option" class="dashboard-settings-profile__photo-option">
-                                        <span class="profile-photo-uploader"><i class="fas fa-upload"></i> Upload Photo</span>
-                                        <span class="profile-photo-deleter"><i class="fas fa-trash-alt"></i> Delete</span>
-                                    </div>
+                                
                                 </div>
+                                
+            
+                                
                                 
                                 
                                 
@@ -171,10 +184,10 @@
                                     <label class="dashboard-settings-profile-info__display-name">Display name publicly as</label>
                                     <select>
                                         <option>student</option>
-                                        <option>Adeniyi</option>
-                                        <option>David</option>
-                                        <option selected="selected">Adeniyi David</option>
-                                        <option>David Adeniyi</option>
+                                        <option>{{student.first_name}}</option>
+                                        <option>{{student.last_name}}</option>
+                                        <option selected="selected">{{student.first_name}} {{student.last_name}}</option>
+                                        <option>{{student.last_name}} {{student.first_name}}</option>
                                     </select>
                                     <p class="dashboard-settings-profile-info__description">The display name is shown in all public fields, such as the author name, instructor name, student name, and name that will be printed on the certificate.</p>
                                 </div>
@@ -257,21 +270,26 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const profileUploader = document.querySelector('.profile-photo-uploader');
-        const profileInput = document.getElementById('dashboard-photo-dialogue-box');
+        const profileUploader = document.getElementById('profile-photo-uploader');
+        const profileInput = document.getElementById('dashboard-profile-photo-dialogue-box');
         const profilePhoto = document.getElementById('profile-photo');
         const loaderArea = document.querySelector('.loader-area');
-    
+
+        const coverUploader = document.getElementById('cover-photo-uploader');
+        const coverInput = document.getElementById('dashboard-cover-photo-dialogue-box');
+        const coverPhoto = document.getElementById('dashboard-cover-area');
+
+        // Profile Picture Upload
         profileUploader.addEventListener('click', function() {
             profileInput.click();
         });
-    
+
         profileInput.addEventListener('change', function() {
             const formData = new FormData();
             formData.append('profile_picture', profileInput.files[0]);
-    
+
             loaderArea.style.display = 'inline-block';
-    
+
             fetch("{% url 'account_app:upload_profile_picture' %}", {
                 method: 'POST',
                 body: formData,
@@ -293,8 +311,40 @@
                 console.error('Error uploading profile picture:', error);
             });
         });
-    });    
-    
+
+        // Cover Photo Upload
+        coverUploader.addEventListener('click', function() {
+            coverInput.click();
+        });
+
+        coverInput.addEventListener('change', function() {
+            const formData = new FormData();
+            formData.append('cover_photo', coverInput.files[0]);
+
+            loaderArea.style.display = 'inline-block';
+
+            fetch("{% url 'account_app:upload_cover_photo' %}", {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                loaderArea.style.display = 'none';
+                if (data.cover_photo_url) {
+                    coverPhoto.style.backgroundImage = `url(${data.cover_photo_url})`;
+                } else {
+                    alert(data.error);
+                }
+            })
+            .catch(error => {
+                loaderArea.style.display = 'none';
+                console.error('Error uploading cover photo:', error);
+            });
+        });
+    });
 </script>
 
 
