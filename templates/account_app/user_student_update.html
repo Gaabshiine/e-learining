@@ -135,7 +135,6 @@
 
                                 <div id="dashboard-profile-cover-photo-editor" class="dashboard-settings-profile">
                                     <input id="dashboard-photo-dialogue-box" class="dashboard-settings-profile__input" type="file" name="profile_picture" accept=".png,.jpg,.jpeg" />
-                                
                                     <div id="dashboard-cover-area" class="dashboard-settings-profile__cover" data-fallback="{% static 'home_page_app/images/cover-photo.jpg' %}" style="background-image:url({% static 'home_page_app/images/cover-photo.jpg' %})">
                                         <span class="cover-deleter">
                                             <i class="fas fa-trash-alt"></i>
@@ -147,25 +146,25 @@
                                             </button>
                                         </div>
                                     </div>
-                                
                                     <div id="photo-meta-area" class="dashboard-settings-profile__photo-meta">
                                         <img src="{% static 'home_page_app/images/info-icon.svg' %}" alt="icon" />
                                         <span>Profile Photo Size: <strong>200x200</strong> pixels,</span>
                                         <span>Cover Photo Size: <strong>700x430</strong> pixels,</span>
                                         <span class="loader-area">Saving&hellip;</span>
                                     </div>
-                                
-                                    <div id="profile-photo" class="dashboard-settings-profile__photo" style="background-image:url({{ profile_picture_url }})">
+                                    <div id="profile-photo" class="dashboard-settings-profile__photo" style="background-image:url({% if profile_picture_url %}{{ profile_picture_url }}{% else %}{% static 'home_page_app/images/avatar-placeholder.jpg' %}{% endif %})">
                                         <div class="overlay">
                                             <i class="fas fa-camera"></i>
                                         </div>
                                     </div>
-                                
                                     <div id="profile-photo-option" class="dashboard-settings-profile__photo-option">
                                         <span class="profile-photo-uploader"><i class="fas fa-upload"></i> Upload Photo</span>
                                         <span class="profile-photo-deleter"><i class="fas fa-trash-alt"></i> Delete</span>
                                     </div>
                                 </div>
+                                
+                                
+                                
                                 
 
                                 <div class="dashboard-settings-profile-info">
@@ -262,17 +261,17 @@
         const profileInput = document.getElementById('dashboard-photo-dialogue-box');
         const profilePhoto = document.getElementById('profile-photo');
         const loaderArea = document.querySelector('.loader-area');
-
+    
         profileUploader.addEventListener('click', function() {
             profileInput.click();
         });
-
+    
         profileInput.addEventListener('change', function() {
             const formData = new FormData();
             formData.append('profile_picture', profileInput.files[0]);
-
+    
             loaderArea.style.display = 'inline-block';
-
+    
             fetch("{% url 'account_app:upload_profile_picture' %}", {
                 method: 'POST',
                 body: formData,
@@ -294,6 +293,11 @@
                 console.error('Error uploading profile picture:', error);
             });
         });
-    });
+    });    
+    
 </script>
+
+
+
+
 {% endblock %}
