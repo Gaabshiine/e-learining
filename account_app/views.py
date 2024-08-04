@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.urls import reverse
-from .utils import execute_query, extract_user_data, hash_password
+from .utils import execute_query, extract_user_data, hash_password, update_user_data
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password
 import os
@@ -660,15 +660,13 @@ def logout_view(request):
 def update_student_and_profile_by_user(request):
     student_id = request.session.get('student_id')
     if not student_id:
-        messages.error(request, 'You need to log in to update your profile.')
-        return redirect('home_page_app:login')
+        return JsonResponse({'success': False, 'redirect_url': reverse('account_app:login')})
 
     if request.method == 'POST':
-        data, errors = extract_user_data(request)
+        data, errors = update_user_data(request)
+
         if errors:
-            for error in errors:
-                messages.error(request, error)
-            return render(request, 'account_app/user_student_update.html', {'student': data})
+            return JsonResponse({'success': False, 'errors': errors})
 
         # Update student data
         query = """
@@ -680,11 +678,11 @@ def update_student_and_profile_by_user(request):
 
         # Prepare profile data
         profile_data = {
-            'bio': request.POST.get('bio'),
-            'facebook': request.POST.get('facebook'),
-            'twitter': request.POST.get('twitter'),
-            'linkedIn': request.POST.get('linkedIn'),
-            'github': request.POST.get('github'),
+            'bio': data['bio'],
+            'facebook': data['facebook'],
+            'twitter': data['twitter'],
+            'linkedIn': data['linkedIn'],
+            'github': data['github'],
             'user_type': 'student',
             'user_id': student_id
         }
@@ -742,8 +740,7 @@ def update_student_and_profile_by_user(request):
             ]
 
         execute_query(query, params)
-        messages.success(request, 'Student profile updated successfully!')
-        return redirect('home_page_app:student_dashboard')
+        return JsonResponse({'success': True, 'message': 'Student profile updated successfully!'})
 
     student = execute_query("SELECT * FROM students WHERE id = %s", [student_id], fetchone=True)
     profile = execute_query("SELECT * FROM profiles WHERE user_id = %s AND user_type = 'student'", [student_id], fetchone=True)
@@ -752,7 +749,6 @@ def update_student_and_profile_by_user(request):
     cover_photo_url = os.path.join(settings.MEDIA_URL, profile['cover_photo']).replace('\\', '/') if profile and profile.get('cover_photo') else None
 
     return render(request, 'account_app/user_student_update.html', {'student': student, 'profile': profile, 'profile_picture_url': profile_picture_url, 'cover_photo_url': cover_photo_url})
-
 
 # 3.2) Upload Cover Photo by user
 def upload_cover_photo(request):
@@ -853,6 +849,10 @@ def delete_photos(request):
         if not student_id:
             return JsonResponse({'error': 'Student ID not found in session.'})
 
+        photo_type = request.POST.get('photo_type')
+        if photo_type not in ['profile_picture', 'cover_photo']:
+            return JsonResponse({'error': 'Invalid photo type.'})
+
         # Fetch the current profile
         profile = execute_query(
             "SELECT profile_picture, cover_photo FROM profiles WHERE user_id = %s AND user_type = 'student'",
@@ -863,31 +863,28 @@ def delete_photos(request):
         if not profile:
             return JsonResponse({'error': 'Profile not found.'})
 
-        # Delete profile picture
-        profile_picture_path = profile.get('profile_picture')
-        if profile_picture_path:
-            profile_picture_full_path = os.path.join(settings.MEDIA_ROOT, profile_picture_path)
-            if os.path.exists(profile_picture_full_path):
-                os.remove(profile_picture_full_path)
-
-        # Delete cover photo
-        cover_photo_path = profile.get('cover_photo')
-        if cover_photo_path:
-            cover_photo_full_path = os.path.join(settings.MEDIA_ROOT, cover_photo_path)
-            if os.path.exists(cover_photo_full_path):
-                os.remove(cover_photo_full_path)
-
-        # Update profile to remove photo paths
-        query = """
-            UPDATE profiles
-            SET profile_picture=NULL, cover_photo=NULL
-            WHERE user_id=%s AND user_type='student'
-        """
-        execute_query(query, [student_id])
+        # Delete the specified photo
+        if photo_type == 'profile_picture':
+            profile_picture_path = profile.get('profile_picture')
+            if profile_picture_path:
+                profile_picture_full_path = os.path.join(settings.MEDIA_ROOT, profile_picture_path)
+                if os.path.exists(profile_picture_full_path):
+                    os.remove(profile_picture_full_path)
+                query = "UPDATE profiles SET profile_picture=NULL WHERE user_id=%s AND user_type='student'"
+                execute_query(query, [student_id])
+        elif photo_type == 'cover_photo':
+            cover_photo_path = profile.get('cover_photo')
+            if cover_photo_path:
+                cover_photo_full_path = os.path.join(settings.MEDIA_ROOT, cover_photo_path)
+                if os.path.exists(cover_photo_full_path):
+                    os.remove(cover_photo_full_path)
+                query = "UPDATE profiles SET cover_photo=NULL WHERE user_id=%s AND user_type='student'"
+                execute_query(query, [student_id])
 
         return JsonResponse({'success': True})
 
     return JsonResponse({'error': 'Invalid request method.'})
+
 
 # 3.5) Update Student and Profile by Admin
 def update_student_and_profile_by_admin(request, student_id):

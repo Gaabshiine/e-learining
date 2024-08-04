@@ -83,6 +83,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'admin_page_app.middleware.AdminAccessMiddleware',  # Add your middleware here
+    'account_app.middleware.AuthenticationMiddleware',  # Add your middleware here
 ]
 
 ROOT_URLCONF = 'e_learning.urls'
@@ -179,6 +181,16 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Media files (Images, Videos, etc)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Sessions
+SESSION_COOKIE_AGE = 1209600  # 2 weeks in seconds (2 * 7 * 24 * 60 * 60)
+SESSION_SAVE_EVERY_REQUEST = True  # Save the session to the database on every request
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Session will not expire when the browser closes
+
+# For persistent sessions, consider using the database session backend
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

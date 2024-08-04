@@ -2,7 +2,7 @@
 {% extends 'dashboard_base.html' %}
 {% load static %}
 
-{% block title %}My Profile - Skillup 24{% endblock %}
+{% block title %}Skillup 24 - My Profile{% endblock %}
 
 {% block dashboard_content %}
 <!-- Dashboard Content Start -->
@@ -24,106 +24,144 @@
             <!-- Dashboard Tabs End -->
 
             <div id="profile-content">
-                <form method="POST" enctype="multipart/form-data" action="{% url 'account_app:update_student_and_profile_by_user' %}">
+                <form id="studentUpdateForm" method="POST">
                     {% csrf_token %}
-                    {% include "account_app_partials/alert_message.html" %}
                     <div class="row gy-6">
                         <div class="col-lg-6">
 
                             <!-- Dashboard Settings Info Start -->
                             <div class="dashboard-content-box">
-
+                
                                 <h4 class="dashboard-content-box__title">Contact information</h4>
-                                <p>Provide your details below to create your account profile</p>
-
+                                <p>Provide your details below to update your account profile</p>
+                
                                 <div class="row gy-4">
                                     <div class="col-md-6">
+                                        <!-- Account Account details Start -->
                                         <div class="dashboard-content__input">
                                             <label class="form-label-02">First name</label>
-                                            <input type="text" class="form-control" name="first_name" value="{{ student.first_name }}">
+                                            <input type="text" name="first_name" class="form-control" value="{{ student.first_name }}">
+                                            <div class="error-message" id="first_name_error"></div>
                                         </div>
+                                        <!-- Account Account details End -->
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="dashboard-content__input">
-                                            <label class="form-label-02">Middle name</label>
-                                            <input type="text" class="form-control" name="middle_name" value="{{ student.middle_name }}">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
+                                        <!-- Account Account details Start -->
                                         <div class="dashboard-content__input">
                                             <label class="form-label-02">Last name</label>
-                                            <input type="text" class="form-control" name="last_name" value="{{ student.last_name }}">
+                                            <input type="text" name="last_name" class="form-control" value="{{ student.last_name }}">
+                                            <div class="error-message" id="last_name_error"></div>
                                         </div>
+                                        <!-- Account Account details End -->
                                     </div>
                                     <div class="col-md-6">
+                                        <!-- Account Account details Start -->
                                         <div class="dashboard-content__input">
-                                            <label class="form-label-02">Gender</label>
-                                            <select class="form-control" name="gender">
-                                                <option value="male" {% if student.gender == 'male' %}selected{% endif %}>Male</option>
-                                                <option value="female" {% if student.gender == 'female' %}selected{% endif %}>Female</option>
-                                            </select>
+                                            <label class="form-label-02">Middle name</label>
+                                            <input type="text" name="middle_name" class="form-control" value="{{ student.middle_name }}">
+                                            <div class="error-message" id="middle_name_error"></div>
                                         </div>
+                                        <!-- Account Account details End -->
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="dashboard-content__input">
-                                            <label class="form-label-02">Address</label>
-                                            <input type="text" class="form-control" name="address" value="{{ student.address }}">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="dashboard-content__input">
-                                            <label class="form-label-02">Date of Birth</label>
-                                            <input type="date" class="form-control" name="date_of_birth" value="{{ student.date_of_birth|date:'Y-m-d' }}">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
+                                        <!-- Account Account details Start -->
                                         <div class="dashboard-content__input">
                                             <label class="form-label-02">Phone Number</label>
-                                            <input type="text" class="form-control" name="phone_number" value="{{ student.phone_number }}">
+                                            <input type="text" name="phone_number" class="form-control" value="{{ student.phone_number }}">
+                                            <div class="error-message" id="phone_number_error"></div>
                                         </div>
-                                    </div>    
+                                        <!-- Account Account details End -->
+                                    </div>
                                     <div class="col-md-6">
+                                        <!-- Account Account details Start -->
                                         <div class="dashboard-content__input">
-                                            <label class="form-label-02">Major</label>
-                                            <input type="text" class="form-control" name="major_or_department" value="{{ student.major }}">
+                                            <label class="form-label-02">Date of Birth</label>
+                                            <input type="date" name="date_of_birth" class="form-control" value="{{ student.date_of_birth }}">
+                                            <div class="error-message" id="date_of_birth_error"></div>
                                         </div>
+                                        <!-- Account Account details End -->
+                                    </div>
+                                    <div class="col-md-6">
+                                        <!-- Account Account details Start -->
+                                        <div class="dashboard-content__input">
+                                            <label class="form-label-02">Gender</label>
+                                            <select name="gender" class="form-control">
+                                                <option value="male" {% if student.gender == "male" %}selected{% endif %}>Male</option>
+                                                <option value="female" {% if student.gender == "female" %}selected{% endif %}>Female</option>
+                                            </select>
+                                            <div class="error-message" id="gender_error"></div>
+                                        </div>
+                                        <!-- Account Account details End -->
                                     </div>
                                     <div class="col-md-12">
+                                        <!-- Account Account details Start -->
+                                        <div class="dashboard-content__input">
+                                            <label class="form-label-02">Address</label>
+                                            <textarea name="address" class="form-control">{{ student.address }}</textarea>
+                                            <div class="error-message" id="address_error"></div>
+                                        </div>
+                                        <!-- Account Account details End -->
+                                    </div>
+                                    <div class="col-md-12">
+                                        <!-- Account Account details Start -->
+                                        <div class="dashboard-content__input">
+                                            <label class="form-label-02">Major</label>
+                                            <input type="text" name="major_or_department" class="form-control" value="{{ student.major }}">
+                                            <div class="error-message" id="major_error"></div>
+                                        </div>
+                                        <!-- Account Account details End -->
+                                    </div>
+                                    <div class="col-md-12">
+                                        <!-- Account Account details Start -->
                                         <div class="dashboard-content__input">
                                             <label class="form-label-02">Bio</label>
-                                            <textarea class="form-control" name="bio">{{ profile.bio }}</textarea>
+                                            <textarea name="bio" class="form-control">{{ profile.bio }}</textarea>
+                                            <div class="error-message" id="bio_error"></div>
                                         </div>
+                                        <!-- Account Account details End -->
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="dashboard-content__input">
-                                            <label class="form-label-02">Facebook</label>
-                                            <input type="text" class="form-control" name="facebook" value="{{ profile.facebook }}">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
+                                        <!-- Account Account details Start -->
                                         <div class="dashboard-content__input">
                                             <label class="form-label-02">Twitter</label>
-                                            <input type="text" class="form-control" name="twitter" value="{{ profile.twitter }}">
+                                            <input type="text" name="twitter" class="form-control" value="{{ profile.twitter }}">
+                                            <div class="error-message" id="twitter_error"></div>
                                         </div>
+                                        <!-- Account Account details End -->
                                     </div>
                                     <div class="col-md-6">
+                                        <!-- Account Account details Start -->
+                                        <div class="dashboard-content__input">
+                                            <label class="form-label-02">Facebook</label>
+                                            <input type="text" name="facebook" class="form-control" value="{{ profile.facebook }}">
+                                            <div class="error-message" id="facebook_error"></div>
+                                        </div>
+                                        <!-- Account Account details End -->
+                                    </div>
+                                    <div class="col-md-6">
+                                        <!-- Account Account details Start -->
                                         <div class="dashboard-content__input">
                                             <label class="form-label-02">LinkedIn</label>
-                                            <input type="text" class="form-control" name="linkedIn" value="{{ profile.linkedIn }}">
+                                            <input type="text" name="linkedIn" class="form-control" value="{{ profile.linkedIn }}">
+                                            <div class="error-message" id="linkedIn_error"></div>
                                         </div>
+                                        <!-- Account Account details End -->
                                     </div>
+                                    
                                     <div class="col-md-6">
+                                        <!-- Account Account details Start -->
                                         <div class="dashboard-content__input">
                                             <label class="form-label-02">Github</label>
-                                            <input type="text" class="form-control" name="github" value="{{ profile.github }}">
+                                            <input type="text" name="github" class="form-control" value="{{ profile.github }}">
+                                            <div class="error-message" id="github_error"></div>
                                         </div>
+                                        <!-- Account Account details End -->
                                     </div>
                                 </div>
-
+                
                             </div>
                             <!-- Dashboard Settings Info End -->
-                             
-
+                
                         </div>
                         <div class="col-lg-6">
 
@@ -143,9 +181,9 @@
                                 
                                     <!-- Cover Photo Area -->
                                     <div id="dashboard-cover-area" class="dashboard-settings-profile__cover" data-fallback="{% static 'home_page_app/images/cover-photo.jpg' %}" style="background-image:url({% if cover_photo_url %}{{ cover_photo_url }}{% else %}{% static 'home_page_app/images/cover-photo.jpg' %}{% endif %})">
-                                        <span class="cover-deleter">
+                                        <button id="delete-cover-photo" class="cover-deleter">
                                             <i class="fas fa-trash-alt"></i>
-                                        </span>
+                                        </button>
                                         <div class="overlay">
                                             <button id="cover-photo-uploader" class="cover-uploader" type="button">
                                                 <i class="fas fa-camera"></i>&nbsp;
@@ -156,9 +194,13 @@
                                 
                                     <!-- Profile Photo Area -->
                                     <div id="profile-photo" class="dashboard-settings-profile__photo" style="background-image:url({% if profile_picture_url %}{{ profile_picture_url }}{% else %}{% static 'home_page_app/images/avatar-placeholder.jpg' %}{% endif %})">
+                                        
                                         <div class="overlay">
                                             <button id="profile-photo-uploader" class="border-0 bg-transparent" type="button">
                                                 <i class="fas fa-camera text-white"></i>
+                                            </button>
+                                            <button id="delete-profile-photo" class="photo-deleter border-0 bg-transparent">
+                                                <i class="fas fa-trash-alt text-white"></i>
                                             </button>
                                         </div>
                                     </div>
@@ -199,7 +241,7 @@
                     </div>
 
                     <div class="dashboard-settings__btn">
-                        <button class="btn btn-primary btn-hover-secondary">Update Profile</button>
+                        <button type="submit" class="btn btn-primary btn-hover-secondary">Update Profile</button>
                     </div>
                 </form>
             </div>
@@ -270,26 +312,75 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('studentUpdateForm');
+    
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+    
+            const formData = new FormData(form);
+    
+            fetch("{% url 'account_app:update_student_and_profile_by_user' %}", {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Clear existing error messages
+                document.querySelectorAll('.error-message').forEach(div => div.innerHTML = '');
+    
+                if (data.success) {
+                    // Show a success message
+                    alert(data.message); // Or update the UI with a success message
+                    // Reload the page to reflect updates
+                    location.reload();
+                } else if (data.errors) {
+                    // Display error messages under each corresponding input field
+                    for (const [field, error] of Object.entries(data.errors)) {
+                        const errorDiv = document.getElementById(`${field}_error`);
+                        if (errorDiv) {
+                            errorDiv.innerHTML = `<p class="text-danger">${error}</p>`;
+                        }
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    });
+    
+    
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
         const profileUploader = document.getElementById('profile-photo-uploader');
         const profileInput = document.getElementById('dashboard-profile-photo-dialogue-box');
         const profilePhoto = document.getElementById('profile-photo');
-        const loaderArea = document.querySelector('.loader-area');
-
+        const deleteProfilePhotoButton = document.getElementById('delete-profile-photo');
+    
         const coverUploader = document.getElementById('cover-photo-uploader');
         const coverInput = document.getElementById('dashboard-cover-photo-dialogue-box');
         const coverPhoto = document.getElementById('dashboard-cover-area');
-
+        const deleteCoverPhotoButton = document.getElementById('delete-cover-photo');
+    
+        const loaderArea = document.querySelector('.loader-area');
+    
         // Profile Picture Upload
         profileUploader.addEventListener('click', function() {
             profileInput.click();
         });
-
+    
         profileInput.addEventListener('change', function() {
             const formData = new FormData();
             formData.append('profile_picture', profileInput.files[0]);
-
+    
             loaderArea.style.display = 'inline-block';
-
+    
             fetch("{% url 'account_app:upload_profile_picture' %}", {
                 method: 'POST',
                 body: formData,
@@ -302,6 +393,7 @@
                 loaderArea.style.display = 'none';
                 if (data.profile_picture_url) {
                     profilePhoto.style.backgroundImage = `url(${data.profile_picture_url})`;
+                    location.reload();
                 } else {
                     alert(data.error);
                 }
@@ -311,18 +403,18 @@
                 console.error('Error uploading profile picture:', error);
             });
         });
-
+    
         // Cover Photo Upload
         coverUploader.addEventListener('click', function() {
             coverInput.click();
         });
-
+    
         coverInput.addEventListener('change', function() {
             const formData = new FormData();
             formData.append('cover_photo', coverInput.files[0]);
-
+    
             loaderArea.style.display = 'inline-block';
-
+    
             fetch("{% url 'account_app:upload_cover_photo' %}", {
                 method: 'POST',
                 body: formData,
@@ -344,10 +436,60 @@
                 console.error('Error uploading cover photo:', error);
             });
         });
+    
+        // Delete Profile Photo
+        deleteProfilePhotoButton.addEventListener('click', function() {
+            const formData = new FormData();
+            formData.append('photo_type', 'profile_picture');
+    
+            fetch("{% url 'account_app:delete_photos' %}", {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    profilePhoto.style.backgroundImage = `url(${profilePhoto.dataset.fallback})`;
+                    location.reload();
+                } else {
+                    alert(data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting profile photo:', error);
+            });
+        });
+    
+        // Delete Cover Photo
+        deleteCoverPhotoButton.addEventListener('click', function() {
+            const formData = new FormData();
+            formData.append('photo_type', 'cover_photo');
+    
+            fetch("{% url 'account_app:delete_photos' %}", {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    coverPhoto.style.backgroundImage = `url(${coverPhoto.dataset.fallback})`;
+                    location.reload();
+                } else {
+                    alert(data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting cover photo:', error);
+            });
+        });
     });
 </script>
-
-
 
 
 {% endblock %}
