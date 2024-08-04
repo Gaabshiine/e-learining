@@ -50,7 +50,7 @@ urlpatterns = [
 
 
     # student dashboard or profile
-    path('dashboard/', views.student_dashboard, name='student_dashboard'), 
+    path('student_dashboard/<int:student_id>/', views.student_dashboard, name='student_dashboard'), 
     path("enrolled_courses/<int:id>/", views.enrolled_courses, name="enrolled_courses"),
     path("wish_list/<int:id>/", views.wish_list, name="wish_list"),
     # review 

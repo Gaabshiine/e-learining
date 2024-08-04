@@ -184,3 +184,13 @@ class Lesson(models.Model):
 
     class Meta:
         db_table = 'lessons'
+
+
+class ActivationRequest(models.Model):
+    request_date = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=20, choices=(('pending', 'Pending'), ('approved', 'Approved'), ('rejected', 'Rejected')), default='pending')
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'activation_requests'

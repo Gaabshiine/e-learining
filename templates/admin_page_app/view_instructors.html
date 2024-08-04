@@ -1,0 +1,133 @@
+{% extends "admin_base.html" %}
+{% load static %}
+
+{% block wrapper %}
+<div class="wrapper">
+    {% include "admin_page_partials/left_sidebar.html" %}
+    <div class="content-page">
+        <div class="content">
+            {% include "admin_page_partials/topbar.html" %}
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box">
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Skillup 24</a></li>
+                                    <li class="breadcrumb-item active">View Instructors</li>
+                                </ol>
+                            </div>
+                            <h4 class="page-title">All Instructors Details</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row mb-2">
+                                    <div class="col-sm-4">
+                                        <a href="{% url 'account_app:add_instructor' %}" class="btn btn-dark mb-2"><i class="mdi mdi-plus-circle me-2"></i> Add instructor</a>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <div class="text-sm-end">
+                                            <button type="button" class="btn btn-success mb-2 me-1"><i class="mdi mdi-cog"></i></button>
+                                            <a href="#" class="btn btn-light mb-2" onclick="window.print()">Export</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table id="basic-datatable" class="table dt-responsive nowrap w-100">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Instructor Name</th>
+                                                <th>Email</th>
+                                                <th>Address</th>
+                                                <th>Date of Birth</th>
+                                                <th>Phone</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for instructor in instructors %}
+                                                <tr>
+                                                    <td>{{ instructor.id }}</td>
+                                                    <td class="table-user">
+                                                        <a href="#" class="text-body fw-semibold">{{ instructor.first_name }} {{ instructor.middle_name }}</a>
+                                                    </td>
+                                                    <td>{{ instructor.email_address }}</td>
+                                                    <td>{{ instructor.address }}</td>
+                                                    <td>{{ instructor.date_of_birth|date:'d/m/Y' }}</td>
+                                                    <td>{{ instructor.phone_number }}</td>
+                                                    <td>
+                                                        {% comment %} <a href="#" class="action-icon"> <i class="mdi mdi-eye"></i></a> {% endcomment %}
+                                                        
+                                                        <a href="{% url 'account_app:update_instructor_profile' instructor.id %}" class="action-icon">
+                                                            <i class="mdi mdi-square-edit-outline"></i>
+                                                        </a>
+                                                        <a href="#deleteinstructorModal{{ instructor.id }}" class="action-icon" data-bs-toggle="modal"> 
+                                                            <i class="mdi mdi-delete"></i>
+                                                        </a>
+                                                        <div class="modal fade" id="deleteinstructorModal{{ instructor.id }}" tabindex="-1" aria-labelledby="deleteinstructorModalLabel{{ instructor.id }}" aria-hidden="true">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="deleteinstructorModalLabel{{ instructor.id }}">Confirm Delete</h5>
+                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        Are you sure you want to delete {{ instructor.first_name }} {{ instructor.middle_name }}?
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <form action="{% url 'account_app:delete_instructor' instructor.id %}" method="post">
+                                                                            {% csrf_token %}
+                                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                                            <button type="submit" class="btn btn-danger">
+                                                                                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                                                                                <span class="button-text">Delete</span>
+                                                                            </button>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div> <!-- end card-body-->
+                        </div> <!-- end card-->
+                    </div> <!-- end col -->
+                </div>
+            </div>
+        </div>
+        {% include "admin_page_partials/footer.html" %}
+    </div>
+</div>
+{% endblock %}
+
+{% block right_sidebar %}
+{% include "admin_page_partials/right_sidebar.html" %}
+<script>
+
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function() {
+                const button = form.querySelector('button[type="submit"]');
+                const spinner = button.querySelector('.spinner-border');
+                const buttonText = button.querySelector('.button-text');
+                
+                spinner.classList.remove('d-none');
+                buttonText.textContent = 'Processing...';
+                button.disabled = true;
+            });
+        });
+    });
+    
+    
+
+</script>
+{% endblock %}

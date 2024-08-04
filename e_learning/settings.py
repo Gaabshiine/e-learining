@@ -98,6 +98,10 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # Add custom context processors
+                'admin_page_app.context_processors.admin_context',
+                'account_app.context_processors.instructor_context',
+                'account_app.context_processors.student_context',
             ],
         },
     },

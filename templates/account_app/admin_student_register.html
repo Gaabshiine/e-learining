@@ -23,42 +23,36 @@
                     </div>
                 </div>
 
-                {% if errors %}
-                    <div class="alert alert-danger">
-                        <ul>
-                            {% for error in errors %}
-                                <li>{{ error }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                {% endif %}
                 
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="card">
                             <div class="card-body">
-                                <form class="needs-validation" method="post" action="{% url 'account_app:add_student_by_admin' %}">
+                                <form id="adminStudentRegisterForm" method="post" action="{% url 'account_app:add_student_by_admin' %}">
                                     {% csrf_token %}
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="mb-3">
                                                 <label for="first_name" class="form-label">First Name<span class="text-danger">*</span></label>
                                                 <input class="form-control" type="text" id="first_name" name="first_name" required>
-                                                <div class="invalid-feedback">Please enter your first name.</div>
+                                                <!-- Custom error message -->
+                                                <div class="error-message text-danger" id="first_nameError" style="display: none; margin-top: 0.25rem;"></div>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="mb-3">
                                                 <label for="middle_name" class="form-label">Middle Name<span class="text-danger">*</span></label>
                                                 <input class="form-control" type="text" id="middle_name" name="middle_name" required>
-                                                <div class="invalid-feedback">Please enter your middle name.</div>
+                                                <!-- Custom error message -->
+                                                <div class="error-message text-danger" id="middle_nameError" style="display: none; margin-top: 0.25rem;"></div>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="mb-3">
                                                 <label for="last_name" class="form-label">Last Name<span class="text-danger">*</span></label>
                                                 <input class="form-control" type="text" id="last_name" name="last_name" required>
-                                                <div class="invalid-feedback">Please enter your last name.</div>
+                                                <!-- Custom error message -->
+                                                <div class="error-message text-danger" id="last_nameError" style="display: none; margin-top: 0.25rem;"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -67,7 +61,8 @@
                                             <div class="mb-3">
                                                 <label for="type_email" class="form-label">Email address<span class="text-danger">*</span></label>
                                                 <input type="email" id="type_email" class="form-control" name="email_address" required>
-                                                <div class="invalid-feedback">Please enter your email address.</div>
+                                                <!-- Custom error message -->
+                                                <div class="error-message text-danger" id="email_addressError" style="display: none; margin-top: 0.25rem;"></div>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -78,8 +73,9 @@
                                                     <div class="input-group-text" data-password="false">
                                                         <span class="password-eye"></span>
                                                     </div>
-                                                    <div class="invalid-feedback">Please enter your password.</div>
                                                 </div>
+                                                <!-- Custom error message -->
+                                                <div class="error-message text-danger" id="passwordError" style="display: none; margin-top: 0.25rem;"></div>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -90,8 +86,9 @@
                                                     <div class="input-group-text" data-password="false">
                                                         <span class="password-eye"></span>
                                                     </div>
-                                                    <div class="invalid-feedback">Please confirm your password.</div>
                                                 </div>
+                                                <!-- Custom error message -->
+                                                <div class="error-message text-danger" id="confirm_passwordError" style="display: none; margin-top: 0.25rem;"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -100,7 +97,8 @@
                                             <div class="mb-3">
                                                 <label for="phone_number" class="form-label">Phone Number<span class="text-danger">*</span></label>
                                                 <input type="text" id="phone_number" name="phone_number" class="form-control" required>
-                                                <div class="invalid-feedback">Please enter your phone number.</div>
+                                                <!-- Custom error message -->
+                                                <div class="error-message text-danger" id="phone_numberError" style="display: none; margin-top: 0.25rem;"></div>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -111,14 +109,16 @@
                                                     <option value="male">Male</option>
                                                     <option value="female">Female</option>
                                                 </select>
-                                                <div class="invalid-feedback">Please choose your gender.</div>
+                                                <!-- Custom error message -->
+                                                <div class="error-message text-danger" id="genderError" style="display: none; margin-top: 0.25rem;"></div>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="mb-3">
                                                 <label for="date_of_birth" class="form-label">Date of Birth</label>
                                                 <input class="form-control" id="date_of_birth" type="date" name="date_of_birth" required>
-                                                <div class="invalid-feedback">Please enter your date of birth.</div>
+                                                <!-- Custom error message -->
+                                                <div class="error-message text-danger" id="date_of_birthError" style="display: none; margin-top: 0.25rem;"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -127,14 +127,16 @@
                                             <div class="mb-3">
                                                 <label for="address" class="form-label">Address<span class="text-danger">*</span></label>
                                                 <input class="form-control" type="text" id="address" name="address" required>
-                                                <div class="invalid-feedback">Please enter your address.</div>
+                                                <!-- Custom error message -->
+                                                <div class="error-message text-danger" id="addressError" style="display: none; margin-top: 0.25rem;"></div>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="mb-3">
                                                 <label for="major" class="form-label">Major<span class="text-danger">*</span></label>
                                                 <input class="form-control" type="text" id="major" name="major_or_department" required>
-                                                <div class="invalid-feedback">Please enter your major.</div>
+                                                <!-- Custom error message -->
+                                                <div class="error-message text-danger" id="major_or_departmentError" style="display: none; margin-top: 0.25rem;"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -143,7 +145,7 @@
                                             <div class="text-sm-end">
                                                 <button class="btn btn-primary" type="submit">
                                                     <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                                                    <span class="button-text"> Submit</span>
+                                                    <span class="button-text">Submit</span>
                                                 </button>
                                             </div>
                                         </div>
@@ -162,4 +164,60 @@
 
 {% block right_sidebar %}
 {% include "admin_page_partials/right_sidebar.html" %}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const form = document.getElementById('adminStudentRegisterForm');
+    
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();  // Prevent the form from submitting normally
+    
+            const formData = new FormData(form);
+    
+            // Clear previous error messages
+            document.querySelectorAll('.error-message').forEach(el => {
+                el.style.display = 'none';
+                el.textContent = ''; // Clear the text content as well
+            });
+            
+            // Send data using fetch API
+            fetch("{% url 'account_app:add_student_by_admin' %}", {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'X-Requested-With': 'XMLHttpRequest' // Mark the request as AJAX
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Redirect or show success message
+                    window.location.href = data.redirect_url;
+                } else {
+                    // Show error messages
+                    if (data.errors) {
+                        for (let field in data.errors) {
+                            const errorElement = document.getElementById(`${field}Error`);
+                            if (errorElement) {
+                                errorElement.textContent = data.errors[field];
+                                errorElement.style.display = 'block'; // Show the error message as a block element
+                            } else {
+                                alert(data.errors[field]); // Fallback for any missing error fields
+                            }
+                        }
+                    } else if (data.error) {
+                        alert(data.error);
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An unexpected error occurred.');
+            });
+        });
+    });    
+    
+    
+</script>
 {% endblock %}

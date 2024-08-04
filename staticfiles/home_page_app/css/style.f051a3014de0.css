@@ -2062,7 +2062,7 @@ span.flatpickr-weekday {
   color: #FFFFFF;
 }
 .header-top-bar-wrap__info-list-04 li:hover a, .header-top-bar-wrap__info-list-04 li:hover button {
-  color: #ffde59;
+  color: #2c2828;
 }
 .header-top-bar-wrap__info-social {
   display: flex;
@@ -3773,8 +3773,19 @@ span.flatpickr-weekday {
   background-color: #edf0f9;
 }
 
-.dashboard-nav__menu-list li.active a i {
-  color: #00b58b;
+.dashboard-nav__menu-list a.active {
+  background-color: #00b58b;
+  color: #FFFFFF;
+}
+.dashboard-nav__menu-list a.active i {
+  color: #FFFFFF; /* Change icon color to white */
+}
+.dashboard-nav__menu-list a.active:hover {
+  background-color: #009b76; /* Slightly darker shade for hover effect */
+  color: #FFFFFF;
+}
+.dashboard-nav__menu-list a.active:hover i {
+  color: #FFFFFF;
 }
 .dashboard-nav__title {
   text-transform: uppercase;

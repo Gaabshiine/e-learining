@@ -49,7 +49,7 @@
                     <button class="toggle-close" data-bs-dismiss="offcanvas"><i class="fas fa-times"></i></button>
                 </div>
                 <div class="dashboard-nav__logo">
-                    <a class="logo" href="{% url "home_page_app:student_dashboard" %}"><img src="{% static 'home_page_app/images/logo.png' %}" style="width:13rem" alt="Logo"></a>
+                    <a class="logo" href="{% url "home_page_app:student_dashboard" student_user.id %}"><img src="{% static 'home_page_app/images/logo.png' %}" style="width:13rem" alt="Logo"></a>
                 </div>
             </div>
             <!-- Dashboard Nav Header End -->
@@ -59,18 +59,19 @@
                 <!-- Dashboard Nav Menu Start -->
                 <div class="dashboard-nav__menu">
                     <ul class="dashboard-nav__menu-list">
-                        <li><a href="{% url "home_page_app:student_dashboard" %}"><i class="edumi edumi-layers"></i><span class="text">Dashboard</span></a></li>
-                        <li><a href="{% url "account_app:update_student_and_profile_by_user" %}"><i class="edumi edumi-follower"></i><span class="text">My Profile</span></a></li>
-                        <li><a href="{% url "home_page_app:enrolled_courses" 1 %}"><i class="edumi edumi-open-book"></i><span class="text">Enrolled Courses</span></a></li>
-                        <li><a href="{% url "home_page_app:wish_list" 1 %}"><i class="edumi edumi-heart"></i><span class="text">Wishlist</span></a></li>
-                        <li><a href="{% url "home_page_app:review" 1 %}"><i class="edumi edumi-star"></i><span class="text">Reviews</span></a></li>
-                        <li><a href="{% url "home_page_app:quiz_attempts" 1 %}"><i class="edumi edumi-help"></i><span class="text">My Quiz Attempts</span></a></li>
-                        <li><a href="{% url "home_page_app:purchase_history" 1 %}"><i class="edumi edumi-shopping-cart"></i><span class="text">Purchase History</span></a></li>
-                        <li><a href="{% url 'home_page_app:certificates' 1 %}"><i class="fas fa-award"></i><span class="text">Certificates</span></a></li>
+                        <li><a href="{% url 'home_page_app:student_dashboard' student_user.id %}" class="{% if request.resolver_match.url_name == 'student_dashboard' %}active{% endif %}"><i class="edumi edumi-layers"></i><span class="text">Dashboard</span></a></li>
+                        <li><a href="{% url 'account_app:update_student_and_profile_by_user' %}" class="{% if request.resolver_match.url_name == 'update_student_and_profile_by_user' %}active{% endif %}"><i class="edumi edumi-follower"></i><span class="text">My Profile</span></a></li>
+                        <li><a href="{% url 'home_page_app:enrolled_courses' 1 %}" class="{% if request.resolver_match.url_name == 'enrolled_courses' %}active{% endif %}"><i class="edumi edumi-open-book"></i><span class="text">Enrolled Courses</span></a></li>
+                        <li><a href="{% url 'home_page_app:wish_list' 1 %}" class="{% if request.resolver_match.url_name == 'wish_list' %}active{% endif %}"><i class="edumi edumi-heart"></i><span class="text">Wishlist</span></a></li>
+                        <li><a href="{% url 'home_page_app:review' 1 %}" class="{% if request.resolver_match.url_name == 'review' %}active{% endif %}"><i class="edumi edumi-star"></i><span class="text">Reviews</span></a></li>
+                        <li><a href="{% url 'home_page_app:quiz_attempts' 1 %}" class="{% if request.resolver_match.url_name == 'quiz_attempts' %}active{% endif %}"><i class="edumi edumi-help"></i><span class="text">My Quiz Attempts</span></a></li>
+                        <li><a href="{% url 'home_page_app:purchase_history' 1 %}" class="{% if request.resolver_match.url_name == 'purchase_history' %}active{% endif %}"><i class="edumi edumi-shopping-cart"></i><span class="text">Purchase History</span></a></li>
+                        <li><a href="{% url 'home_page_app:certificates' 1 %}" class="{% if request.resolver_match.url_name == 'certificates' %}active{% endif %}"><i class="fas fa-award"></i><span class="text">Certificates</span></a></li>
                     </ul>
-               
+                    
+                                    
                     <ul class="dashboard-nav__menu-list">
-                        <li><a href="{% url "home_page_app:home" %}"><i class="edumi edumi-sign-out"></i><span class="text">Logout</span></a></li>
+                        <li><a href="{% url "account_app:logout" %}"><i class="edumi edumi-sign-out"></i><span class="text">Logout</span></a></li>
                     </ul>
                 </div>
                 <!-- Dashboard Nav Menu End -->
@@ -131,10 +132,14 @@
                     </div>
                     <div class="dashboard-header__user">
                         <div class="dashboard-header__user-avatar">
-                            <img src="{% static 'home_page_app/images/avatar/avatar-02.jpg' %}" alt="Avatar" width="90" height="90">
+                            {% if profile_picture_url %}
+                                <img src="{{ profile_picture_url }}"  alt="Avatar" width="90" height="90" >
+                            {% else %}
+                                <img src="{% static 'home_page_app/images/avatar-placeholder.jpg' %}" alt="Avatar" width="90" height="90" >
+                            {% endif %}
                         </div>
                         <div class="dashboard-header__user-info">
-                            <h4 class="dashboard-header__user-name"><span class="welcome-text">{{ student.first_name }} </span> {{ student.middle_name }} {{ student.last_name }}</h4>
+                            <h4 class="dashboard-header__user-name"><span class="welcome-text">{{ student_user.first_name }} </span> {{ student_user.middle_name }} {{ student_user.last_name }}</h4>
                              
                             <div class="dashboard-header__user-rating">
                                 <div class="rating-star">
@@ -164,6 +169,17 @@
         <!-- Dashboard Content End -->
     </main>
     <!-- Dashboard Main Wrapper End -->
+
+    <!-- contact icons Start -->
+    <div class="edumall-demo-option">
+
+        <div class="edumall-demo-option__toolbar">
+            <a class="toolbar-action" href="https://wa.me/+252615272255" target="_blank" data-bs-tooltip="tooltip" data-bs-placement="left" title="Facebook"><i class="fab fa-whatsapp fs-5" style=""></i></a>
+            <a class="toolbar-action" href="https://facebook.com/" target="_blank" data-bs-tooltip="tooltip" data-bs-placement="left" title="Facebook"><i class="fab fa-facebook fs-5"></i></a>
+            <a class="toolbar-action" href="https://youtube.com/" target="_blank" data-bs-tooltip="tooltip" data-bs-placement="left" title="Youtube"><i class="fab fa-youtube fs-5"></i></a>
+        </div>
+
+    </div>
 
     <!-- JS Vendor, Plugins & Activation Script Files -->
     <!-- Vendors JS -->

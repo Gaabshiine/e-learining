@@ -8,17 +8,17 @@
             <img src="{% static "admin_page_app/images/logo.png" %}" alt="" height="40">
         </span>
         <span class="logo-sm">
-            <img src="{% static "admin_page_app/images/logo3.png" %}" alt="" height="16">
+            <img src="{% static "admin_page_app/images/logo.png" %}" alt="" height="16">
         </span>
     </a>
 
     <!-- LOGO -->
     <a href="{% url 'admin_page_app:dashboard' %}" class="logo text-center logo-dark">
         <span class="logo-lg">
-            <img src="{% static "admin_page_app/images/dark_logo.png" %}" alt="" height="40">
+            <img src="{% static "admin_page_app/images/logo.png" %}" alt="" height="40">
         </span>
         <span class="logo-sm">
-            <img src="{% static "admin_page_app/images/dark_logo2.png" %}" alt="" height="16">
+            <img src="{% static "admin_page_app/images/logo.png" %}" alt="" height="16">
         </span>
     </a>
 
@@ -61,8 +61,8 @@
                 <div class="collapse" id="sidebarInstructors">
                     <ul class="side-nav-second-level">
                         {% comment %} {% url "admin_page_app:add_instructor" %} {% url "admin_page_app:view_instructors" %}{% endcomment %}
-                        <li><a href="#">Add Instructor</a></li>
-                        <li><a href="#">View Instructors</a></li>
+                        <li><a href="{% url "account_app:add_instructor" %}">Add Instructor</a></li>
+                        <li><a href="{% url "admin_page_app:instructor_list" %}">View Instructors</a></li>
                     </ul>
                 </div>
             </li>
@@ -136,15 +136,15 @@
                 <div class="collapse" id="sidebarSettings">
                     <ul class="side-nav-second-level">
                         {% comment %} {% url "admin_page_app:general_settings" %} {% url "admin_page_app:profile_settings" %}{% endcomment %}
-                        <li><a href="#">Create Admin</a></li>
-                        <li><a href="#">View Admins</a></li>
+                        <li><a href="{% url "account_app:admin_register" %}">Create Admin</a></li>
+                        <li><a href="{% url "admin_page_app:view_admins" %}">View Admins</a></li>
                     </ul>
                 </div>
             </li>
 
             <li class="side-nav-item">
-                {% comment %} {% url "admin_page_app:logout" %} {% endcomment %}
-                <a href="#" class="side-nav-link">
+             
+                <a href="{% url "account_app:logout" %}" class="side-nav-link">
                     <i class="uil-sign-out-alt"></i>
                     <span> Logout </span>
                 </a>

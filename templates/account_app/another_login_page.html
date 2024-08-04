@@ -1,0 +1,130 @@
+{% extends "home_base.html" %}
+
+{% load static %}
+{% block css_files %}
+
+{% endblock %}
+
+
+{% block main %}
+<main class="main-wrapper">
+
+    <!-- Header Start -->
+    {% block header %}
+    {% include 'home_page_partials/main_header.html' %}
+    {% endblock %}
+    <!-- Header End -->
+
+    {% block slider %}
+    
+    <!-- Slider Section Start -->
+    <div class="slider-section slider-section-04">
+        <div class="slider-wrapper" style="background-image: url({% static "home_page_app/images/home-education-center-hero-bg.jpg" %});">
+            <div class="container">
+
+                <div class="row gy-10 align-items-center">
+                    <div class="col-lg-6">
+                        <!-- Slider Caption Start -->
+                        <div class="slider-caption-04" data-aos="fade-up" data-aos-duration="1000">
+                            <h4 class="slider-caption-04__sub-title">FOR A BETTER FUTURE</h4>
+                            <h2 class="slider-caption-04__main-title">Build An <span>Incredible</span> Learning Experience</h2>
+                            <a href="#" class="slider-caption-04__btn btn btn-white btn-hover-primary">Find Courses</a>
+                        </div>
+                        <!-- Slider Caption End -->
+                    </div>
+                    <div class="col-lg-6">
+                        
+                        <!-- Slider Register Form Start -->
+                        <div class="slider-register__box text-center" data-aos="fade-up" data-aos-duration="1000">
+
+                            <h4 class="slider-register__title">Register for A Free Account <br> To Access To <span>1200+</span> Online Courses</h4>
+
+                            {% if messages %}
+                            <div class="alert-container">
+                                {% for message in messages %}
+                                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <!-- Close button for each alert -->
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                            <form id="loginForm" method="POST" action="{% url 'account_app:login' %}">
+                                {% csrf_token %}
+                                <div class="slider-register__form">
+                                    <div class="slider-register__input">
+                                        <i class="fas fa-envelope"></i>
+                                        <input type="text" class="form-control" placeholder="Your email" name="email_address" id="email" required>
+                                        <div class="error-message" id="emailError"></div>
+                                    </div>
+
+                                    <div class="slider-register__input">
+                                        <i class="fas fa-key"></i>
+                                        <input type="password" class="form-control" placeholder="Password" name="password" id="password" required>
+                                    </div>
+                                    <div class="modal-form d-flex justify-content-between flex-wrap gap-2 mt-3">
+                                        <div class="form-check">
+                                            <input type="checkbox" id="rememberme">
+                                            <label for="rememberme">Remember me</label>
+                                        </div>
+                                        <div class="text-end">
+                                            <a class="modal-form__link" href="#">Forgot your password?</a>
+                                        </div>
+                                    </div>
+                        
+                                    <div class="slider-register__btn">
+                                        <button class="btn btn-primary btn-hover-secondary w-100 login-btn" type="submit">Log In</button>
+                                    </div>
+
+                                </div>
+                            </form>
+                            
+                            
+                            
+                        </div>
+                        <!-- Slider Register Form End -->
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Slider Section End -->
+    {% endblock %}
+
+
+    <!-- Footer Start -->
+    {% block footer %}
+    {% include 'home_page_partials/main_footer.html' %}
+    {% endblock %}
+    <!-- Footer End -->
+
+
+
+    {% include "home_page_partials/arrow_up_down.html" %}
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll('form').forEach(form => {
+                form.addEventListener('submit', function () {
+                    const button = form.querySelector('button[type="submit"]');
+                    const spinner = button.querySelector('.spinner-border');
+                    const buttonText = button.querySelector('.button-text');
+
+                    if (spinner) spinner.classList.remove('d-none');
+                    if (buttonText) buttonText.textContent = 'Processing...';
+                    button.disabled = true;
+                });
+            });
+        });
+
+        function toggleChatPopup() {
+            const chatPopup = document.getElementById('whatsapp-chat-popup');
+            chatPopup.style.display = chatPopup.style.display === 'none' || chatPopup.style.display === '' ? 'block' : 'none';
+        }
+    </script>
+</main>
+{% endblock %}

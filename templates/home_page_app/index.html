@@ -1,7 +1,7 @@
 {% extends "home_base.html" %}
 {% load static %}
 {% block css_files %}
-<style>
+{% comment %} <style>
         /* WhatsApp button */
     .whatsapp-button {
     position: fixed;
@@ -90,7 +90,7 @@
     -webkit-shadow: 0 0 0 0.2rem #1a4d3b;
     box-shadow: 0 0 0 0.2rem #1a4d3b;
     }
-</style>
+</style> {% endcomment %}
 
 {% endblock %}
 
@@ -1888,6 +1888,7 @@
                     <h3 class="banner-caption-03__title">Achieve Your Goals With SkillUp 24</h3>
                     <p>Create an account to receive our newsletter, course recommendations and promotions.</p>
                     <a href="{% url "account_app:add_student_from_slider" %}" class="banner-caption-03__btn btn btn-primary btn-hover-secondary">Register for free</a>
+                    <a href="{% url 'account_app:login' %}">Login</a>
                 </div>
 
                 <div class="banner-big-box__image" style="background-image: url({% static "home_page_app/images/banner-image-03.jpg" %});"></div>

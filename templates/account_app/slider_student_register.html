@@ -125,31 +125,34 @@
                         
                         <!-- Slider Register Form Start -->
                         <div class="slider-register__box text-center" data-aos="fade-up" data-aos-duration="1000">
-                            {% if errors %}
-                            <div class="alert alert-danger">
-                                <ul>
-                                    {% for error in errors %}
-                                        <li>{{ error }}</li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                            {% endif %}
+
                             <h4 class="slider-register__title">Register for A Free Account <br> To Access To <span>1200+</span> Online Courses</h4>
 
-                            <form method="post" action="{% url 'account_app:add_student_from_slider' %}">
+                            <form id="sliderRegisterForm" method="post" action="{% url 'account_app:add_student_from_slider' %}">
                                 {% csrf_token %}
-                                <div class="slider-register__form">
+                                {% if messages %}
+                                    <div class="alert-container">
+                                        {% for message in messages %}
+                                        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %} alert-dismissible fade show" role="alert">
+                                            {{ message }}
+                                            <!-- Close button for each alert -->
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                    <div class="slider-register__form">
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="slider-register__input">
                                                 <i class="fas fa-user"></i>
-                                                <input type="text" class="form-control" placeholder="First Name" name="first_name" required>
+                                                <input type="text" class="form-control" placeholder="First Name" name="first_name" value="{{ data.first_name }}" required>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="slider-register__input">
                                                 <i class="fas fa-user"></i>
-                                                <input type="text" class="form-control" placeholder="Middle Name" name="middle_name" required>
+                                                <input type="text" class="form-control" placeholder="Middle Name" name="middle_name" value="{{ data.middle_name }}" required>
                                             </div>
                                         </div>
                                     </div>
@@ -157,13 +160,13 @@
                                         <div class="col-md-6">
                                             <div class="slider-register__input">
                                                 <i class="fas fa-user"></i>
-                                                <input type="text" class="form-control" placeholder="Last Name" name="last_name" required>
+                                                <input type="text" class="form-control" placeholder="Last Name" name="last_name" value="{{ data.last_name }}" required>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="slider-register__input">
                                                 <i class="fas fa-envelope"></i>
-                                                <input type="email" class="form-control" placeholder="Your Email" name="email_address" required>
+                                                <input type="email" class="form-control" placeholder="Your Email" name="email_address" value="{{ data.email_address }}" required>
                                             </div>
                                         </div>
                                     </div>
@@ -180,14 +183,12 @@
                                                 <input type="password" class="form-control" placeholder="Confirm Password" name="confirm_password" required>
                                             </div>
                                         </div>
-                                        
-                                        
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="slider-register__input">
                                                 <i class="fas fa-phone"></i>
-                                                <input type="text" class="form-control" placeholder="Phone Number" name="phone_number" required>
+                                                <input type="text" class="form-control" placeholder="Phone Number" name="phone_number" value="{{ data.phone_number }}" required>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -195,47 +196,41 @@
                                                 <i class="fas fa-venus-mars"></i>
                                                 <select class="form-control" name="gender" required>
                                                     <option value="">-- choose gender --</option>
-                                                    <option value="male">Male</option>
-                                                    <option value="female">Female</option>
+                                                    <option value="male" {% if data.gender == 'male' %}selected{% endif %}>Male</option>
+                                                    <option value="female" {% if data.gender == 'female' %}selected{% endif %}>Female</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        
-                                        
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="slider-register__input">
                                                 <i class="fas fa-calendar"></i>
-                                                <input type="date" class="form-control" placeholder="Date of Birth" name="date_of_birth" required>
+                                                <input type="date" class="form-control" placeholder="Date of Birth" name="date_of_birth" value="{{ data.date_of_birth }}" required>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="slider-register__input">
                                                 <i class="fas fa-map"></i>
-                                                <input type="text" class="form-control" placeholder="Address" name="address" required>
+                                                <input type="text" class="form-control" placeholder="Address" name="address" value="{{ data.address }}" required>
                                             </div>
                                         </div>
-                                        
                                     </div>
-
-
                                     <div class="slider-register__input">
                                         <i class="fas fa-graduation-cap"></i>
-                                        <input type="text" class="form-control" name="major_or_department" placeholder="Major">
+                                        <input type="text" class="form-control" name="major_or_department" placeholder="Major" value="{{ data.major }}">
                                     </div>
                                     <div class="slider-register__input">
-                                        <input type="checkbox" name="terms" required>
+                                        <input type="checkbox" name="terms" {% if data.terms == 'on' %}checked{% endif %} required>
                                         <label for="terms">I agree to the <a href="#">terms and conditions</a></label>
                                     </div>
-                                    
-
                                     <div class="slider-register__btn">
                                         <button class="btn btn-primary btn-hover-secondary w-100" type="submit">Sign up</button>
                                     </div>
-
                                 </div>
                             </form>
+                            
+                            
                         </div>
                         <!-- Slider Register Form End -->
 

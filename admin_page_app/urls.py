@@ -14,13 +14,14 @@ urlpatterns = [
     # path('courses/delete/<int:id>/', views.delete_course, name='delete_course'),
 
     # # Instructor management
-    # path('instructors/', views.instructor_list, name='instructor_list'),
+    path('instructors/', views.instructor_list, name='instructor_list'),
     # path('instructors/add/', views.add_instructor, name='add_instructor'),
     # path('instructors/update/<int:id>/', views.update_instructor, name='update_instructor'),
     # path('instructors/delete/<int:id>/', views.delete_instructor, name='delete_instructor'),
 
     # # Student management
     path('students/', views.student_list, name='student_list'), 
+    path('students/details/<int:student_id>/', views.view_student_details, name='view_student_details'),
     # path('students/add/by_admin/', views.add_student_by_admin, name='add_student_by_admin'),
     # path('students/add/by_user/', views.add_student_by_user, name='add_student_by_user'),
     
@@ -60,7 +61,7 @@ urlpatterns = [
 
     # admin mangamenter
     # path('admins/', views.admin_list, name='admin_list'),
-    # path('admins/add/', views.add_admin, name='add_admin'),
+    path('admin/view/', views.view_admins, name='view_admins'),
 
     # # System logs
     # path('logs/', views.system_logs, name='system_logs'),

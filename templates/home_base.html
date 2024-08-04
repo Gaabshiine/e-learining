@@ -37,6 +37,16 @@
     <!-- Style CSS -->
     <link rel="stylesheet" href="{% static "home_page_app/css/style.css" %} ">
 
+    <!-- Custom CSS -->
+    <style>
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            display: block;
+            margin-top: 5px;
+        }
+    </style>
+
     {% block css_files %}{% endblock %}
 
 </head>
@@ -114,10 +124,24 @@
 
     </main>
     {% endblock main %}
+
+    <!-- contact icons Start -->
+    <div class="edumall-demo-option">
+
+        <div class="edumall-demo-option__toolbar">
+            <a class="toolbar-action" href="https://wa.me/+252615272255" target="_blank" data-bs-tooltip="tooltip" data-bs-placement="left" title="Facebook"><i class="fab fa-whatsapp fs-5" style=""></i></a>
+            <a class="toolbar-action" href="https://facebook.com/" target="_blank" data-bs-tooltip="tooltip" data-bs-placement="left" title="Facebook"><i class="fab fa-facebook fs-5"></i></a>
+            <a class="toolbar-action" href="https://youtube.com/" target="_blank" data-bs-tooltip="tooltip" data-bs-placement="left" title="Youtube"><i class="fab fa-youtube fs-5"></i></a>
+        </div>
+
+    </div>
+    <!-- contact icons End -->
     
 
     <!-- login Modal Start -->
     {% include "account_app_partials/login_student.html" %}
+
+    
         
     <!-- login Modal End -->
 
@@ -157,6 +181,82 @@
 
     <!-- Activation JS -->
     <script src="{% static "home_page_app/js/main.js" %}"></script>
+
+    <!-- Custom login JS -->
+    <script>
+        // Custom JS
+        document.addEventListener("DOMContentLoaded", function() {
+            const loginButton = document.getElementById('loginButton');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const emailError = document.getElementById('emailError');
+            const passwordError = document.getElementById('passwordError');
+            const generalError = document.getElementById('generalError');
+
+            loginButton.addEventListener('click', function(event) {
+                let isValid = true;
+
+                // Clear previous errors
+                emailError.textContent = '';
+                passwordError.textContent = '';
+                generalError.style.display = 'none';
+
+                // Email validation
+                if (!validateEmail(emailInput.value)) {
+                    emailError.textContent = 'Please enter a valid email address.';
+                    isValid = false;
+                }
+
+                // Password validation
+                if (passwordInput.value.trim() === '') {
+                    passwordError.textContent = 'Password cannot be empty.';
+                    isValid = false;
+                }
+
+                // If there are errors, prevent form submission
+                if (!isValid) {
+                    return;
+                }
+
+                // AJAX request to server for login
+                const formData = new FormData();
+                formData.append('email_address', emailInput.value);
+                formData.append('password', passwordInput.value);
+                
+                fetch("{% url 'account_app:login' %}", {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'X-Requested-With': 'XMLHttpRequest'  // Make sure to set this header
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Redirect to the appropriate page
+                        window.location.href = data.redirect_url;
+                    } else {
+                        generalError.textContent = data.error;
+                        generalError.style.display = 'block';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            });
+
+            function validateEmail(email) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRegex.test(email);
+            }
+        });
+
+    </script>
+
+    
+
+        
     
     {% block js_files %}{% endblock %}
 </body>

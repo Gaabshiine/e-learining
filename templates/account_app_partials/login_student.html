@@ -1,7 +1,6 @@
 <!-- Log In Modal Start -->
 <div class="modal fade" id="loginModal">
     <div class="modal-dialog modal-dialog-centered modal-login">
-
         <!-- Modal Wrapper Start -->
         <div class="modal-wrapper">
             <button class="modal-close" data-bs-dismiss="modal"><i class="fas fa-times"></i></button>
@@ -13,16 +12,20 @@
                     <p class="modal-description">Don't have an account yet? <button data-bs-toggle="modal" data-bs-target="#registerModal">Sign up for free</button></p>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" action="{% url 'account_app:login' %}">
-                        {% csrf_token %}
-                        {% include "account_app_partials/alert_message.html" %}
+                    <form id="loginForm" method="POST">
                         <div class="modal-form">
                             <label class="form-label">Email</label>
-                            <input type="text" class="form-control" placeholder="Your email" name="email_address">
+                            <input type="text" class="form-control" placeholder="Your email" name="email_address" id="email">
+                            <div class="error-message" id="emailError"></div>
                         </div>
                         <div class="modal-form">
                             <label class="form-label">Password</label>
-                            <input type="password" class="form-control" placeholder="Password" name="password">
+                            <input type="password" class="form-control" placeholder="Password" name="password" id="password">
+                            <div class="error-message" id="passwordError"></div>
+                        </div>
+                        <div class="modal-form">
+                            <!-- Error message container -->
+                            <div class="error-message" id="generalError" style="display: none;"></div>
                         </div>
                         <div class="modal-form d-flex justify-content-between flex-wrap gap-2">
                             <div class="form-check">
@@ -34,13 +37,12 @@
                             </div>
                         </div>
                         <div class="modal-form">
-                            <button class="btn btn-primary btn-hover-secondary w-100">Log In</button>
+                            <button type="button" class="btn btn-primary btn-hover-secondary w-100" id="loginButton">Log In</button>
                         </div>
                     </form>
 
                     <div class="modal-social-option">
                         <p>or Log-in with</p>
-
                         <ul class="modal-social-btn">
                             <li><a href="#" class="btn facebook"><i class="fab fa-facebook-square"></i> Facebook</a></li>
                             <li><a href="#" class="btn google"><i class="fab fa-google"></i> Google</a></li>
@@ -49,10 +51,8 @@
                 </div>
             </div>
             <!-- Modal Content End -->
-
         </div>
         <!-- Modal Wrapper End -->
-
     </div>
 </div>
 <!-- Log In Modal End -->

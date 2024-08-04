@@ -1,15 +1,19 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
+from django.urls import reverse
 from .utils import execute_query, extract_user_data, hash_password
-from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password
 import os
+from django.db import IntegrityError
 from django.conf import settings
 from django.http import JsonResponse
-from PIL import Image
+from datetime import datetime
+from django.utils.dateparse import parse_date
+from django.utils import timezone
 
 
 # Create your views here.
+
 
 
 # -----------------------------------------------------> 1) Start: Regiseration Management <-----------------------------------------------------
@@ -18,125 +22,632 @@ from PIL import Image
 def add_student_by_admin(request):
     if request.method == 'POST':
         data, errors = extract_user_data(request)
+
+        # Check for validation errors and return them as a JSON response
         if errors:
-            return render(request, 'account_app/admin_student_register.html', {'errors': errors, 'data': data})
-        
+            return JsonResponse({'success': False, 'errors': errors})
+
         if not data['password']:
-            messages.error(request, 'Password is required.')
-            return render(request, 'account_app/admin_student_register.html', {'data': data})
-        
+            return JsonResponse({'success': False, 'error': 'Password is required.'})
+
         if not data['email_address']:
-            messages.error(request, 'Email address is required.')
-            return render(request, 'account_app/admin_student_register.html', {'data': data})
+            return JsonResponse({'success': False, 'error': 'Email address is required.'})
 
         data['password'] = hash_password(data['password'])  # Hash the password
+
         query = """
             INSERT INTO students (first_name, middle_name, last_name, email_address, password, phone_number, gender, date_of_birth, address, major, created_at)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())
         """
-        params = [data['first_name'], data['middle_name'], data['last_name'], data['email_address'], data['password'], data['phone_number'], data['gender'], data['date_of_birth'], data['address'], data['major']]
+        params = [
+            data['first_name'], data['middle_name'], data['last_name'],
+            data['email_address'], data['password'], data['phone_number'],
+            data['gender'], data['date_of_birth'], data['address'], data['major']
+        ]
+        
+        # Execute the query to insert data into the database
         execute_query(query, params)
-        messages.success(request, 'Student added successfully by admin!')
-        return redirect('admin_page_app:student_list')
 
+        # Return a JSON response indicating success, using reverse to get the URL
+        return JsonResponse({
+            'success': True,
+            'message': 'Student added successfully by admin!',
+            'redirect_url': reverse('admin_page_app:student_list')  # Use the name of the URL
+        })
+
+    # Render the HTML form if not a POST request
     return render(request, 'account_app/admin_student_register.html')
+
+
 
 # 1.2) Add Student by User
 def add_student_by_user(request):
-    if request.method == 'POST':
+    if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        # Extract user data and validate
         data, errors = extract_user_data(request)
+
         if errors:
-            return render(request, 'account_app_partials/register_student_by_user.html', {'errors': errors, 'data': data})
-        
-        if not data['email_address']:
-            messages.error(request, 'Email address is required.')
-            return render(request, 'account_app_partials/register_student_by_user.html', {'data': data})
+            # Return errors as JSON
+            return JsonResponse({'success': False, 'errors': errors})
 
-        if not data['password']:
-            messages.error(request, 'Password is required.')
-            return render(request, 'account_app_partials/register_student_by_user.html', {'data': data})
+        # Hash the password
+        data['password'] = hash_password(data['password'])
 
-        data['password'] = hash_password(data['password'])  # Hash the password
+        # Insert the new student into the database
         query = """
             INSERT INTO students (first_name, middle_name, last_name, email_address, password, phone_number, gender, date_of_birth, address, major, created_at)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())
         """
-        params = [data['first_name'], data['middle_name'], data['last_name'], data['email_address'], data['password'], data['phone_number'], data['gender'], data['date_of_birth'], data['address'], data['major']]
-        execute_query(query, params)
-        messages.success(request, 'Student registered successfully!')
-        return redirect('home_page_app:home')
+        params = [
+            data['first_name'], data['middle_name'], data['last_name'],
+            data['email_address'], data['password'], data['phone_number'],
+            data['gender'], data['date_of_birth'], data['address'], data['major']
+        ]
 
-    return render(request, 'account_app_partials/register_student_by_user.html')
+        try:
+            execute_query(query, params)
+            # Return success response
+            return JsonResponse({'success': True, 'redirect_url': reverse('home_page_app:home')})
+        except Exception as e:
+            # Handle database errors
+            return JsonResponse({'success': False, 'error': 'An error occurred while registering the student.'})
+
+    return JsonResponse({'success': False, 'error': 'Invalid request.'})
 
 
-# 1.3) Add Student from Slider
+# 1.3) Add Student from Slider or another form of registration
 def add_student_from_slider(request):
     if request.method == 'POST':
-        data, errors = extract_user_data(request)
+        # Extract data directly from POST
+        data = {
+            'first_name': request.POST.get('first_name', '').strip(),
+            'middle_name': request.POST.get('middle_name', '').strip(),
+            'last_name': request.POST.get('last_name', '').strip(),
+            'email_address': request.POST.get('email_address', '').strip(),
+            'password': request.POST.get('password', ''),
+            'confirm_password': request.POST.get('confirm_password', ''),
+            'phone_number': request.POST.get('phone_number', '').strip(),
+            'gender': request.POST.get('gender', '').strip(),
+            'date_of_birth': request.POST.get('date_of_birth', '').strip(),
+            'address': request.POST.get('address', '').strip(),
+            'major': request.POST.get('major_or_department', '').strip(),
+            'terms': request.POST.get('terms', '')  # Checkbox value
+        }
+
+        # Validate fields
+        errors = []
+
+        if not data['first_name']:
+            errors.append('First name is required.')
+        elif not data['first_name'].replace(' ', '').isalpha():
+            errors.append('First name must be alphabetic.')
+
+        if not data['middle_name']:
+            errors.append('Middle name is required.')
+        elif not data['middle_name'].replace(' ', '').isalpha():
+            errors.append('Middle name must be alphabetic.')
+
+        if not data['last_name']:
+            errors.append('Last name is required.')
+        elif not data['last_name'].replace(' ', '').isalpha():
+            errors.append('Last name must be alphabetic.')
+
+        if not data['phone_number']:
+            errors.append('Phone number is required.')
+
+        if not data['gender']:
+            errors.append('Gender is required.')
+
+        if not data['date_of_birth']:
+            errors.append('Date of birth is required.')
+        else:
+            try:
+                dob = parse_date(data['date_of_birth'])
+                if dob is None:
+                    raise ValueError("Invalid date format")
+                age = (datetime.now().date() - dob).days // 365
+                if age < 10:
+                    errors.append('Age must be greater than 10 years.')
+            except ValueError:
+                errors.append('Invalid date of birth format.')
+
+        if not data['address']:
+            errors.append('Address is required.')
+
+        if not data['major']:
+            errors.append('Major is required.')
+
+        if not data['email_address']:
+            errors.append('Email address is required.')
+        else:
+            # Check email uniqueness
+            query = "SELECT * FROM students WHERE email_address = %s"
+            student = execute_query(query, [data['email_address']], fetchone=True)
+            if student:
+                errors.append('Email address already exists.')
+
+        # Validate password
+        if not data['password']:
+            errors.append('Password is required.')
+        elif len(data['password']) < 8:
+            errors.append('Password must be at least 8 characters long.')
+
+        # Validate confirm password
+        if data['confirm_password'] != data['password']:
+            errors.append('Passwords do not match.')
+
+        # Validate terms acceptance
+        if data['terms'] != 'on':
+            errors.append('You must accept the terms and conditions.')
+
         if errors:
             for error in errors:
                 messages.error(request, error)
-            return render(request, 'account_app/slider_student_register.html', {'errors': errors, 'data': data})
-        
-        if not data['email_address']:
-            messages.error(request, 'Email address is required.')
-            return render(request, 'account_app/slider_student_register.html', {'data': data})
-        
-        if not data['password']:
-            messages.error(request, 'Password is required.')
             return render(request, 'account_app/slider_student_register.html', {'data': data})
 
-        data['password'] = hash_password(data['password'])  # Hash the password
+        # Hash the password
+        data['password'] = hash_password(data['password'])
+
+        # Insert the new student into the database
         query = """
             INSERT INTO students (first_name, middle_name, last_name, email_address, password, phone_number, gender, date_of_birth, address, major, created_at)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())
         """
-        params = [data['first_name'], data['middle_name'], data['last_name'], data['email_address'], data['password'], data['phone_number'], data['gender'], data['date_of_birth'], data['address'], data['major']]
-        execute_query(query, params)
-        messages.success(request, 'Student registered successfully!')
-        return redirect('home_page_app:home')
+        params = [
+            data['first_name'], data['middle_name'], data['last_name'],
+            data['email_address'], data['password'], data['phone_number'],
+            data['gender'], data['date_of_birth'], data['address'], data['major']
+        ]
+
+        try:
+            execute_query(query, params)
+            messages.success(request, 'Student registered successfully!')
+            return redirect(reverse('home_page_app:home'))
+        except IntegrityError as e:
+            messages.error(request, 'An error occurred while registering the student: ' + str(e))
+        except Exception as e:
+            messages.error(request, 'An unexpected error occurred: ' + str(e))
 
     return render(request, 'account_app/slider_student_register.html')
 
+
+# 1.4) Add Instructor by Admin
+def add_instructor_by_admin(request):
+    if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        # Extract data from the POST request
+        data = {
+            'first_name': request.POST.get('first_name', '').strip(),
+            'middle_name': request.POST.get('middle_name', '').strip(),
+            'last_name': request.POST.get('last_name', '').strip(),
+            'email_address': request.POST.get('email_address', '').strip().lower(),
+            'password': request.POST.get('password', ''),
+            'confirm_password': request.POST.get('confirm_password', ''),
+            'phone_number': request.POST.get('phone_number', '').strip(),
+            'gender': request.POST.get('gender', '').strip(),
+            'date_of_birth': request.POST.get('date_of_birth', '').strip(),
+            'address': request.POST.get('address', '').strip(),
+            'department': request.POST.get('major_or_department', '').strip()
+        }
+
+        # Perform validation
+        errors = {}
+
+        # Validate names
+        if not data['first_name']:
+            errors['first_name'] = 'First name is required.'
+        elif not data['first_name'].replace(' ', '').isalpha():
+            errors['first_name'] = 'First name must be alphabetic.'
+
+        if not data['middle_name']:
+            errors['middle_name'] = 'Middle name is required.'
+        elif not data['middle_name'].replace(' ', '').isalpha():
+            errors['middle_name'] = 'Middle name must be alphabetic.'
+
+        if not data['last_name']:
+            errors['last_name'] = 'Last name is required.'
+        elif not data['last_name'].replace(' ', '').isalpha():
+            errors['last_name'] = 'Last name must be alphabetic.'
+
+        # Validate email
+        if not data['email_address']:
+            errors['email_address'] = 'Email address is required.'
+        else:
+            query = "SELECT * FROM instructors WHERE email_address = %s"
+            instructor = execute_query(query, [data['email_address']], fetchone=True)
+            if instructor:
+                errors['email_address'] = 'Email address already exists.'
+
+        # Validate password
+        if not data['password']:
+            errors['password'] = 'Password is required.'
+        elif len(data['password']) < 8:
+            errors['password'] = 'Password must be at least 8 characters long.'
+        elif data['password'] != data['confirm_password']:
+            errors['confirm_password'] = 'Passwords do not match.'
+
+        # Validate phone number
+        if not data['phone_number']:
+            errors['phone_number'] = 'Phone number is required.'
+
+        # Validate gender
+        if not data['gender']:
+            errors['gender'] = 'Gender is required.'
+
+        # Validate date of birth and age
+        if not data['date_of_birth']:
+            errors['date_of_birth'] = 'Date of birth is required.'
+        else:
+            try:
+                dob = datetime.strptime(data['date_of_birth'], '%Y-%m-%d').date()
+                today = timezone.now().date()
+                age = (today - dob).days // 365
+                if age < 18:
+                    errors['date_of_birth'] = 'Age must be 18 years or older to register.'
+            except ValueError:
+                errors['date_of_birth'] = 'Invalid date of birth format.'
+
+        # Validate address
+        if not data['address']:
+            errors['address'] = 'Address is required.'
+
+        # Validate department
+        if not data['department']:
+            errors['department'] = 'Department is required.'
+
+        # Return errors if any
+        if errors:
+            return JsonResponse({'success': False, 'errors': errors})
+
+        # Hash the password before storing it
+        hashed_password = hash_password(data['password'])
+
+        # Insert instructor data into the database
+        query = """
+            INSERT INTO instructors (
+                first_name, middle_name, last_name, email_address, password,
+                phone_number, gender, date_of_birth, address, department, created_at
+            )
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())
+        """
+        params = [
+            data['first_name'], data['middle_name'], data['last_name'],
+            data['email_address'], hashed_password, data['phone_number'],
+            data['gender'], data['date_of_birth'], data['address'],
+            data['department']
+        ]
+        
+        execute_query(query, params)
+
+        # Return a success response
+        return JsonResponse({
+            'success': True,
+            'redirect_url': reverse('admin_page_app:instructor_list')
+        })
+
+    return render(request, 'account_app/admin_instructor_register.html')
+
+# 1.5) Add Admin
+def admin_register_view(request):
+    if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        # Extract data from the POST request
+        first_name = request.POST.get('first_name', '').strip()
+        middle_name = request.POST.get('middle_name', '').strip()
+        last_name = request.POST.get('last_name', '').strip()
+        email_address = request.POST.get('email_address', '').strip().lower()
+        password = request.POST.get('password', '')
+        confirm_password = request.POST.get('confirm_password', '')
+        phone_number = request.POST.get('phone_number', '').strip()
+        gender = request.POST.get('gender', '').strip()
+        date_of_birth_str = request.POST.get('date_of_birth', '').strip()
+        address = request.POST.get('address', '').strip()
+
+        # Validate the data
+        errors = {}
+
+        # Validate names
+        if not first_name:
+            errors['first_name'] = 'First name is required.'
+        if not middle_name:
+            errors['middle_name'] = 'Middle name is required.'
+        if not last_name:
+            errors['last_name'] = 'Last name is required.'
+
+        # Validate email
+        if not email_address:
+            errors['email_address'] = 'Email address is required.'
+        else:
+            query = "SELECT * FROM admins WHERE email_address = %s"
+            existing_admin = execute_query(query, [email_address], fetchone=True)
+            if existing_admin:
+                errors['email_address'] = 'Email address is already in use.'
+
+        # Validate password
+        if not password:
+            errors['password'] = 'Password is required.'
+        elif len(password) < 8:
+            errors['password'] = 'Password must be at least 8 characters long.'
+
+        # Validate confirm password
+        if password != confirm_password:
+            errors['confirm_password'] = 'Passwords do not match.'
+
+        # Validate phone number
+        if not phone_number:
+            errors['phone_number'] = 'Phone number is required.'
+
+        # Validate gender
+        if gender not in ['male', 'female']:
+            errors['gender'] = 'Invalid gender selected.'
+
+        # Validate date of birth and check if age is 18 or older
+        if not date_of_birth_str:
+            errors['date_of_birth'] = 'Date of birth is required.'
+        else:
+            try:
+                date_of_birth = datetime.strptime(date_of_birth_str, '%Y-%m-%d').date()
+                today = timezone.now().date()
+                age = (today - date_of_birth).days // 365
+                if age < 18:
+                    errors['date_of_birth'] = 'You must be at least 18 years old to register.'
+            except ValueError:
+                errors['date_of_birth'] = 'Invalid date of birth format.'
+
+        # Validate address
+        if not address:
+            errors['address'] = 'Address is required.'
+
+        # Return errors if any
+        if errors:
+            return JsonResponse({'success': False, 'errors': errors})
+
+        # If no errors, create the admin using raw SQL query
+        hashed_password = hash_password(password)
+        insert_query = """
+            INSERT INTO admins (first_name, middle_name, last_name, email_address, password, phone_number, gender, date_of_birth, address,is_admin,is_staff, created_at)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())
+        """
+        params = [first_name, middle_name, last_name, email_address, hashed_password, phone_number, gender, date_of_birth, address, True, True]
+
+        try:
+            execute_query(insert_query, params)
+            # Successful creation, return success response
+            return JsonResponse({
+                'success': True,
+                'redirect_url': reverse('admin_page_app:view_admins')  # Redirect to view admins page
+            })
+        except IntegrityError:
+            return JsonResponse({'success': False, 'error': 'An error occurred while registering the admin.'})
+
+    # If not a POST request, just render the registration page
+    return render(request, 'account_app/admin_register.html')
+
+
+# 1.6) Add Admin from Slider or another form of registration that are out side of the dasbhboard
+def admin_register_view_without_login(request):
+    if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        # Extract data from the POST request
+        first_name = request.POST.get('first_name', '').strip()
+        middle_name = request.POST.get('middle_name', '').strip()
+        last_name = request.POST.get('last_name', '').strip()
+        email_address = request.POST.get('email_address', '').strip().lower()
+        password = request.POST.get('password', '')
+        confirm_password = request.POST.get('confirm_password', '')
+        phone_number = request.POST.get('phone_number', '').strip()
+        gender = request.POST.get('gender', '').strip()
+        date_of_birth_str = request.POST.get('date_of_birth', '').strip()
+        address = request.POST.get('address', '').strip()
+
+        # Validate the data
+        errors = {}
+
+        # Validate names
+        if not first_name:
+            errors['first_name'] = 'First name is required.'
+        if not middle_name:
+            errors['middle_name'] = 'Middle name is required.'
+        if not last_name:
+            errors['last_name'] = 'Last name is required.'
+
+        # Validate email
+        if not email_address:
+            errors['email_address'] = 'Email address is required.'
+        else:
+            query = "SELECT * FROM admins WHERE email_address = %s"
+            existing_admin = execute_query(query, [email_address], fetchone=True)
+            if existing_admin:
+                errors['email_address'] = 'Email address is already in use.'
+
+        # Validate password
+        if not password:
+            errors['password'] = 'Password is required.'
+        elif len(password) < 8:
+            errors['password'] = 'Password must be at least 8 characters long.'
+
+        # Validate confirm password
+        if password != confirm_password:
+            errors['confirm_password'] = 'Passwords do not match.'
+
+        # Validate phone number
+        if not phone_number:
+            errors['phone_number'] = 'Phone number is required.'
+
+        # Validate gender
+        if gender not in ['male', 'female']:
+            errors['gender'] = 'Invalid gender selected.'
+
+        # Validate date of birth and check if age is 18 or older
+        if not date_of_birth_str:
+            errors['date_of_birth'] = 'Date of birth is required.'
+        else:
+            try:
+                date_of_birth = datetime.strptime(date_of_birth_str, '%Y-%m-%d').date()
+                today = timezone.now().date()
+                age = (today - date_of_birth).days // 365
+                if age < 18:
+                    errors['date_of_birth'] = 'You must be at least 18 years old to register.'
+            except ValueError:
+                errors['date_of_birth'] = 'Invalid date of birth format.'
+
+        # Validate address
+        if not address:
+            errors['address'] = 'Address is required.'
+
+        # Return errors if any
+        if errors:
+            return JsonResponse({'success': False, 'errors': errors})
+
+        # If no errors, create the admin using raw SQL query
+        hashed_password = hash_password(password)
+        insert_query = """
+            INSERT INTO admins (first_name, middle_name, last_name, email_address, password, phone_number, gender, date_of_birth, address, is_admin, is_staff, created_at)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())
+        """
+        params = [first_name, middle_name, last_name, email_address, hashed_password, phone_number, gender, date_of_birth, address, True, True]
+
+        try:
+            execute_query(insert_query, params)
+            # Successful creation, return success response
+            return JsonResponse({
+                'success': True,
+                'redirect_url': reverse('admin_page_app:dashboard')  # Redirect to dashboard page
+            })
+        except IntegrityError:
+            return JsonResponse({'success': False, 'error': 'An error occurred while registering the admin.'})
+
+    # If not a POST request, just render the registration page
+    return render(request, 'account_app/admin_register_withoutlogin.html')
+
+
 # -----------------------------------------------------> End: Regiseration Management <-----------------------------------------------------
 
+
+
+# -----------------------------------------------------> 3) Start: Delete Users <-----------------------------------------------------
+
+# 3.1) delete instructor and his profile by using sql query as prvious
+def delete_instructor(request, id):
+    query = "DELETE FROM instructors WHERE id = %s"
+    execute_query(query, [id])
+
+    query = "DELETE FROM profiles WHERE user_id = %s AND user_type = 'instructor'"
+    execute_query(query, [id])
+    return redirect('admin_page_app:instructor_list')
+
+# 3.2) delete student 
 def delete_student(request, id):
     query = "DELETE FROM students WHERE id = %s"
     execute_query(query, [id])
 
-    messages.success(request, 'Student deleted successfully!')
+    query = "DELETE FROM profiles WHERE user_id = %s AND user_type = 'student'"
+    execute_query(query, [id])
     return redirect('admin_page_app:student_list')
+
+# 3.3) delete admin
+def delete_admin(request, id):
+    # Check if admin exists before attempting deletion
+    query = "SELECT * FROM admins WHERE id = %s"
+    admin = execute_query(query, [id], fetchone=True)
+
+    if admin:
+        # Delete the admin from the admins table
+        query = "DELETE FROM admins WHERE id = %s"
+        execute_query(query, [id])
+
+        # If there are any related tables for admins, you might need to delete those too.
+        # For example, if there is a profile associated with this admin:
+        query = "DELETE FROM profiles WHERE user_id = %s AND user_type = 'admin'"
+        execute_query(query, [id])
+    else:
+        messages.error(request, 'Admin not found or already deleted.')
+
+    return redirect('admin_page_app:view_admins')
+
+# -----------------------------------------------------> End: Delete Users <-----------------------------------------------------
+
 
 
 
 # -----------------------------------------------------> 2) Start: Login Management <-----------------------------------------------------
 
-# 2.1) Login
+# 2.1) Combined Login View
 def login_view(request):
     if request.method == 'POST':
-        email = request.POST.get('email_address')
-        password = request.POST.get('password') 
-        
+        email_address = request.POST.get('email_address')
+        password = request.POST.get('password')
+
+        # Validate email and password presence
+        if not email_address or not password:
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'success': False, 'error': 'Email and password are required.'})
+            else:
+                messages.error(request, 'Email and password are required.')
+                return render(request, 'account_app/another_login_page.html')
+
+        # Fetch the user by email
         query = "SELECT * FROM students WHERE email_address = %s"
-        student = execute_query(query, [email], fetchone=True)
-        
+        student = execute_query(query, [email_address], fetchone=True)
+
         if student and check_password(password, student['password']):
+            # Successful login, set session or other login mechanisms
             request.session['student_id'] = student['id']
-            request.session['student_email'] = student['email_address']
-            request.session['student_name'] = student['first_name']
-            messages.success(request, 'Logged in successfully!')
-            return redirect('home_page_app:student_dashboard')
+            student_id = student['id']
+            
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'success': True, 'redirect_url': reverse('home_page_app:student_dashboard', args=[student_id])})
+            else:
+                messages.success(request, 'Login successful!')
+                return redirect(reverse('home_page_app:student_dashboard', args=[student_id]))
         else:
-            messages.error(request, 'Invalid email or password.')
-            return redirect('account_app:login')
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'success': False, 'error': 'Invalid email or password.'})
+            else:
+                messages.error(request, 'Invalid email or password.')
+
+    return render(request, 'account_app/another_login_page.html')
+
     
-    return render(request, 'account_app_partials/login_student.html')
+def admin_login_view(request):
+    if request.method == 'POST':
+        email_address = request.POST.get('email_address')
+        password = request.POST.get('password')
+
+        # Validate email and password presence
+        if not email_address or not password:
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'success': False, 'error': 'Email and password are required.'})
+            else:
+                messages.error(request, 'Email and password are required.')
+                return render(request, 'account_app/admin_login.html')
+
+        # Fetch the admin by email
+        query = "SELECT * FROM admins WHERE email_address = %s"
+        admin = execute_query(query, [email_address], fetchone=True)
+
+        if admin and check_password(password, admin['password']):
+            # Successful login, set session or other login mechanisms
+            request.session['admin_id'] = admin['id']
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'success': True, 'redirect_url': reverse('admin_page_app:dashboard')})
+            else:
+                messages.success(request, 'Login successful!')
+                return redirect(reverse('admin_page_app:dashboard'))
+        else:
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'success': False, 'error': 'Invalid email or password.'})
+            else:
+                messages.error(request, 'Invalid email or password.')
+
+    return render(request, 'account_app/admin_login.html')
+
 
 # 2.2) Logout
 def logout_view(request):
-    request.session.flush()
-    messages.success(request, 'Logged out successfully!')
-    return redirect('home_page_app:home')
+    if 'admin_id' in request.session:
+        del request.session['admin_id']
+        return redirect('account_app:admin_login')
+    else:
+        request.session.flush()
+        return redirect('home_page_app:home')
 
 # -----------------------------------------------------> End: Login Management <-----------------------------------------------------
 
@@ -145,8 +656,6 @@ def logout_view(request):
 
 
 # -----------------------------------------------------> 3) Start: Student Profile Management <-----------------------------------------------------
-
-
 # 3.1) Update Student and Profile
 def update_student_and_profile_by_user(request):
     student_id = request.session.get('student_id')
@@ -245,7 +754,7 @@ def update_student_and_profile_by_user(request):
     return render(request, 'account_app/user_student_update.html', {'student': student, 'profile': profile, 'profile_picture_url': profile_picture_url, 'cover_photo_url': cover_photo_url})
 
 
-# 3.2) Upload Cover Photo
+# 3.2) Upload Cover Photo by user
 def upload_cover_photo(request):
     if request.method == 'POST':
         cover_photo = request.FILES.get('cover_photo')
@@ -296,7 +805,7 @@ def upload_cover_photo(request):
     return JsonResponse({'error': 'Invalid request method.'})
 
 
-# 3.3) Upload Profile Picture
+# 3.3) Upload Profile Picture by user
 def upload_profile_picture(request):
     if request.method == 'POST':
         profile_picture = request.FILES.get('profile_picture')
@@ -337,7 +846,7 @@ def upload_profile_picture(request):
 
     return JsonResponse({'error': 'Invalid request method.'})
 
-# 3.4) Delete Photos
+# 3.4) Delete Photos by user
 def delete_photos(request):
     if request.method == 'POST':
         student_id = request.session.get('student_id')
@@ -380,39 +889,427 @@ def delete_photos(request):
 
     return JsonResponse({'error': 'Invalid request method.'})
 
+# 3.5) Update Student and Profile by Admin
 def update_student_and_profile_by_admin(request, student_id):
-    if request.method == 'POST':
-        data, errors = extract_user_data(request)
-
-        if errors:
-            for error in errors:
-                messages.error(request, error)
-            return redirect('account_app:update_student_and_profile_by_admin', student_id=student_id)
-
-        update_student_query = """
-            UPDATE students
-            SET first_name = %s, middle_name = %s, last_name = %s, phone_number = %s, gender = %s, date_of_birth = %s, address = %s, major = %s
-            WHERE id = %s
-        """
-        student_params = [data['first_name'], data['middle_name'], data['last_name'], data['phone_number'], data['gender'], data['date_of_birth'], data['address'], data['major'], student_id]
-        execute_query(update_student_query, student_params)
-
-        update_profile_query = """
-            UPDATE profiles
-            SET bio = %s, facebook = %s, twitter = %s, linkedIn = %s, github = %s, profile_picture = %s
-            WHERE user_id = %s AND user_type = 'student'
-        """
-        profile_params = [data['bio'], data['facebook'], data['twitter'], data['linkedIn'], data['github'], data['profile_picture'], student_id]
-        execute_query(update_profile_query, profile_params)
-        
-        messages.success(request, 'Profile updated successfully!')
-        return redirect('account_app:student_list')
-
+    # Fetch student data
     student_query = "SELECT * FROM students WHERE id = %s"
     student = execute_query(student_query, [student_id], fetchone=True)
 
+    # Ensure the student exists
+    if not student:
+        return JsonResponse({'success': False, 'error': "Student not found."})
+
+    # Fetch or create the student's profile
     profile_query = "SELECT * FROM profiles WHERE user_id = %s AND user_type = 'student'"
     profile = execute_query(profile_query, [student_id], fetchone=True)
 
-    return render(request, 'account_app/admin_student_update.html', {'student': student, 'profile': profile})
+    # If profile does not exist, create it with default values
+    if not profile:
+        create_profile_query = """
+            INSERT INTO profiles (bio, facebook, twitter, linkedIn, github, user_type, user_id, created_at)
+            VALUES ('', '', '', '', '', 'student', %s, NOW())
+        """
+        execute_query(create_profile_query, [student_id])
+        profile = execute_query(profile_query, [student_id], fetchone=True)
+
+    if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        data = request.POST
+        errors = {}
+
+        # Validate and update student details
+        if not data.get('first_name'):
+            errors['first_name'] = 'First name is required.'
+        if not data.get('middle_name'):
+            errors['middle_name'] = 'Middle name is required.'
+        if not data.get('last_name'):
+            errors['last_name'] = 'Last name is required.'
+        if not data.get('date_of_birth'):
+            errors['date_of_birth'] = 'Date of birth is required.'
+        if not data.get('phone_number'):
+            errors['phone_number'] = 'Phone number is required.'
+        if not data.get('address'):
+            errors['address'] = 'Address is required.'
+        if not data.get('major'):
+            errors['major'] = 'Major is required.'
+        if not data.get('email_address'):
+            errors['email_address'] = 'Email address is required.'
+
+        # Age validation
+        if data.get('date_of_birth'):
+            try:
+                dob = datetime.strptime(data['date_of_birth'], '%Y-%m-%d')
+                age = (datetime.now().date() - dob.date()).days // 365
+                if age < 18:
+                    errors['date_of_birth'] = 'Student must be at least 18 years old.'
+            except ValueError:
+                errors['date_of_birth'] = 'Invalid date of birth format.'
+
+        # Return errors if any
+        if errors:
+            return JsonResponse({'success': False, 'errors': errors})
+
+        # Update student details
+        student_update_query = """
+            UPDATE students
+            SET first_name=%s, middle_name=%s, last_name=%s, date_of_birth=%s, phone_number=%s,
+                address=%s, major=%s, email_address=%s
+            WHERE id=%s
+        """
+        student_params = [
+            data.get('first_name', student['first_name']),
+            data.get('middle_name', student['middle_name']),
+            data.get('last_name', student['last_name']),
+            data.get('date_of_birth', student['date_of_birth']),
+            data.get('phone_number', student['phone_number']),
+            data.get('address', student['address']),
+            data.get('major', student['major']),
+            data.get('email_address', student['email_address']),
+            student_id
+        ]
+
+        execute_query(student_update_query, student_params)
+
+        # Update profile details
+        profile_data = {
+            'bio': data.get('bio', profile['bio']),
+            'facebook': data.get('facebook', profile['facebook']),
+            'twitter': data.get('twitter', profile['twitter']),
+            'linkedIn': data.get('linkedIn', profile['linkedIn']),
+            'github': data.get('github', profile['github']),
+            'user_id': student_id
+        }
+
+        # Check for new profile picture
+        profile_picture = request.FILES.get('profile_picture')
+        if profile_picture:
+            profile_picture_path = os.path.join('profile_images', profile_picture.name)
+            with open(os.path.join(settings.MEDIA_ROOT, profile_picture_path), 'wb+') as destination:
+                for chunk in profile_picture.chunks():
+                    destination.write(chunk)
+            profile_data['profile_picture'] = profile_picture_path
+        else:
+            profile_data['profile_picture'] = profile['profile_picture']
+
+        # Check for new cover photo
+        cover_photo = request.FILES.get('cover_photo')
+        if cover_photo:
+            cover_photo_path = os.path.join('cover_images', cover_photo.name)
+            with open(os.path.join(settings.MEDIA_ROOT, cover_photo_path), 'wb+') as destination:
+                for chunk in cover_photo.chunks():
+                    destination.write(chunk)
+            profile_data['cover_photo'] = cover_photo_path
+        else:
+            profile_data['cover_photo'] = profile['cover_photo']
+
+        profile_update_query = """
+            UPDATE profiles
+            SET bio=%s, facebook=%s, twitter=%s, linkedIn=%s, github=%s,
+                profile_picture=%s, cover_photo=%s
+            WHERE user_id=%s AND user_type='student'
+        """
+        profile_params = [
+            profile_data['bio'], profile_data['facebook'], profile_data['twitter'],
+            profile_data['linkedIn'], profile_data['github'], profile_data['profile_picture'],
+            profile_data['cover_photo'], student_id
+        ]
+
+        execute_query(profile_update_query, profile_params)
+
+        # Return success response
+        return JsonResponse({'success': True, 'message': 'Student profile updated successfully!'})
+
+    # Fetch enrolled courses
+    enrolled_courses_query = """
+        SELECT c.name AS course_name, cat.name AS category_name
+        FROM enrollments e
+        JOIN courses c ON e.course_id = c.id
+        JOIN categories cat ON c.category_id = cat.id
+        WHERE e.student_id = %s
+    """
+    enrolled_courses = execute_query(enrolled_courses_query, [student_id], fetchall=True)
+
+    profile_picture_url = os.path.join(settings.MEDIA_URL, profile['profile_picture']).replace('\\', '/') if profile and profile.get('profile_picture') else None
+    cover_photo_url = os.path.join(settings.MEDIA_URL, profile['cover_photo']).replace('\\', '/') if profile and profile.get('cover_photo') else None
+
+    return render(request, 'account_app/admin_student_update.html', {
+        'student': student,
+        'profile': profile,
+        'enrolled_courses': enrolled_courses,
+        'profile_picture_url': profile_picture_url,
+        'cover_photo_url': cover_photo_url
+    })
+
+# 3.6) Update Instructor and Profile by Admin
+def update_instructor_profile(request, instructor_id):
+    # Fetch instructor data
+    instructor_query = "SELECT * FROM instructors WHERE id = %s"
+    instructor = execute_query(instructor_query, [instructor_id], fetchone=True)
+
+    # Ensure the instructor exists
+    if not instructor:
+        return JsonResponse({'success': False, 'error': 'Instructor not found.'})
+
+    # Fetch or create the instructor's profile
+    profile_query = "SELECT * FROM profiles WHERE user_id = %s AND user_type = 'instructor'"
+    profile = execute_query(profile_query, [instructor_id], fetchone=True)
+
+    # If profile does not exist, create it with default values
+    if not profile:
+        create_profile_query = """
+            INSERT INTO profiles (bio, facebook, twitter, linkedIn, github, user_type, user_id, created_at)
+            VALUES ('', '', '', '', '', 'instructor', %s, NOW())
+        """
+        execute_query(create_profile_query, [instructor_id])
+        profile = execute_query(profile_query, [instructor_id], fetchone=True)
+
+    if request.method == 'POST':
+        data = request.POST
+        errors = []
+
+        # Validate form data
+        if not data.get('first_name', '').strip():
+            errors.append({'field': 'first_name', 'message': 'First name is required.'})
+        if not data.get('last_name', '').strip():
+            errors.append({'field': 'last_name', 'message': 'Last name is required.'})
+        if not data.get('email_address', '').strip():
+            errors.append({'field': 'email_address', 'message': 'Email address is required.'})
+        if not data.get('phone_number', '').strip():
+            errors.append({'field': 'phone_number', 'message': 'Phone number is required.'})
+
+        # Validate email uniqueness
+        if data['email_address'] and data['email_address'] != instructor['email_address']:
+            query = "SELECT * FROM instructors WHERE email_address = %s"
+            existing_instructor = execute_query(query, [data['email_address']], fetchone=True)
+            if existing_instructor:
+                errors.append({'field': 'email_address', 'message': 'Email address already exists.'})
+
+        # Validate date of birth
+        if data.get('date_of_birth'):
+            try:
+                dob = datetime.strptime(data['date_of_birth'], '%Y-%m-%d')
+                age = (datetime.now() - dob).days // 365
+                if age < 18:
+                    errors.append({'field': 'date_of_birth', 'message': 'Instructor must be at least 18 years old.'})
+            except ValueError:
+                errors.append({'field': 'date_of_birth', 'message': 'Invalid date of birth format.'})
+
+        # Handle errors
+        if errors:
+            return JsonResponse({'success': False, 'errors': errors})
+
+        # Update instructor details
+        instructor_update_query = """
+            UPDATE instructors
+            SET first_name=%s, middle_name=%s, last_name=%s, date_of_birth=%s, phone_number=%s,
+                address=%s, department=%s, email_address=%s
+            WHERE id=%s
+        """
+        instructor_params = [
+            data.get('first_name', instructor['first_name']),
+            data.get('middle_name', instructor['middle_name']),
+            data.get('last_name', instructor['last_name']),
+            data.get('date_of_birth', instructor['date_of_birth']),
+            data.get('phone_number', instructor['phone_number']),
+            data.get('address', instructor['address']),
+            data.get('department', instructor['department']),
+            data.get('email_address', instructor['email_address']),
+            instructor_id
+        ]
+
+        execute_query(instructor_update_query, instructor_params)
+
+        # Update profile details
+        profile_data = {
+            'bio': data.get('bio', profile['bio']),
+            'facebook': data.get('facebook', profile['facebook']),
+            'twitter': data.get('twitter', profile['twitter']),
+            'linkedIn': data.get('linkedIn', profile['linkedIn']),
+            'github': data.get('github', profile['github']),
+            'user_id': instructor_id
+        }
+
+        # Check for new profile picture
+        profile_picture = request.FILES.get('profile_picture')
+        if profile_picture:
+            profile_picture_path = os.path.join('profile_images', profile_picture.name)
+            with open(os.path.join(settings.MEDIA_ROOT, profile_picture_path), 'wb+') as destination:
+                for chunk in profile_picture.chunks():
+                    destination.write(chunk)
+            profile_data['profile_picture'] = profile_picture_path
+        else:
+            profile_data['profile_picture'] = profile['profile_picture']
+
+        # Check for new cover photo
+        cover_photo = request.FILES.get('cover_photo')
+        if cover_photo:
+            cover_photo_path = os.path.join('cover_images', cover_photo.name)
+            with open(os.path.join(settings.MEDIA_ROOT, cover_photo_path), 'wb+') as destination:
+                for chunk in cover_photo.chunks():
+                    destination.write(chunk)
+            profile_data['cover_photo'] = cover_photo_path
+        else:
+            profile_data['cover_photo'] = profile['cover_photo']
+
+        profile_update_query = """
+            UPDATE profiles
+            SET bio=%s, facebook=%s, twitter=%s, linkedIn=%s, github=%s,
+                profile_picture=%s, cover_photo=%s
+            WHERE user_id=%s AND user_type='instructor'
+        """
+        profile_params = [
+            profile_data['bio'], profile_data['facebook'], profile_data['twitter'],
+            profile_data['linkedIn'], profile_data['github'], profile_data['profile_picture'],
+            profile_data['cover_photo'], instructor_id
+        ]
+
+        execute_query(profile_update_query, profile_params)
+
+        # Return success response
+        return JsonResponse({'success': True})
+
+    profile_picture_url = os.path.join(settings.MEDIA_URL, profile['profile_picture']).replace('\\', '/') if profile and profile.get('profile_picture') else None
+    cover_photo_url = os.path.join(settings.MEDIA_URL, profile['cover_photo']).replace('\\', '/') if profile and profile.get('cover_photo') else None
+
+    return render(request, 'account_app/admin_instructor_update.html', {
+        'instructor': instructor,
+        'profile': profile,
+        'profile_picture_url': profile_picture_url,
+        'cover_photo_url': cover_photo_url
+    })
+
+# 3.7) update admin profile
+def update_admin_profile(request, admin_id):
+    # Fetch admin data
+    admin_query = "SELECT * FROM admins WHERE id = %s"
+    admin = execute_query(admin_query, [admin_id], fetchone=True)
+
+    # Ensure the admin exists
+    if not admin:
+        return JsonResponse({'success': False, 'error': 'Admin not found.'})
+
+    # Fetch or create the admin's profile
+    profile_query = "SELECT * FROM profiles WHERE user_id = %s AND user_type = 'admin'"
+    profile = execute_query(profile_query, [admin_id], fetchone=True)
+
+    # If profile does not exist, create it with default values
+    if not profile:
+        create_profile_query = """
+            INSERT INTO profiles (bio, facebook, twitter, linkedIn, github, user_type, user_id, created_at)
+            VALUES ('', '', '', '', '', 'admin', %s, NOW())
+        """
+        execute_query(create_profile_query, [admin_id])
+        profile = execute_query(profile_query, [admin_id], fetchone=True)
+
+    if request.method == 'POST':
+        data = request.POST
+        errors = []
+
+        # Update admin details
+        admin_update_query = """
+            UPDATE admins
+            SET first_name=%s, middle_name=%s, last_name=%s, date_of_birth=%s, phone_number=%s,
+                address=%s, email_address=%s
+            WHERE id=%s
+        """
+        admin_params = [
+            data.get('first_name', admin['first_name']),
+            data.get('middle_name', admin['middle_name']),
+            data.get('last_name', admin['last_name']),
+            data.get('date_of_birth', admin['date_of_birth']),
+            data.get('phone_number', admin['phone_number']),
+            data.get('address', admin['address']),
+            data.get('email_address', admin['email_address']),
+            admin_id
+        ]
+
+        # Validate input data
+        if not data['first_name']:
+            errors.append({'field': 'first_name', 'message': 'First name is required.'})
+        if not data['middle_name']:
+            errors.append({'field': 'middle_name', 'message': 'Middle name is required.'})
+        if not data['last_name']:
+            errors.append({'field': 'last_name', 'message': 'Last name is required.'})
+        if not data['phone_number']:
+            errors.append({'field': 'phone_number', 'message': 'Phone number is required.'})
+        if not data['address']:
+            errors.append({'field': 'address', 'message': 'Address is required.'})
+        if not data['email_address']:
+            errors.append({'field': 'email_address', 'message': 'Email address is required.'})
+
+        # Validate age
+        if data['date_of_birth']:
+            try:
+                dob = datetime.strptime(data['date_of_birth'], '%Y-%m-%d')
+                age = (datetime.now() - dob).days // 365
+                if age < 18:
+                    errors.append({'field': 'date_of_birth', 'message': 'Admin must be at least 18 years old.'})
+            except ValueError:
+                errors.append({'field': 'date_of_birth', 'message': 'Invalid date of birth format.'})
+
+        # Handle profile updates
+        profile_data = {
+            'bio': data.get('bio', profile['bio']),
+            'facebook': data.get('facebook', profile['facebook']),
+            'twitter': data.get('twitter', profile['twitter']),
+            'linkedIn': data.get('linkedIn', profile['linkedIn']),
+            'github': data.get('github', profile['github']),
+            'user_id': admin_id
+        }
+
+        # Check for new profile picture
+        profile_picture = request.FILES.get('profile_picture')
+        if profile_picture:
+            profile_picture_path = os.path.join('profile_images', profile_picture.name)
+            with open(os.path.join(settings.MEDIA_ROOT, profile_picture_path), 'wb+') as destination:
+                for chunk in profile_picture.chunks():
+                    destination.write(chunk)
+            profile_data['profile_picture'] = profile_picture_path
+        else:
+            profile_data['profile_picture'] = profile['profile_picture']
+
+        # Check for new cover photo
+        cover_photo = request.FILES.get('cover_photo')
+        if cover_photo:
+            cover_photo_path = os.path.join('cover_images', cover_photo.name)
+            with open(os.path.join(settings.MEDIA_ROOT, cover_photo_path), 'wb+') as destination:
+                for chunk in cover_photo.chunks():
+                    destination.write(chunk)
+            profile_data['cover_photo'] = cover_photo_path
+        else:
+            profile_data['cover_photo'] = profile['cover_photo']
+
+        if errors:
+            return JsonResponse({'success': False, 'errors': errors})
+
+        # Execute admin update query
+        execute_query(admin_update_query, admin_params)
+
+        # Update profile details
+        profile_update_query = """
+            UPDATE profiles
+            SET bio=%s, facebook=%s, twitter=%s, linkedIn=%s, github=%s,
+                profile_picture=%s, cover_photo=%s
+            WHERE user_id=%s AND user_type='admin'
+        """
+        profile_params = [
+            profile_data['bio'], profile_data['facebook'], profile_data['twitter'],
+            profile_data['linkedIn'], profile_data['github'], profile_data['profile_picture'],
+            profile_data['cover_photo'], admin_id
+        ]
+
+        execute_query(profile_update_query, profile_params)
+
+        return JsonResponse({'success': True, 'message': 'Admin profile updated successfully!'})
+
+    profile_picture_url = os.path.join(settings.MEDIA_URL, profile['profile_picture']).replace('\\', '/') if profile and profile.get('profile_picture') else None
+    cover_photo_url = os.path.join(settings.MEDIA_URL, profile['cover_photo']).replace('\\', '/') if profile and profile.get('cover_photo') else None
+
+    return render(request, 'account_app/admin_update_and_profile.html', {
+        'admin': admin,
+        'profile': profile,
+        'profile_picture_url': profile_picture_url,
+        'cover_photo_url': cover_photo_url
+    })
+
+
 # -----------------------------------------------------> End: Student Profile Management <-----------------------------------------------------

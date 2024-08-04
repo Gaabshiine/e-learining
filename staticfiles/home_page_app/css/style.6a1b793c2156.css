@@ -3776,6 +3776,20 @@ span.flatpickr-weekday {
 .dashboard-nav__menu-list li.active a i {
   color: #00b58b;
 }
+.dashboard-nav__menu-list a.active {
+  background-color: #00b58b;
+  color: #FFFFFF;
+}
+.dashboard-nav__menu-list a.active i {
+  color: #FFFFFF;
+}
+.dashboard-nav__menu-list a.active:hover {
+  background-color: #009b76; /* Slightly darker shade for hover effect */
+  color: #FFFFFF;
+}
+.dashboard-nav__menu-list a.active:hover i {
+  color: #FFFFFF;
+}
 .dashboard-nav__title {
   text-transform: uppercase;
   letter-spacing: 1px;
