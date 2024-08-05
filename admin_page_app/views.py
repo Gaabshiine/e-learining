@@ -13,33 +13,7 @@ def dashboard(request):
     """
     View for the admin dashboard. Retrieves admin profile and passes it to the template.
     """
-    admin_profile = None
-
-    # Check if the admin_id is set in the session
-    if 'admin_id' in request.session:
-        # Fetch admin profile from the database
-        query = "SELECT * FROM admins WHERE id = %s"
-        admin_profile = execute_query(query, [request.session['admin_id']], fetchone=True)
-
-    if not admin_profile:
-        # If no admin is found, redirect to the login page
-        return redirect(reverse('account_app:admin_login'))
-
-    # Fetch or create the admin's profile
-    profile_query = "SELECT * FROM profiles WHERE user_id = %s AND user_type = 'admin'"
-    profile = execute_query(profile_query, [admin_profile['id']], fetchone=True)
-
-
-    # Construct the profile picture URL
-    profile_picture_url = os.path.join(settings.MEDIA_URL, profile['profile_picture']).replace('\\', '/') if profile and profile.get('profile_picture') else None
-
-    # Add context for the admin profile
-    context = {
-        'admin_user': admin_profile,
-        'profile_picture_url': profile_picture_url,
-    }
-
-    return render(request, 'admin_page_app/admin_dashboard.html', context)
+    return render(request, 'admin_page_app/admin_dashboard.html')
 
 #--------------------------------- End: Admin Dashboard---------------------------------#
 

@@ -3,6 +3,14 @@
 {% load static %}
 
 {% block title %}Skillup 24 - My Profile{% endblock %}
+{% block css_files %}
+
+
+
+{% endblock %}
+
+{% block js_files %}
+{% endblock %}
 
 {% block dashboard_content %}
 <!-- Dashboard Content Start -->
@@ -241,7 +249,7 @@
                     </div>
 
                     <div class="dashboard-settings__btn">
-                        <button type="submit" class="btn btn-primary btn-hover-secondary">Update Profile</button>
+                        <button type="submit" class="btn btn-primary btn-hover-secondary btn-with-spinner" data-loading-text="Updating...">Update Profile</button>
                     </div>
                 </form>
             </div>
@@ -490,6 +498,8 @@
         });
     });
 </script>
+
+
 
 
 {% endblock %}

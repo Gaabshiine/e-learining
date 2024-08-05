@@ -6,6 +6,7 @@ from account_app.models import Student, Instructor
 class Category(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
+    image = models.ImageField(upload_to='category_images/', blank=True, null=True)  # Added image field
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -20,6 +21,7 @@ class Course(models.Model):
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='course_images/', blank=True, null=True)  # Added image field
     instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 

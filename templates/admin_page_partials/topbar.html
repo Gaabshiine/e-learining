@@ -63,8 +63,8 @@
             <a class="nav-link dropdown-toggle nav-user arrow-none me-0" data-bs-toggle="dropdown"
                 href="#" role="button" aria-haspopup="false" aria-expanded="false">
                 <span class="account-user-avatar">
-                    {% if profile_picture_url %}
-                        <img src="{{ profile_picture_url }}" alt="profile-image" class="rounded-circle">
+                    {% if admin_profile_picture_url %}
+                        <img src="{{ admin_profile_picture_url }}" alt="profile-image" class="rounded-circle">
                     {% else %}
                         
                         <img src="{% static 'home_page_app/images/avatar-placeholder.jpg' %}" alt="Default Male Avatar" class="rounded-circle">

@@ -115,31 +115,37 @@ def add_student_from_slider(request):
         }
 
         # Validate fields
-        errors = []
+        errors = {}
 
+        # First name validation
         if not data['first_name']:
-            errors.append('First name is required.')
+            errors['first_name'] = 'First name is required.'
         elif not data['first_name'].replace(' ', '').isalpha():
-            errors.append('First name must be alphabetic.')
+            errors['first_name'] = 'First name must be alphabetic.'
 
+        # Middle name validation
         if not data['middle_name']:
-            errors.append('Middle name is required.')
+            errors['middle_name'] = 'Middle name is required.'
         elif not data['middle_name'].replace(' ', '').isalpha():
-            errors.append('Middle name must be alphabetic.')
+            errors['middle_name'] = 'Middle name must be alphabetic.'
 
+        # Last name validation
         if not data['last_name']:
-            errors.append('Last name is required.')
+            errors['last_name'] = 'Last name is required.'
         elif not data['last_name'].replace(' ', '').isalpha():
-            errors.append('Last name must be alphabetic.')
+            errors['last_name'] = 'Last name must be alphabetic.'
 
+        # Phone number validation
         if not data['phone_number']:
-            errors.append('Phone number is required.')
+            errors['phone_number'] = 'Phone number is required.'
 
+        # Gender validation
         if not data['gender']:
-            errors.append('Gender is required.')
+            errors['gender'] = 'Gender is required.'
 
+        # Date of birth validation
         if not data['date_of_birth']:
-            errors.append('Date of birth is required.')
+            errors['date_of_birth'] = 'Date of birth is required.'
         else:
             try:
                 dob = parse_date(data['date_of_birth'])
@@ -147,43 +153,45 @@ def add_student_from_slider(request):
                     raise ValueError("Invalid date format")
                 age = (datetime.now().date() - dob).days // 365
                 if age < 10:
-                    errors.append('Age must be greater than 10 years.')
+                    errors['date_of_birth'] = 'Age must be greater than 10 years.'
             except ValueError:
-                errors.append('Invalid date of birth format.')
+                errors['date_of_birth'] = 'Invalid date of birth format.'
 
+        # Address validation
         if not data['address']:
-            errors.append('Address is required.')
+            errors['address'] = 'Address is required.'
 
+        # Major validation
         if not data['major']:
-            errors.append('Major is required.')
+            errors['major'] = 'Major is required.'
 
+        # Email validation
         if not data['email_address']:
-            errors.append('Email address is required.')
+            errors['email_address'] = 'Email address is required.'
         else:
             # Check email uniqueness
             query = "SELECT * FROM students WHERE email_address = %s"
             student = execute_query(query, [data['email_address']], fetchone=True)
             if student:
-                errors.append('Email address already exists.')
+                errors['email_address'] = 'Email address already exists.'
 
-        # Validate password
+        # Password validation
         if not data['password']:
-            errors.append('Password is required.')
+            errors['password'] = 'Password is required.'
         elif len(data['password']) < 8:
-            errors.append('Password must be at least 8 characters long.')
+            errors['password'] = 'Password must be at least 8 characters long.'
 
-        # Validate confirm password
+        # Confirm password validation
         if data['confirm_password'] != data['password']:
-            errors.append('Passwords do not match.')
+            errors['confirm_password'] = 'Passwords do not match.'
 
-        # Validate terms acceptance
+        # Terms acceptance validation
         if data['terms'] != 'on':
-            errors.append('You must accept the terms and conditions.')
+            errors['terms'] = 'You must accept the terms and conditions.'
 
+        # Check for errors and respond accordingly
         if errors:
-            for error in errors:
-                messages.error(request, error)
-            return render(request, 'account_app/slider_student_register.html', {'data': data})
+            return JsonResponse({'success': False, 'errors': errors}, status=400)
 
         # Hash the password
         data['password'] = hash_password(data['password'])
@@ -201,12 +209,11 @@ def add_student_from_slider(request):
 
         try:
             execute_query(query, params)
-            messages.success(request, 'Student registered successfully!')
-            return redirect(reverse('home_page_app:home'))
+            return JsonResponse({'success': True, 'message': 'Student registered successfully!', 'redirect_url': reverse('home_page_app:home')})
         except IntegrityError as e:
-            messages.error(request, 'An error occurred while registering the student: ' + str(e))
+            return JsonResponse({'success': False, 'error': 'An error occurred while registering the student: ' + str(e)}, status=500)
         except Exception as e:
-            messages.error(request, 'An unexpected error occurred: ' + str(e))
+            return JsonResponse({'success': False, 'error': 'An unexpected error occurred: ' + str(e)}, status=500)
 
     return render(request, 'account_app/slider_student_register.html')
 

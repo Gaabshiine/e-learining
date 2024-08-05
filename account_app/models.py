@@ -1,4 +1,4 @@
-# home_page_app/models.py
+# account_app/models.py
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 

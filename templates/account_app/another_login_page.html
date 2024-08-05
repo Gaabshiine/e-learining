@@ -74,7 +74,10 @@
                                     </div>
                         
                                     <div class="slider-register__btn">
-                                        <button class="btn btn-primary btn-hover-secondary w-100 login-btn" type="submit">Log In</button>
+                                        <button class="btn btn-primary btn-hover-secondary w-100 login-btn btn-with-spinner" type="submit" id="loginButton">
+                                            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                                            <span class="button-text">Login</span>
+                                        </button>
                                     </div>
 
                                 </div>
@@ -106,25 +109,5 @@
 
     {% include "home_page_partials/arrow_up_down.html" %}
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            document.querySelectorAll('form').forEach(form => {
-                form.addEventListener('submit', function () {
-                    const button = form.querySelector('button[type="submit"]');
-                    const spinner = button.querySelector('.spinner-border');
-                    const buttonText = button.querySelector('.button-text');
-
-                    if (spinner) spinner.classList.remove('d-none');
-                    if (buttonText) buttonText.textContent = 'Processing...';
-                    button.disabled = true;
-                });
-            });
-        });
-
-        function toggleChatPopup() {
-            const chatPopup = document.getElementById('whatsapp-chat-popup');
-            chatPopup.style.display = chatPopup.style.display === 'none' || chatPopup.style.display === '' ? 'block' : 'none';
-        }
-    </script>
 </main>
 {% endblock %}
