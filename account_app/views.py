@@ -533,42 +533,64 @@ def admin_register_view_without_login(request):
 
 # 3.1) delete instructor and his profile by using sql query as prvious
 def delete_instructor(request, id):
-    query = "DELETE FROM instructors WHERE id = %s"
-    execute_query(query, [id])
+    if request.method == 'POST':
+        try:
+            # Delete the instructor from the database
+            query = "DELETE FROM instructors WHERE id = %s"
+            execute_query(query, [id])
 
-    query = "DELETE FROM profiles WHERE user_id = %s AND user_type = 'instructor'"
-    execute_query(query, [id])
-    return redirect('admin_page_app:instructor_list')
+            # Delete the instructor's profile
+            query = "DELETE FROM profiles WHERE user_id = %s AND user_type = 'instructor'"
+            execute_query(query, [id])
+
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})
 
 # 3.2) delete student 
 def delete_student(request, id):
-    query = "DELETE FROM students WHERE id = %s"
-    execute_query(query, [id])
+    if request.method == 'POST':
+        try:
+            query = "DELETE FROM students WHERE id = %s"
+            execute_query(query, [id])
 
-    query = "DELETE FROM profiles WHERE user_id = %s AND user_type = 'student'"
-    execute_query(query, [id])
-    return redirect('admin_page_app:student_list')
+            query = "DELETE FROM profiles WHERE user_id = %s AND user_type = 'student'"
+            execute_query(query, [id])
+
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})
+
 
 # 3.3) delete admin
 def delete_admin(request, id):
-    # Check if admin exists before attempting deletion
-    query = "SELECT * FROM admins WHERE id = %s"
-    admin = execute_query(query, [id], fetchone=True)
+    if request.method == 'POST':
+        try:
+            # Check if admin exists before attempting deletion
+            query = "SELECT * FROM admins WHERE id = %s"
+            admin = execute_query(query, [id], fetchone=True)
 
-    if admin:
-        # Delete the admin from the admins table
-        query = "DELETE FROM admins WHERE id = %s"
-        execute_query(query, [id])
+            if admin:
+                # Delete the admin from the admins table
+                query = "DELETE FROM admins WHERE id = %s"
+                execute_query(query, [id])
 
-        # If there are any related tables for admins, you might need to delete those too.
-        # For example, if there is a profile associated with this admin:
-        query = "DELETE FROM profiles WHERE user_id = %s AND user_type = 'admin'"
-        execute_query(query, [id])
-    else:
-        messages.error(request, 'Admin not found or already deleted.')
+                # Delete associated profile
+                query = "DELETE FROM profiles WHERE user_id = %s AND user_type = 'admin'"
+                execute_query(query, [id])
 
-    return redirect('admin_page_app:view_admins')
+                return JsonResponse({'success': True})
+            else:
+                return JsonResponse({'success': False, 'error': 'Admin not found or already deleted.'})
 
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})
 # -----------------------------------------------------> End: Delete Users <-----------------------------------------------------
 
 

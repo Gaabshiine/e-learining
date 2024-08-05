@@ -244,7 +244,7 @@ data-layout-config='{"leftSideBarTheme":"dark","layoutBoxed":false, "leftSidebar
                     .then(data => {
                         if (data.success) {
                             // Handle success (e.g., redirect or show message)
-                            location.reload();
+                            window.location.href = data.redirect_url;
                         } else {
                             // Reset button if there was an error
                             resetButtonLoadingState(submitButton);

@@ -90,7 +90,10 @@
                                                 <form method="post" action="">
                                                     {% csrf_token %}
                                                     <input type="hidden" name="enrollment_id" value="{{ course.enrollment_id }}">
-                                                    <button type="submit" class="btn btn-secondary btn-sm">Request Activation</button>
+                                                    <button class="btn btn-secondary btn-sm btn-with-spinner" type="submit">
+                                                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                                                        <span class="button-text">Request Activation</span>
+                                                    </button>
                                                 </form>
                                             {% endif %}
                                         </li>
