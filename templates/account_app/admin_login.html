@@ -87,7 +87,7 @@
 {% include "admin_page_partials/footer_alt.html" %}
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         const loginButton = document.getElementById('loginButton');
         const emailInput = document.getElementById('email_address');
         const passwordInput = document.getElementById('password');
@@ -95,7 +95,7 @@
         const passwordError = document.getElementById('passwordError');
         const generalError = document.getElementById('generalError');
 
-        loginButton.addEventListener('click', function() {
+        loginButton.addEventListener('click', function () {
             console.log("Login button clicked");
             let isValid = true;
 
@@ -124,6 +124,16 @@
                 return;
             }
 
+            // Prevent multiple submissions
+            if (loginButton.disabled) {
+                return;
+            }
+
+            handleButtonLoadingState(loginButton);
+
+            // Mark the button as disabled to prevent additional clicks
+            loginButton.disabled = true;
+
             // Perform AJAX login
             const formData = new FormData();
             formData.append('email_address', emailInput.value);
@@ -137,13 +147,22 @@
                     'X-Requested-With': 'XMLHttpRequest'
                 }
             })
-            .then(response => response.json())
+            .then(response => {
+                // Check if the response is OK (status code 200)
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(data => {
                 console.log("Response received:", data);
                 if (data.success) {
                     // Redirect on success
                     window.location.href = data.redirect_url;
                 } else {
+                    // Reset button if there was an error
+                    resetButtonLoadingState(loginButton);
+                    loginButton.disabled = false; // Re-enable button for retry
                     // Show errors
                     generalError.textContent = data.error || 'An error occurred.';
                     generalError.style.display = 'block';
@@ -153,10 +172,51 @@
                 console.error('Error:', error);
                 generalError.textContent = 'An unexpected error occurred.';
                 generalError.style.display = 'block';
+                // Reset button on catch error
+                resetButtonLoadingState(loginButton);
+                loginButton.disabled = false; // Re-enable button for retry
             });
         });
+
+        // Function to handle button loading state
+        function handleButtonLoadingState(button) {
+            const originalText = button.textContent.trim();
+            const loadingText = getLoadingText(originalText);
+
+            // Show spinner and update button text
+            const spinner = button.querySelector('.spinner-border');
+            if (spinner) {
+                spinner.classList.remove('d-none');
+            }
+            button.querySelector('.button-text').textContent = loadingText;
+        }
+
+        // Function to reset button loading state
+        function resetButtonLoadingState(button) {
+            const originalText = button.dataset.originalText;
+            const spinner = button.querySelector('.spinner-border');
+
+            if (spinner) {
+                spinner.classList.add('d-none');
+            }
+            button.querySelector('.button-text').textContent = originalText;
+        }
+
+        // Function to derive the loading text based on the original text
+        function getLoadingText(originalText) {
+            if (originalText.endsWith('e')) {
+                return `${originalText.slice(0, -1)}ing...`;
+            } else if (originalText.endsWith('y')) {
+                return `${originalText.slice(0, -1)}ying...`;
+            }
+            return `${originalText}ing...`;
+        }
+
+        // Store original text for the button
+        loginButton.dataset.originalText = loginButton.textContent.trim();
     });
 </script>
+
 {% endblock %}
 
 

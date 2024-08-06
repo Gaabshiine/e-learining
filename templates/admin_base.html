@@ -23,6 +23,8 @@
     <link href="{% static "admin_page_app/css/icons.min.css" %}" rel="stylesheet" type="text/css" />
     <link href="{% static "admin_page_app/css/app.min.css" %}" rel="stylesheet" type="text/css" id="light-style" />
     <link href="{% static "admin_page_app/css/app-dark.min.css" %}" rel="stylesheet" type="text/css" id="dark-style" />
+    {% block css_files %}{% endblock %}
+
     <!-- Custom Data Table CSS -->
     <style>
         .dataTables_wrapper .dataTables_info,
@@ -170,125 +172,6 @@ data-layout-config='{"leftSideBarTheme":"dark","layoutBoxed":false, "leftSidebar
     
     </script>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // Function to handle loading state of buttons
-            function handleButtonLoadingState(button) {
-                const originalText = button.textContent.trim();
-                const loadingText = getLoadingText(originalText);
-        
-                // Show spinner and update button text
-                const spinner = button.querySelector('.spinner-border');
-                if (spinner) {
-                    spinner.classList.remove('d-none');
-                }
-                button.querySelector('.button-text').textContent = loadingText;
-        
-                // Disable the button to prevent multiple clicks
-                button.disabled = true;
-            }
-        
-            // Function to reset button loading state
-            function resetButtonLoadingState(button) {
-                const originalText = button.dataset.originalText;
-                const spinner = button.querySelector('.spinner-border');
-        
-                if (spinner) {
-                    spinner.classList.add('d-none');
-                }
-                button.querySelector('.button-text').textContent = originalText;
-                button.disabled = false;
-            }
-        
-            // Function to derive the loading text based on the original text
-            function getLoadingText(originalText) {
-                if (originalText.endsWith('e')) {
-                    return `${originalText.slice(0, -1)}ing...`;
-                } else if (originalText.endsWith('y')) {
-                    return `${originalText.slice(0, -1)}ying...`;
-                }
-                return `${originalText}ing...`;
-            }
-        
-            // Store original text for all buttons
-            const allButtons = document.querySelectorAll('button');
-            allButtons.forEach(button => {
-                button.dataset.originalText = button.textContent.trim();
-            });
-        
-            // Select all forms and attach the spinner functionality
-            const forms = document.querySelectorAll('form');
-            forms.forEach(form => {
-                form.addEventListener('submit', function (event) {
-                    event.preventDefault(); // Prevent default form submission
-        
-                    const submitButton = form.querySelector('button[type="submit"]');
-                    if (!submitButton) {
-                        return;
-                    }
-        
-                    handleButtonLoadingState(submitButton);
-        
-                    // Fetch API to handle form submission
-                    const formData = new FormData(form);
-        
-                    fetch(form.action, {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value,
-                            'X-Requested-With': 'XMLHttpRequest' // Mark the request as AJAX
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // Handle success (e.g., redirect or show message)
-                            window.location.href = data.redirect_url;
-                        } else {
-                            // Reset button if there was an error
-                            resetButtonLoadingState(submitButton);
-                            // Show error messages (use your existing error handling code here)
-                            displayErrors(data.errors);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        // Reset button on catch error
-                        resetButtonLoadingState(submitButton);
-                    });
-                });
-            });
-        
-            // Function to display error messages
-            function displayErrors(errors) {
-                if (errors) {
-                    for (let field in errors) {
-                        const errorElement = document.getElementById(`${field}Error`);
-                        if (errorElement) {
-                            errorElement.textContent = errors[field];
-                            errorElement.style.display = 'block';
-                        }
-                    }
-                }
-            }
-        
-            // Add spinner handling for regular button clicks
-            const buttons = document.querySelectorAll('button:not([type="submit"])');
-            buttons.forEach(button => {
-                button.addEventListener('click', function () {
-                    handleButtonLoadingState(button);
-        
-                    // Perform any actions needed, then reset
-                    window.addEventListener('load', function () {
-                        resetButtonLoadingState(button);
-                    });
-                });
-            });
-        });
-        
-        
-    </script>
     
     
 

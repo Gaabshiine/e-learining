@@ -120,7 +120,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'fahad2023_skillup24',
         'USER': 'fahad2023_skillup24',
-        'PASSWORD': '4o2*a0W7j',
+        'PASSWORD': 'vf3N4i74%',
         'HOST': 'fahad2023.helioho.st',
         'PORT': '3306',
     }
@@ -186,6 +186,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 SESSION_COOKIE_AGE = 1209600  # 2 weeks in seconds (2 * 7 * 24 * 60 * 60)
 SESSION_SAVE_EVERY_REQUEST = True  # Save the session to the database on every request
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Session will not expire when the browser closes
+
+# Bunny.net API credentials
+BUNNY_CDN_ACCESS_KEY = '1d9a7145-e6c5-4f5b-bebbc2001941-5ade-4487'  # Your API key
+BUNNY_CDN_STORAGE_ZONE_NAME = 'skillup24'  # Your storage zone name
+BUNNY_CDN_PULL_ZONE = 'skillup24site'  # Your pull zone name
+BUNNY_CDN_STORAGE_ZONE_ID = '734133'  # Your storage zone ID
+BUNNY_CDN_BASE_URL = f'https://storage.bunnycdn.com/{BUNNY_CDN_STORAGE_ZONE_NAME}/'
+BUNNY_CDN_HOSTNAME = 'skillup24site.b-cdn.net'  # CDN Hostname
 
 # For persistent sessions, consider using the database session backend
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'

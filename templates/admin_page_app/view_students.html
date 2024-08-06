@@ -62,7 +62,7 @@
                                                     <td>{{ student.phone_number }}</td>
                                                     <td>
                                                         <a href="{% url "admin_page_app:view_student_details" student.id %}" class="action-icon"> <i class="mdi mdi-eye"></i></a>
-                                                        <a href="{% url 'account_app:update_student_and_profile_by_admin' student.id %}" class="action-icon">
+                                                        <a href="{% url 'account_app:update_student_profile' student.id %}" class="action-icon">
                                                             <i class="mdi mdi-square-edit-outline"></i>
                                                         </a>
                                                         <a href="#deleteStudentModal{{ student.id }}" class="action-icon" data-bs-toggle="modal"> 
@@ -119,6 +119,13 @@
             button.addEventListener('click', function () {
                 const studentId = button.getAttribute('data-student-id');
                 const form = document.getElementById(`delete-student-form-${studentId}`);
+
+                // Prevent multiple submissions
+                if (button.disabled) {
+                    return;
+                }
+
+                handleButtonLoadingState(button);
                 
                 const formData = new FormData(form);
 
@@ -147,17 +154,61 @@
                         // Optionally, show a success message
                         console.log('Student deleted successfully.');
                     } else {
-                        // Show error message
+                        // Reset button if there was an error
+                        resetButtonLoadingState(button);
                         console.error('Failed to delete student:', data.error || 'Unknown error');
                     }
                 })
                 .catch(error => {
                     console.error('Error deleting student:', error);
+                    resetButtonLoadingState(button);
                 });
             });
+        });
+
+        // Function to handle button loading state
+        function handleButtonLoadingState(button) {
+            const originalText = button.textContent.trim();
+            const loadingText = getLoadingText(originalText);
+
+            // Show spinner and update button text
+            const spinner = button.querySelector('.spinner-border');
+            if (spinner) {
+                spinner.classList.remove('d-none');
+            }
+            button.querySelector('.button-text').textContent = loadingText;
+
+            // Disable the button to prevent multiple clicks
+            button.disabled = true;
+        }
+
+        // Function to reset button loading state
+        function resetButtonLoadingState(button) {
+            const originalText = button.dataset.originalText;
+            const spinner = button.querySelector('.spinner-border');
+
+            if (spinner) {
+                spinner.classList.add('d-none');
+            }
+            button.querySelector('.button-text').textContent = originalText;
+            button.disabled = false;
+        }
+
+        // Function to derive the loading text based on the original text
+        function getLoadingText(originalText) {
+            if (originalText.endsWith('e')) {
+                return `${originalText.slice(0, -1)}ing...`;
+            } else if (originalText.endsWith('y')) {
+                return `${originalText.slice(0, -1)}ying...`;
+            }
+            return `${originalText}ing...`;
+        }
+
+        // Store original text for the buttons
+        const allButtons = document.querySelectorAll('button');
+        allButtons.forEach(button => {
+            button.dataset.originalText = button.textContent.trim();
         });
     });
 </script>
 {% endblock %}
-
-

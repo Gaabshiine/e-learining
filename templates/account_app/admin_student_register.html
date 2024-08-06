@@ -168,6 +168,9 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const form = document.getElementById('adminStudentRegisterForm');
+        const submitButton = form.querySelector('button[type="submit"]');
+        const spinner = submitButton.querySelector('.spinner-border');
+        const buttonText = submitButton.querySelector('.button-text');
     
         form.addEventListener('submit', function(event) {
             event.preventDefault();  // Prevent the form from submitting normally
@@ -179,6 +182,11 @@
                 el.style.display = 'none';
                 el.textContent = ''; // Clear the text content as well
             });
+            
+            // Show the spinner and disable the button
+            submitButton.disabled = true;
+            spinner.classList.remove('d-none');
+            buttonText.textContent = 'Submitting...';
             
             // Send data using fetch API
             fetch("{% url 'account_app:add_student_by_admin' %}", {
@@ -192,10 +200,10 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Redirect or show success message
+                    // Redirect on success
                     window.location.href = data.redirect_url;
                 } else {
-                    // Show error messages
+                    // Handle errors
                     if (data.errors) {
                         for (let field in data.errors) {
                             const errorElement = document.getElementById(`${field}Error`);
@@ -209,15 +217,24 @@
                     } else if (data.error) {
                         alert(data.error);
                     }
+
+                    // Reset spinner and button state on error
+                    submitButton.disabled = false;
+                    spinner.classList.add('d-none');
+                    buttonText.textContent = 'Submit';
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
                 alert('An unexpected error occurred.');
+                
+                // Reset spinner and button state on error
+                submitButton.disabled = false;
+                spinner.classList.add('d-none');
+                buttonText.textContent = 'Submit';
             });
         });
     });    
-    
-    
 </script>
+
 {% endblock %}

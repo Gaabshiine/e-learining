@@ -24,7 +24,7 @@ urlpatterns = [
 
     # update urls
     path('students/update/by_user/', views.update_student_and_profile_by_user, name='update_student_and_profile_by_user'),
-    path('students/update/by_admin/<int:student_id>/', views.update_student_and_profile_by_admin, name='update_student_and_profile_by_admin'),
+    path('students/update/by_admin/<int:student_id>/', views.update_student_and_profile_by_admin, name='update_student_profile'),
     path('admin/update/<int:admin_id>/', views.update_admin_profile, name='update_admin'),  # New URL for updating admin
     path('instructors/update/<int:instructor_id>/', views.update_instructor_profile, name='update_instructor_profile'),
 

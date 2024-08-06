@@ -1,0 +1,68 @@
+<!-- admin_page_app/templates/admin_page_app/view_course_lessons.html -->
+{% extends "admin_base.html" %}
+{% load static %}
+
+{% block wrapper %}
+<div class="wrapper">
+    {% include "admin_page_partials/left_sidebar.html" %}
+    <div class="content-page">
+        <div class="content">
+            {% include "admin_page_partials/topbar.html" %}
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box">
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="#">Skillup 24</a></li>
+                                    <li class="breadcrumb-item active">Lessons for {{ course.name }}</li>
+                                </ol>
+                            </div>
+                            <a href="{% url 'admin_page_app:list_lessons' %}" class="btn btn-dark mb-2">
+                                {% comment %} back arrow {% endcomment %}
+                                <i class="mdi mdi-arrow-left-circle me-1 mb-4"></i> Go Back
+                            </a>
+                            <h4 class="page-title">Lessons for {{ course.name }}</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    {% if lessons %}
+                        {% for lesson in lessons %}
+                        <div class="col-lg-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ lesson.title }}</h5>
+                                    <p class="card-text">{{ lesson.content }}</p>
+                                    {% if lesson.video_url %}
+                                    <video controls width="100%">
+                                        <source src="{{ lesson.video_url }}" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                    {% else %}
+                                    <p>No video available.</p>
+                                    {% endif %}
+                                    <p class="card-text"><small class="text-muted">Created on {{ lesson.created_at|date:"d M Y" }}</small></p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="col-12">
+                            <div class="alert alert-warning" role="alert">
+                                No lessons found for this course.
+                            </div>
+                        </div>
+                    {% endif %}
+                </div> <!-- end row -->
+            </div> <!-- container -->
+        </div> <!-- content -->
+        {% include "admin_page_partials/footer.html" %}
+    </div> <!-- end content-page -->
+</div> <!-- end wrapper -->
+{% endblock %}
+
+{% block right_sidebar %}
+{% include "admin_page_partials/right_sidebar.html" %}
+{% endblock %}

@@ -8,23 +8,33 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
 
     # # Course management
-    # path('courses/', views.course_list, name='course_list'),
-    # path('courses/add/', views.add_course, name='add_course'),
-    # path('courses/update/<int:id>/', views.update_course, name='update_course'),
-    # path('courses/delete/<int:id>/', views.delete_course, name='delete_course'),
+    path('courses/', views.course_list, name='course_list'),
+    path('courses/register/', views.add_courses, name='add_courses'),
+    path('courses/update/<int:course_id>/', views.update_course, name='update_course'),
+    path('course/delete/<int:course_id>/', views.delete_course, name='delete_course'),
+    
 
     # # Instructor management
     path('instructors/', views.instructor_list, name='instructor_list'),
-    # path('instructors/add/', views.add_instructor, name='add_instructor'),
-    # path('instructors/update/<int:id>/', views.update_instructor, name='update_instructor'),
-    # path('instructors/delete/<int:id>/', views.delete_instructor, name='delete_instructor'),
+
 
     # # Student management
     path('students/', views.student_list, name='student_list'), 
     path('students/details/<int:student_id>/', views.view_student_details, name='view_student_details'),
-    # path('students/add/by_admin/', views.add_student_by_admin, name='add_student_by_admin'),
-    # path('students/add/by_user/', views.add_student_by_user, name='add_student_by_user'),
-    
+
+    # # Payment management
+    path('payments/add/', views.add_payment, name='add_payment'),
+    path('payments/update/<int:payment_id>/', views.update_payment, name='update_payment'),
+    path('payments/delete/<int:payment_id>/', views.delete_payment, name='delete_payment'),
+    path('payments/', views.payment_list, name='payment_list'),
+    path('payments/view/<int:payment_id>/', views.view_payment_student_details, name='view_payment_student_details'),
+
+    # # Lesson management
+    path('lessons/add/', views.add_lessons, name='add_lessons'),
+    path('lessons/update/<int:lesson_id>/', views.update_lesson, name='update_lesson'),
+    path('lessons/delete/<int:lesson_id>/', views.delete_lesson, name='delete_lesson'),
+    path('lessons/', views.list_lessons, name='list_lessons'),
+    path('courses/<int:course_id>/lessons/', views.view_course_lessons, name='view_course_lessons'),
 
     # # Reports
     # path('reports/enrollment/', views.enrollment_report, name='enrollment_report'),
@@ -38,10 +48,11 @@ urlpatterns = [
     # path('events/delete/<int:id>/', views.delete_event, name='delete_event'),
 
     # # Category management
-    # path('categories/', views.category_list, name='category_list'),
-    # path('categories/add/', views.add_category, name='add_category'),
-    # path('categories/update/<int:id>/', views.update_category, name='update_category'),
-    # path('categories/delete/<int:id>/', views.delete_category, name='delete_category'),
+    path('categories/', views.category_list, name='category_list'),
+    path('categories/add/', views.add_categories, name='add_categories'),
+    path('category/update/<int:category_id>/', views.update_category, name='update_category'),  # Correct parameter name
+    path('category/delete/<int:category_id>/', views.delete_category, name='delete_category'),
+    path('categories/<int:category_id>/courses/', views.view_category_courses, name='view_category_courses'),
 
     # # Quiz management
     # path('quizzes/', views.quiz_list, name='quiz_list'),
@@ -60,7 +71,6 @@ urlpatterns = [
     # path('users/permissions/', views.user_permissions, name='user_permissions'),
 
     # admin mangamenter
-    # path('admins/', views.admin_list, name='admin_list'),
     path('admin/view/', views.view_admins, name='view_admins'),
 
     # # System logs

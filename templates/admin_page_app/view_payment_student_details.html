@@ -1,0 +1,78 @@
+{% extends "admin_base.html" %}
+{% load static %}
+
+{% block wrapper %}
+<div class="wrapper">
+    {% include "admin_page_partials/left_sidebar.html" %}
+    <div class="content-page">
+        <div class="content">
+            {% include "admin_page_partials/topbar.html" %}
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box">
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="#">Skillup 24</a></li>
+                                    <li class="breadcrumb-item active">Payment Details</li>
+                                </ol>
+                            </div>
+                            <h4 class="page-title">Payment Details</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="header-title mb-4">Payment for {{ payment_details.course_name }}</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">Student Name</th>
+                                                <td>{{ payment_details.first_name }} {{ payment_details.middle_name }} {{ payment_details.last_name }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Course Name</th>
+                                                <td>{{ payment_details.course_name }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Expected Course Amount</th>
+                                                <td>{{ payment_details.expected_course_amount }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Discount (%)</th>
+                                                <td>{{ payment_details.discount }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Total Amount</th>
+                                                <td>{{ payment_details.total_amount }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Payment Date</th>
+                                                <td>{{ payment_details.payment_date|date:'d/m/Y' }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="text-end">
+                                    <a href="{% url 'admin_page_app:payment_list' %}" class="btn btn-secondary">Back to Payments</a>
+                                </div>
+                            </div> <!-- end card-body-->
+                        </div> <!-- end card-->
+                    </div> <!-- end col -->
+                </div> <!-- end row -->
+            </div> <!-- container -->
+        </div> <!-- content -->
+        {% include "admin_page_partials/footer.html" %}
+    </div> <!-- end content-page -->
+</div> <!-- end wrapper -->
+{% endblock %}
+
+{% block right_sidebar %}
+{% include "admin_page_partials/right_sidebar.html" %}
+
+
+{% endblock %}

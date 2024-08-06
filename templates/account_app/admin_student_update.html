@@ -28,8 +28,8 @@
                     <div class="col-xl-4 col-lg-5">
                         <div class="card text-center">
                             <div class="card-body">
-                                {% if profile_picture_url %}
-                                    <img src="{{ profile_picture_url }}" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
+                                {% if current_student_profile_picture_url %}
+                                    <img src="{{ current_student_profile_picture_url }}" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
                                 {% else %}
                                     <img src="{% static 'home_page_app/images/avatar-placeholder.jpg' %}" alt="Default Avatar" class="rounded-circle avatar-lg img-thumbnail">
                                 {% endif %}
@@ -63,144 +63,108 @@
                             </div> <!-- end card-body -->
                         </div> <!-- end card -->
                     </div> <!-- end col-->
-            
-                    <!-- Edit Profile and Enrolled Courses Section -->
+
+                    <!-- Edit Profile Section -->
                     <div class="col-xl-8 col-lg-7">
                         <div class="card">
                             <div class="card-body">
-                                <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">
-                                    <li class="nav-item">
-                                        <a href="#enrolled_courses" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0 active">
-                                            Enrolled Courses
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#edit_profile" data-bs-toggle="tab" aria-expanded="false" class="nav-link rounded-0">
-                                            Edit Profile
-                                        </a>
-                                    </li>
-                                </ul>
-            
-                                <div class="tab-content">
-                                    <!-- Enrolled Courses Section -->
-                                    <div class="tab-pane show active" id="enrolled_courses">
-                                        <h5 class="mb-3 text-uppercase">Enrolled Courses</h5>
-                                        <ul class="list-group">
-                                            {% for course in enrolled_courses %}
-                                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                    {{ course.course_name }}
-                                                    <span class="badge bg-primary rounded-pill">{{ course.category_name }}</span>
-                                                </li>
-                                            {% empty %}
-                                                <li class="list-group-item">No courses enrolled.</li>
-                                            {% endfor %}
-                                        </ul>
+                                <h5 class="mb-4 text-uppercase"><i class="mdi mdi-account-circle me-1"></i> Personal Info</h5>
+                                <form method="POST" enctype="multipart/form-data" id="studentProfileForm">
+                                    {% csrf_token %}
+                                    <div class="mb-3">
+                                        <label for="firstname" class="form-label">First Name</label>
+                                        <input type="text" class="form-control" id="firstname" name="first_name" placeholder="Enter first name" value="{{ student.first_name }}">
+                                        <div class="error-message text-danger" id="first_nameError" style="display: none; margin-top: 0.25rem;"></div>
                                     </div>
-            
-                                    <!-- Edit Profile Section -->
-                                    <div class="tab-pane" id="edit_profile">
-                                        <form id="editProfileForm" method="POST" enctype="multipart/form-data">
-                                            {% csrf_token %}
-                                            <h5 class="mb-4 text-uppercase"><i class="mdi mdi-account-circle me-1"></i> Personal Info</h5>
-                                            <div class="mb-3">
-                                                <label for="firstname" class="form-label">First Name</label>
-                                                <input type="text" class="form-control" id="firstname" name="first_name" placeholder="Enter first name" value="{{ student.first_name }}">
-                                                <div class="error-message text-danger" id="first_nameError" style="display: none;"></div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="middlename" class="form-label">Middle Name</label>
-                                                <input type="text" class="form-control" id="middlename" name="middle_name" placeholder="Enter middle name" value="{{ student.middle_name }}">
-                                                <div class="error-message text-danger" id="middle_nameError" style="display: none;"></div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="lastname" class="form-label">Last Name</label>
-                                                <input type="text" class="form-control" id="lastname" name="last_name" placeholder="Enter last name" value="{{ student.last_name }}">
-                                                <div class="error-message text-danger" id="last_nameError" style="display: none;"></div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="date_of_birth" class="form-label">Date of Birth</label>
-                                                <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ student.date_of_birth|date:'Y-m-d' }}">
-                                                <div class="error-message text-danger" id="date_of_birthError" style="display: none;"></div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="phone_number" class="form-label">Phone Number</label>
-                                                <input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="Enter phone number" value="{{ student.phone_number }}">
-                                                <div class="error-message text-danger" id="phone_numberError" style="display: none;"></div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="address" class="form-label">Address</label>
-                                                <input type="text" class="form-control" id="address" name="address" placeholder="Enter address" value="{{ student.address }}">
-                                                <div class="error-message text-danger" id="addressError" style="display: none;"></div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="major" class="form-label">Major</label>
-                                                <input type="text" class="form-control" id="major" name="major" placeholder="Enter major" value="{{ student.major }}">
-                                                <div class="error-message text-danger" id="majorError" style="display: none;"></div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="email" class="form-label">Email Address</label>
-                                                <input type="email" class="form-control" id="email" name="email_address" placeholder="Enter email" value="{{ student.email_address }}">
-                                                <div class="error-message text-danger" id="email_addressError" style="display: none;"></div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="bio" class="form-label">Bio</label>
-                                                <textarea class="form-control" id="bio" name="bio" rows="4" placeholder="Write something...">{{ profile.bio }}</textarea>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="profile_picture" class="form-label">Profile Picture</label>
-                                                <input type="file" name="profile_picture" class="form-control" accept="image/*">
-                                                {% if profile_picture_url %}
-                                                <img src="{{ profile_picture_url }}" height="100" alt="Current Profile Picture">
-                                                {% endif %}
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="cover_photo" class="form-label">Cover Photo</label>
-                                                <input type="file" name="cover_photo" class="form-control" accept="image/*">
-                                                {% if cover_photo_url %}
-                                                    <img src="{{ cover_photo_url }}" height="100" alt="Current Cover Photo">
-                                                {% endif %}
-                                            </div>
-                                            <!-- Social Media Section -->
-                                            <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-earth me-1"></i> Social Media</h5>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="mb-3">
-                                                        <label for="facebook" class="form-label">Facebook</label>
-                                                        <input type="url" class="form-control" id="facebook" name="facebook" placeholder="Facebook URL" value="{{ profile.facebook }}">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="mb-3">
-                                                        <label for="twitter" class="form-label">Twitter</label>
-                                                        <input type="url" class="form-control" id="twitter" name="twitter" placeholder="Twitter URL" value="{{ profile.twitter }}">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="mb-3">
-                                                        <label for="linkedIn" class="form-label">LinkedIn</label>
-                                                        <input type="url" class="form-control" id="linkedIn" name="linkedIn" placeholder="LinkedIn URL" value="{{ profile.linkedIn }}">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="mb-3">
-                                                        <label for="github" class="form-label">GitHub</label>
-                                                        <input type="url" class="form-control" id="github" name="github" placeholder="GitHub URL" value="{{ profile.github }}">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="text-end">
-                                                <button id="saveButton" class="btn btn-primary mt-2 btn-with-spinner" type="button">
-                                                    <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                                                    <span class="button-text"><i class="mdi mdi-content-save"></i> Save</span>
-                                                </button>
-                                            </div>
-                                            <div id="generalError" class="error-message text-danger" style="display: none;"></div>
-                                        </form>
+                                    <div class="mb-3">
+                                        <label for="middlename" class="form-label">Middle Name</label>
+                                        <input type="text" class="form-control" id="middlename" name="middle_name" placeholder="Enter middle name" value="{{ student.middle_name }}">
                                     </div>
-                                    <!-- end edit_profile content-->
-                                </div> <!-- end tab-content -->
+                                    <div class="mb-3">
+                                        <label for="lastname" class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" id="lastname" name="last_name" placeholder="Enter last name" value="{{ student.last_name }}">
+                                        <div class="error-message text-danger" id="last_nameError" style="display: none; margin-top: 0.25rem;"></div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="date_of_birth" class="form-label">Date of Birth</label>
+                                        <input type="date" id="date_of_birth" name="date_of_birth" class="form-control" value="{{ student.date_of_birth }}" required>
+                                        <div class="error-message text-danger" id="date_of_birthError" style="display: none; margin-top: 0.25rem;"></div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="phone_number" class="form-label">Phone Number</label>
+                                        <input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="Enter phone number" value="{{ student.phone_number }}">
+                                        <div class="error-message text-danger" id="phone_numberError" style="display: none; margin-top: 0.25rem;"></div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="address" class="form-label">Address</label>
+                                        <input type="text" class="form-control" id="address" name="address" placeholder="Enter address" value="{{ student.address }}">
+                                        <div class="error-message text-danger" id="addressError" style="display: none; margin-top: 0.25rem;"></div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="major" class="form-label">Major</label>
+                                        <input type="text" class="form-control" id="major" name="major" placeholder="Enter major" value="{{ student.major }}">
+                                        <div class="error-message text-danger" id="majorError" style="display: none; margin-top: 0.25rem;"></div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email Address</label>
+                                        <input type="email" class="form-control" id="email" name="email_address" placeholder="Enter email" value="{{ student.email_address }}">
+                                        <div class="error-message text-danger" id="email_addressError" style="display: none; margin-top: 0.25rem;"></div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="bio" class="form-label">Bio</label>
+                                        <textarea class="form-control" id="bio" name="bio" rows="4" placeholder="Write something...">{{ profile.bio }}</textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="profile_picture" class="form-label">Profile Picture</label>
+                                        <input type="file" name="profile_picture" class="form-control" accept="image/*">
+                                        {% if current_student_profile_picture_url %}
+                                        <img src="{{ current_student_profile_picture_url }}" height="100" alt="Current Profile Picture">
+                                        {% endif %}
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="cover_photo" class="form-label">Cover Photo</label>
+                                        <input type="file" name="cover_photo" class="form-control" accept="image/*">
+                                        {% if current_student_cover_photo_url %}
+                                            <img src="{{ current_student_cover_photo_url }}" height="100" alt="Current Cover Photo">
+                                        {% endif %}
+                                    </div>
+                                    <!-- Social Media Section -->
+                                    <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-earth me-1"></i> Social Media</h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="facebook" class="form-label">Facebook</label>
+                                                <input type="url" class="form-control" id="facebook" name="facebook" placeholder="Facebook URL" value="{{ profile.facebook }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="twitter" class="form-label">Twitter</label>
+                                                <input type="url" class="form-control" id="twitter" name="twitter" placeholder="Twitter URL" value="{{ profile.twitter }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="linkedIn" class="form-label">LinkedIn</label>
+                                                <input type="url" class="form-control" id="linkedIn" name="linkedIn" placeholder="LinkedIn URL" value="{{ profile.linkedIn }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="github" class="form-label">GitHub</label>
+                                                <input type="url" class="form-control" id="github" name="github" placeholder="GitHub URL" value="{{ profile.github }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-end">
+                                        <button class="btn btn-primary mt-2 btn-with-spinner" type="submit">
+                                            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                                            <i class="mdi mdi-content-save"></i><span class="button-text">Save</span>
+                                        </button>
+                                    </div>
+                                </form>
                             </div> <!-- end card-body -->
                         </div> <!-- end card -->
                     </div> <!-- end col -->
@@ -215,57 +179,114 @@
 
 {% block right_sidebar %}
 {% include "admin_page_partials/right_sidebar.html" %}
-
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const saveButton = document.getElementById('saveButton');
-        const form = document.getElementById('editProfileForm');
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById('studentProfileForm');
 
-        saveButton.addEventListener('click', function() {
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();  // Prevent the form from submitting normally
+
+            const submitButton = form.querySelector('button[type="submit"]');
+            if (!submitButton) {
+                return;
+            }
+
+            // Prevent duplicate submissions
+            if (submitButton.disabled) {
+                return;
+            }
+
+            handleButtonLoadingState(submitButton);
+
+            // Mark the button as disabled to prevent additional clicks
+            submitButton.disabled = true;
+
             const formData = new FormData(form);
 
             // Clear previous error messages
             document.querySelectorAll('.error-message').forEach(el => {
                 el.style.display = 'none';
-                el.textContent = '';
+                el.textContent = ''; // Clear the text content as well
             });
 
-            fetch("{% url 'account_app:update_student_and_profile_by_admin' student.id %}", {
+            // Send data using fetch API
+            fetch("{% url 'account_app:update_student_profile' student.id %}", {
                 method: 'POST',
                 body: formData,
                 headers: {
                     'X-CSRFToken': '{{ csrf_token }}',
-                    'X-Requested-With': 'XMLHttpRequest'  // Mark the request as AJAX
+                    'X-Requested-With': 'XMLHttpRequest' // Mark the request as AJAX
                 }
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    window.location.href = window.location.href; // Reload the current page to reflect changes
-                    // Optionally, redirect or update the UI
+                    // Handle success without alert
+                    window.location.href = window.location.href; // Reload the current page
                 } else {
+                    // Reset button if there was an error
+                    resetButtonLoadingState(submitButton);
+                    submitButton.disabled = false; // Re-enable button for correction and resubmission
                     // Show error messages
                     if (data.errors) {
                         for (let field in data.errors) {
                             const errorElement = document.getElementById(`${field}Error`);
                             if (errorElement) {
                                 errorElement.textContent = data.errors[field];
-                                errorElement.style.display = 'block';
+                                errorElement.style.display = 'block'; // Show the error message
                             }
                         }
                     } else if (data.error) {
-                        document.getElementById('generalError').textContent = data.error;
-                        document.getElementById('generalError').style.display = 'block';
+                        console.error(data.error); // Log the general error
                     }
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('An unexpected error occurred.');
+                // Reset button on catch error
+                resetButtonLoadingState(submitButton);
+                submitButton.disabled = false; // Re-enable button for retry
             });
+        });
+
+        // Existing functions to handle button loading state
+        function handleButtonLoadingState(button) {
+            const originalText = button.textContent.trim();
+            const loadingText = getLoadingText(originalText);
+
+            // Show spinner and update button text
+            const spinner = button.querySelector('.spinner-border');
+            if (spinner) {
+                spinner.classList.remove('d-none');
+            }
+            button.querySelector('.button-text').textContent = loadingText;
+        }
+
+        function resetButtonLoadingState(button) {
+            const originalText = button.dataset.originalText;
+            const spinner = button.querySelector('.spinner-border');
+
+            if (spinner) {
+                spinner.classList.add('d-none');
+            }
+            button.querySelector('.button-text').textContent = originalText;
+        }
+
+        function getLoadingText(originalText) {
+            if (originalText.endsWith('e')) {
+                return `${originalText.slice(0, -1)}ing...`;
+            } else if (originalText.endsWith('y')) {
+                return `${originalText.slice(0, -1)}ying...`;
+            }
+            return `${originalText}ing...`;
+        }
+
+        // Store original text for all buttons
+        const allButtons = document.querySelectorAll('button');
+        allButtons.forEach(button => {
+            button.dataset.originalText = button.textContent.trim();
         });
     });
 </script>
+
 {% endblock %}
-
-

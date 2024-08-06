@@ -1,0 +1,84 @@
+{% extends "admin_base.html" %}
+{% load static %}
+
+{% block wrapper %}
+<div class="wrapper">
+    {% include "admin_page_partials/left_sidebar.html" %}
+    <div class="content-page">
+        <div class="content">
+            {% include "admin_page_partials/topbar.html" %}
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box">
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Skillup 24</a></li>
+                                    <li class="breadcrumb-item"><a href="{% url 'admin_page_app:category_list' %}">View categories</a></li>
+                                    <li class="breadcrumb-item active">{{ category.name }} Courses</li>
+                                </ol>
+                            </div>
+                            <h4 class="page-title">Courses for {{ category.name }}</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <a href="{% url 'admin_page_app:category_list' %}" class="btn btn-dark mb-2">
+                                    {% comment %} back arrow {% endcomment %}
+                                    <i class="mdi mdi-arrow-left-circle me-1 mb-4"></i> Go Back
+                                </a>
+                                {% if courses %}
+                                <div class="table-responsive">
+                                    <table id="basic-datatable" class="table dt-responsive nowrap w-100">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Name</th>
+                                                <th>Description</th>
+                                                <th>Start Date</th>
+                                                <th>Course Amount</th>
+                                                <th>Instructor</th>
+                                                <th>Image</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for course in courses %}
+                                                <tr id="course-row-{{ course.id }}">
+                                                    <td>{{ course.id }}</td>
+                                                    <td>{{ course.name }}</td>
+                                                    <td>{{ course.description }}</td>
+                                                    <td>{{ course.start_date|date:"d/m/Y" }}</td>
+                                                    <td>{{ course.course_amount }}</td>
+                                                    <td>{{ course.first_name }} {{ course.last_name }}</td>
+                                                    <td>
+                                                        {% if course.image %}
+                                                            <img src="{{ MEDIA_URL }}{{ course.image }}" alt="{{ course.name }}" width="100">
+                                                        {% else %}
+                                                            No Image
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                {% else %}
+                                <p>No courses found for this category.</p>
+                                {% endif %}
+                            </div> <!-- end card-body-->
+                        </div> <!-- end card-->
+                    </div> <!-- end col -->
+                </div> <!-- end row -->
+            </div> <!-- container -->
+        </div> <!-- content -->
+        {% include "admin_page_partials/footer.html" %}
+    </div> <!-- end content-page -->
+</div> <!-- end wrapper -->
+{% endblock %}
+
+{% block right_sidebar %}
+{% include "admin_page_partials/right_sidebar.html" %}
+{% endblock %}

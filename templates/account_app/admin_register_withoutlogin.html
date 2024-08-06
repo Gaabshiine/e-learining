@@ -173,11 +173,26 @@
 {% include "admin_page_partials/footer_alt.html" %}
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         const form = document.getElementById('adminRegisterForm');
     
-        form.addEventListener('submit', function(event) {
+        form.addEventListener('submit', function (event) {
             event.preventDefault();  // Prevent the form from submitting normally
+
+            const submitButton = form.querySelector('button[type="submit"]');
+            if (!submitButton) {
+                return;
+            }
+
+            // Prevent duplicate submissions
+            if (submitButton.disabled) {
+                return;
+            }
+
+            handleButtonLoadingState(submitButton);
+
+            // Mark the button as disabled to prevent additional clicks
+            submitButton.disabled = true;
     
             const formData = new FormData(form);
     
@@ -202,6 +217,9 @@
                     // Redirect on success
                     window.location.href = data.redirect_url;
                 } else {
+                    // Reset button if there was an error
+                    resetButtonLoadingState(submitButton);
+                    submitButton.disabled = false; // Re-enable button for retry
                     // Show error messages
                     if (data.errors) {
                         for (let field in data.errors) {
@@ -220,9 +238,51 @@
             })
             .catch(error => {
                 console.error('Error:', error);
+                // Reset button on catch error
+                resetButtonLoadingState(submitButton);
+                submitButton.disabled = false; // Re-enable button for retry
             });
         });
-    });    
-    
+
+        // Function to handle button loading state
+        function handleButtonLoadingState(button) {
+            const originalText = button.textContent.trim();
+            const loadingText = getLoadingText(originalText);
+
+            // Show spinner and update button text
+            const spinner = button.querySelector('.spinner-border');
+            if (spinner) {
+                spinner.classList.remove('d-none');
+            }
+            button.querySelector('.button-text').textContent = loadingText;
+        }
+
+        // Function to reset button loading state
+        function resetButtonLoadingState(button) {
+            const originalText = button.dataset.originalText;
+            const spinner = button.querySelector('.spinner-border');
+
+            if (spinner) {
+                spinner.classList.add('d-none');
+            }
+            button.querySelector('.button-text').textContent = originalText;
+        }
+
+        // Function to derive the loading text based on the original text
+        function getLoadingText(originalText) {
+            if (originalText.endsWith('e')) {
+                return `${originalText.slice(0, -1)}ing...`;
+            } else if (originalText.endsWith('y')) {
+                return `${originalText.slice(0, -1)}ying...`;
+            }
+            return `${originalText}ing...`;
+        }
+
+        // Store original text for the button
+        const allButtons = document.querySelectorAll('button');
+        allButtons.forEach(button => {
+            button.dataset.originalText = button.textContent.trim();
+        });
+    });
 </script>
 {% endblock %}

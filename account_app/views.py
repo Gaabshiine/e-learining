@@ -10,6 +10,11 @@ from django.http import JsonResponse
 from datetime import datetime
 from django.utils.dateparse import parse_date
 from django.utils import timezone
+from django.db import transaction
+from django.db import IntegrityError
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 # Create your views here.
@@ -410,8 +415,8 @@ def admin_register_view(request):
         # If no errors, create the admin using raw SQL query
         hashed_password = hash_password(password)
         insert_query = """
-            INSERT INTO admins (first_name, middle_name, last_name, email_address, password, phone_number, gender, date_of_birth, address,is_admin,is_staff, created_at)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())
+            INSERT INTO admins (first_name, middle_name, last_name, email_address, password, phone_number, gender, date_of_birth, address, is_admin, is_staff, created_at)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())
         """
         params = [first_name, middle_name, last_name, email_address, hashed_password, phone_number, gender, date_of_birth, address, True, True]
 
@@ -422,8 +427,14 @@ def admin_register_view(request):
                 'success': True,
                 'redirect_url': reverse('admin_page_app:view_admins')  # Redirect to view admins page
             })
-        except IntegrityError:
+        except IntegrityError as e:
+            # Log the error for further analysis
+            print(f"IntegrityError: {e}")
             return JsonResponse({'success': False, 'error': 'An error occurred while registering the admin.'})
+        except Exception as e:
+            # Log unexpected errors
+            print(f"Unexpected error: {e}")
+            return JsonResponse({'success': False, 'error': 'An unexpected error occurred. Please try again.'})
 
     # If not a POST request, just render the registration page
     return render(request, 'account_app/admin_register.html')
@@ -668,7 +679,6 @@ def admin_login_view(request):
 
     return render(request, 'account_app/admin_login.html')
 
-
 # 2.2) Logout
 def logout_view(request):
     if 'admin_id' in request.session:
@@ -687,9 +697,12 @@ def logout_view(request):
 # -----------------------------------------------------> 3) Start: Student Profile Management <-----------------------------------------------------
 # 3.1) Update Student and Profile
 def update_student_and_profile_by_user(request):
+    
     student_id = request.session.get('student_id')
     if not student_id:
         return JsonResponse({'success': False, 'redirect_url': reverse('account_app:login')})
+    
+    # get date birth value by using this strftime('%Y-%m-%d')
 
     if request.method == 'POST':
         data, errors = update_user_data(request)
@@ -773,6 +786,10 @@ def update_student_and_profile_by_user(request):
 
     student = execute_query("SELECT * FROM students WHERE id = %s", [student_id], fetchone=True)
     profile = execute_query("SELECT * FROM profiles WHERE user_id = %s AND user_type = 'student'", [student_id], fetchone=True)
+
+    # Format date_of_birth for HTML date input
+    if student['date_of_birth']:
+        student['date_of_birth'] = student['date_of_birth'].strftime('%Y-%m-%d')
 
     profile_picture_url = os.path.join(settings.MEDIA_URL, profile['profile_picture']).replace('\\', '/') if profile and profile.get('profile_picture') else None
     cover_photo_url = os.path.join(settings.MEDIA_URL, profile['cover_photo']).replace('\\', '/') if profile and profile.get('cover_photo') else None
@@ -925,6 +942,10 @@ def update_student_and_profile_by_admin(request, student_id):
     if not student:
         return JsonResponse({'success': False, 'error': "Student not found."})
 
+    # Format the date_of_birth correctly if it exists
+    if student['date_of_birth']:
+        student['date_of_birth'] = student['date_of_birth'].strftime('%Y-%m-%d')
+
     # Fetch or create the student's profile
     profile_query = "SELECT * FROM profiles WHERE user_id = %s AND user_type = 'student'"
     profile = execute_query(profile_query, [student_id], fetchone=True)
@@ -1054,15 +1075,16 @@ def update_student_and_profile_by_admin(request, student_id):
     """
     enrolled_courses = execute_query(enrolled_courses_query, [student_id], fetchall=True)
 
-    profile_picture_url = os.path.join(settings.MEDIA_URL, profile['profile_picture']).replace('\\', '/') if profile and profile.get('profile_picture') else None
-    cover_photo_url = os.path.join(settings.MEDIA_URL, profile['cover_photo']).replace('\\', '/') if profile and profile.get('cover_photo') else None
+    # Prepare specific URLs for the current student
+    current_student_profile_picture_url = os.path.join(settings.MEDIA_URL, profile['profile_picture']).replace('\\', '/') if profile and profile.get('profile_picture') else None
+    current_student_cover_photo_url = os.path.join(settings.MEDIA_URL, profile['cover_photo']).replace('\\', '/') if profile and profile.get('cover_photo') else None
 
     return render(request, 'account_app/admin_student_update.html', {
         'student': student,
         'profile': profile,
         'enrolled_courses': enrolled_courses,
-        'profile_picture_url': profile_picture_url,
-        'cover_photo_url': cover_photo_url
+        'current_student_profile_picture_url': current_student_profile_picture_url,
+        'current_student_cover_photo_url': current_student_cover_photo_url
     })
 
 # 3.6) Update Instructor and Profile by Admin
@@ -1070,6 +1092,9 @@ def update_instructor_profile(request, instructor_id):
     # Fetch instructor data
     instructor_query = "SELECT * FROM instructors WHERE id = %s"
     instructor = execute_query(instructor_query, [instructor_id], fetchone=True)
+
+    if instructor['date_of_birth']:
+        instructor['date_of_birth'] = instructor['date_of_birth'].strftime('%Y-%m-%d')
 
     # Ensure the instructor exists
     if not instructor:
@@ -1193,21 +1218,26 @@ def update_instructor_profile(request, instructor_id):
         # Return success response
         return JsonResponse({'success': True})
 
-    profile_picture_url = os.path.join(settings.MEDIA_URL, profile['profile_picture']).replace('\\', '/') if profile and profile.get('profile_picture') else None
-    cover_photo_url = os.path.join(settings.MEDIA_URL, profile['cover_photo']).replace('\\', '/') if profile and profile.get('cover_photo') else None
+    # Prepare specific URLs for the current instructor
+    current_instructor_profile_picture_url = os.path.join(settings.MEDIA_URL, profile['profile_picture']).replace('\\', '/') if profile and profile.get('profile_picture') else None
+    current_instructor_cover_photo_url = os.path.join(settings.MEDIA_URL, profile['cover_photo']).replace('\\', '/') if profile and profile.get('cover_photo') else None
 
     return render(request, 'account_app/admin_instructor_update.html', {
         'instructor': instructor,
         'profile': profile,
-        'profile_picture_url': profile_picture_url,
-        'cover_photo_url': cover_photo_url
+        'current_instructor_profile_picture_url': current_instructor_profile_picture_url,
+        'current_instructor_cover_photo_url': current_instructor_cover_photo_url
     })
+
 
 # 3.7) update admin profile
 def update_admin_profile(request, admin_id):
-    # Fetch admin data
+    # Fetch admin data for the specific admin being updated
     admin_query = "SELECT * FROM admins WHERE id = %s"
     admin = execute_query(admin_query, [admin_id], fetchone=True)
+
+    if admin['date_of_birth']:
+        admin['date_of_birth'] = admin['date_of_birth'].strftime('%Y-%m-%d')
 
     # Ensure the admin exists
     if not admin:
@@ -1230,7 +1260,69 @@ def update_admin_profile(request, admin_id):
         data = request.POST
         errors = []
 
-        # Update admin details
+        # Validate input data
+        if not data.get('first_name'):
+            errors.append({'field': 'first_name', 'message': 'First name is required.'})
+        if not data.get('middle_name'):
+            errors.append({'field': 'middle_name', 'message': 'Middle name is required.'})
+        if not data.get('last_name'):
+            errors.append({'field': 'last_name', 'message': 'Last name is required.'})
+        if not data.get('phone_number'):
+            errors.append({'field': 'phone_number', 'message': 'Phone number is required.'})
+        if not data.get('address'):
+            errors.append({'field': 'address', 'message': 'Address is required.'})
+        if not data.get('email_address'):
+            errors.append({'field': 'email_address', 'message': 'Email address is required.'})
+
+        # Validate age
+        if data.get('date_of_birth'):
+            try:
+                dob = datetime.strptime(data['date_of_birth'], '%Y-%m-%d').date()
+                age = (timezone.now().date() - dob).days // 365
+                if age < 18:
+                    errors.append({'field': 'date_of_birth', 'message': 'Admin must be at least 18 years old.'})
+            except ValueError:
+                errors.append({'field': 'date_of_birth', 'message': 'Invalid date of birth format.'})
+
+        # Handle file paths and uploads
+        profile_data = {
+            'bio': data.get('bio', profile.get('bio', '')),
+            'facebook': data.get('facebook', profile.get('facebook', '')),
+            'twitter': data.get('twitter', profile.get('twitter', '')),
+            'linkedIn': data.get('linkedIn', profile.get('linkedIn', '')),
+            'github': data.get('github', profile.get('github', '')),
+        }
+
+        # Check for new profile picture
+        profile_picture = request.FILES.get('profile_picture')
+        if profile_picture:
+            profile_picture_path = os.path.join('admin_profile_images', f"{admin_id}_{profile_picture.name}")
+            profile_picture_full_path = os.path.join(settings.MEDIA_ROOT, profile_picture_path)
+            os.makedirs(os.path.dirname(profile_picture_full_path), exist_ok=True)
+            with open(profile_picture_full_path, 'wb+') as destination:
+                for chunk in profile_picture.chunks():
+                    destination.write(chunk)
+            profile_data['profile_picture'] = profile_picture_path
+        else:
+            profile_data['profile_picture'] = profile.get('profile_picture', '')
+
+        # Check for new cover photo
+        cover_photo = request.FILES.get('cover_photo')
+        if cover_photo:
+            cover_photo_path = os.path.join('admin_cover_images', f"{admin_id}_{cover_photo.name}")
+            cover_photo_full_path = os.path.join(settings.MEDIA_ROOT, cover_photo_path)
+            os.makedirs(os.path.dirname(cover_photo_full_path), exist_ok=True)
+            with open(cover_photo_full_path, 'wb+') as destination:
+                for chunk in cover_photo.chunks():
+                    destination.write(chunk)
+            profile_data['cover_photo'] = cover_photo_path
+        else:
+            profile_data['cover_photo'] = profile.get('cover_photo', '')
+
+        if errors:
+            return JsonResponse({'success': False, 'errors': errors})
+
+        # Update admin details in the database
         admin_update_query = """
             UPDATE admins
             SET first_name=%s, middle_name=%s, last_name=%s, date_of_birth=%s, phone_number=%s,
@@ -1248,69 +1340,9 @@ def update_admin_profile(request, admin_id):
             admin_id
         ]
 
-        # Validate input data
-        if not data['first_name']:
-            errors.append({'field': 'first_name', 'message': 'First name is required.'})
-        if not data['middle_name']:
-            errors.append({'field': 'middle_name', 'message': 'Middle name is required.'})
-        if not data['last_name']:
-            errors.append({'field': 'last_name', 'message': 'Last name is required.'})
-        if not data['phone_number']:
-            errors.append({'field': 'phone_number', 'message': 'Phone number is required.'})
-        if not data['address']:
-            errors.append({'field': 'address', 'message': 'Address is required.'})
-        if not data['email_address']:
-            errors.append({'field': 'email_address', 'message': 'Email address is required.'})
-
-        # Validate age
-        if data['date_of_birth']:
-            try:
-                dob = datetime.strptime(data['date_of_birth'], '%Y-%m-%d')
-                age = (datetime.now() - dob).days // 365
-                if age < 18:
-                    errors.append({'field': 'date_of_birth', 'message': 'Admin must be at least 18 years old.'})
-            except ValueError:
-                errors.append({'field': 'date_of_birth', 'message': 'Invalid date of birth format.'})
-
-        # Handle profile updates
-        profile_data = {
-            'bio': data.get('bio', profile['bio']),
-            'facebook': data.get('facebook', profile['facebook']),
-            'twitter': data.get('twitter', profile['twitter']),
-            'linkedIn': data.get('linkedIn', profile['linkedIn']),
-            'github': data.get('github', profile['github']),
-            'user_id': admin_id
-        }
-
-        # Check for new profile picture
-        profile_picture = request.FILES.get('profile_picture')
-        if profile_picture:
-            profile_picture_path = os.path.join('profile_images', profile_picture.name)
-            with open(os.path.join(settings.MEDIA_ROOT, profile_picture_path), 'wb+') as destination:
-                for chunk in profile_picture.chunks():
-                    destination.write(chunk)
-            profile_data['profile_picture'] = profile_picture_path
-        else:
-            profile_data['profile_picture'] = profile['profile_picture']
-
-        # Check for new cover photo
-        cover_photo = request.FILES.get('cover_photo')
-        if cover_photo:
-            cover_photo_path = os.path.join('cover_images', cover_photo.name)
-            with open(os.path.join(settings.MEDIA_ROOT, cover_photo_path), 'wb+') as destination:
-                for chunk in cover_photo.chunks():
-                    destination.write(chunk)
-            profile_data['cover_photo'] = cover_photo_path
-        else:
-            profile_data['cover_photo'] = profile['cover_photo']
-
-        if errors:
-            return JsonResponse({'success': False, 'errors': errors})
-
-        # Execute admin update query
         execute_query(admin_update_query, admin_params)
 
-        # Update profile details
+        # Update profile details in the database
         profile_update_query = """
             UPDATE profiles
             SET bio=%s, facebook=%s, twitter=%s, linkedIn=%s, github=%s,
@@ -1327,15 +1359,14 @@ def update_admin_profile(request, admin_id):
 
         return JsonResponse({'success': True, 'message': 'Admin profile updated successfully!'})
 
-    profile_picture_url = os.path.join(settings.MEDIA_URL, profile['profile_picture']).replace('\\', '/') if profile and profile.get('profile_picture') else None
-    cover_photo_url = os.path.join(settings.MEDIA_URL, profile['cover_photo']).replace('\\', '/') if profile and profile.get('cover_photo') else None
+    # Construct URLs for profile picture and cover photo for the specific admin being updated
+    current_admin_profile_picture_url = os.path.join(settings.MEDIA_URL, profile.get('profile_picture', '')).replace('\\', '/') if profile and profile.get('profile_picture') else None
+    current_admin_cover_photo_url = os.path.join(settings.MEDIA_URL, profile.get('cover_photo', '')).replace('\\', '/') if profile and profile.get('cover_photo') else None
 
     return render(request, 'account_app/admin_update_and_profile.html', {
         'admin': admin,
         'profile': profile,
-        'profile_picture_url': profile_picture_url,
-        'cover_photo_url': cover_photo_url
+        'current_admin_profile_picture_url': current_admin_profile_picture_url,
+        'current_admin_cover_photo_url': current_admin_cover_photo_url
     })
-
-
 # -----------------------------------------------------> End: Student Profile Management <-----------------------------------------------------

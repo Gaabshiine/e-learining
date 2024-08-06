@@ -2,6 +2,7 @@
 
 from django.db import models
 from account_app.models import Student, Instructor
+from django.utils import timezone
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -20,16 +21,33 @@ class Course(models.Model):
     description = models.TextField()
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='course_images/', blank=True, null=True)  # Added image field
+    course_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)  # Add course amount field
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+    
 
     def __str__(self):
         return self.name
 
     class Meta:
         db_table = 'courses'
+
+class Payment(models.Model):
+    expected_course_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    discount = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    payment_date = models.DateField(default=timezone.now)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Payment for {self.course.name} by {self.student.first_name}"
+    
+    class Meta:
+        db_table = 'payments'
 
 class Assignment(models.Model):
     name = models.CharField(max_length=100)
@@ -177,7 +195,8 @@ class Review(models.Model):
 class Lesson(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField()
-    video_url = models.CharField(max_length=255)
+    video_url = models.CharField(max_length=255, blank=True, null=True)
+    video_id = models.CharField(max_length=255, blank=True, null=True)  # Add field for Bunny.net video ID
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -193,6 +212,7 @@ class ActivationRequest(models.Model):
     status = models.CharField(max_length=20, choices=(('pending', 'Pending'), ('approved', 'Approved'), ('rejected', 'Rejected')), default='pending')
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         db_table = 'activation_requests'

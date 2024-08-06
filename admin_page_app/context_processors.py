@@ -18,7 +18,10 @@ def admin_context(request):
             profile_query = "SELECT * FROM profiles WHERE user_id = %s AND user_type = 'admin'"
             profile = execute_query(profile_query, [admin_user['id']], fetchone=True)
             if profile:
-                admin_profile_picture_url = os.path.join(settings.MEDIA_URL, profile['profile_picture']).replace('\\', '/') if profile.get('profile_picture') else None
+                # Check if profile picture exists before constructing URL
+                profile_picture = profile.get('profile_picture')
+                if profile_picture:
+                    admin_profile_picture_url = os.path.join(settings.MEDIA_URL, profile_picture).replace('\\', '/')
         
     return {
         'admin_user': admin_user,

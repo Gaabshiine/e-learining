@@ -24,7 +24,7 @@ class AuthenticationMiddleware:
         # Paths that require login
         login_required_paths = [
             reverse('account_app:update_student_and_profile_by_user'),
-            reverse('account_app:update_student_and_profile_by_admin', args=[0]),
+            reverse('account_app:update_student_profile', args=[0]),
             reverse('account_app:update_admin', args=[0]),
             reverse('account_app:update_instructor_profile', args=[0]),
             reverse('account_app:delete_student', args=[0]),

@@ -27,8 +27,8 @@
                     <div class="col-xl-4 col-lg-5">
                         <div class="card text-center">
                             <div class="card-body">
-                                {% if profile_picture_url %}
-                                    <img src="{{ profile_picture_url }}" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
+                                {% if current_admin_profile_picture_url %}
+                                    <img src="{{ current_admin_profile_picture_url }}" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
                                 {% else %}
                                     <img src="{% static 'home_page_app/images/avatar-placeholder.jpg' %}" alt="Default Avatar" class="rounded-circle avatar-lg img-thumbnail">
                                 {% endif %}
@@ -86,7 +86,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="date_of_birth" class="form-label">Date of Birth</label>
-                                        <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ admin.date_of_birth|date:'Y-m-d' }}">
+                                        <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ admin.date_of_birth }}">
                                         <div class="error-message text-danger" id="date_of_birthError" style="display: none;"></div>
                                     </div>
                                     <div class="mb-3">
@@ -111,15 +111,15 @@
                                     <div class="mb-3">
                                         <label for="profile_picture" class="form-label">Profile Picture</label>
                                         <input type="file" name="profile_picture" class="form-control" accept="image/*">
-                                        {% if profile_picture_url %}
-                                        <img src="{{ profile_picture_url }}" height="100" alt="Current Profile Picture">
+                                        {% if current_admin_profile_picture_url %}
+                                        <img src="{{ current_admin_profile_picture_url }}" height="100" alt="Current Profile Picture">
                                         {% endif %}
                                     </div>
                                     <div class="mb-3">
                                         <label for="cover_photo" class="form-label">Cover Photo</label>
                                         <input type="file" name="cover_photo" class="form-control" accept="image/*">
-                                        {% if cover_photo_url %}
-                                            <img src="{{ cover_photo_url }}" height="100" alt="Current Cover Photo">
+                                        {% if current_admin_cover_photo_url %}
+                                            <img src="{{ current_admin_cover_photo_url }}" height="100" alt="Current Cover Photo">
                                         {% endif %}
                                     </div>
                                     <!-- Social Media Section -->
@@ -173,13 +173,25 @@
 
 {% block right_sidebar %}
 {% include "admin_page_partials/right_sidebar.html" %}
-
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const saveButton = document.getElementById('saveButton');
         const form = document.getElementById('editAdminForm');
 
-        saveButton.addEventListener('click', function() {
+        saveButton.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the default form submission behavior
+
+            // Prevent duplicate submissions
+            if (saveButton.disabled) {
+                return;
+            }
+
+            // Handle button loading state
+            handleButtonLoadingState(saveButton);
+
+            // Disable the button to prevent additional clicks
+            saveButton.disabled = true;
+
             const formData = new FormData(form);
 
             // Clear previous error messages
@@ -188,7 +200,7 @@
                 el.textContent = '';
             });
 
-            fetch("{% url 'account_app:update_admin' admin_user.id %}", {
+            fetch("{% url 'account_app:update_admin' admin.id %}", {
                 method: 'POST',
                 body: formData,
                 headers: {
@@ -196,12 +208,20 @@
                     'X-Requested-With': 'XMLHttpRequest'  // Mark the request as AJAX
                 }
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.success) {
-                    window.location.href = window.location.href; // Reload the current page to reflect changes
-                    // Optionally, redirect or update the UI
+                    window.location.reload(); // Reload the current page to reflect changes
                 } else {
+                    // Reset button if there was an error
+                    resetButtonLoadingState(saveButton);
+                    saveButton.disabled = false; // Re-enable button for retry
+
                     // Show error messages
                     if (data.errors) {
                         data.errors.forEach(function(error) {
@@ -209,21 +229,67 @@
                             if (errorElement) {
                                 errorElement.textContent = error.message;
                                 errorElement.style.display = 'block';
+                            } else {
+                                console.warn(`No element found for error field: ${error.field}`);
                             }
                         });
                     } else if (data.error) {
-                        document.getElementById('generalError').textContent = data.error;
-                        document.getElementById('generalError').style.display = 'block';
+                        const generalErrorElement = document.getElementById('generalError');
+                        generalErrorElement.textContent = data.error;
+                        generalErrorElement.style.display = 'block';
                     }
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
                 alert('An unexpected error occurred.');
+
+                // Reset button on catch error
+                resetButtonLoadingState(saveButton);
+                saveButton.disabled = false; // Re-enable button for retry
             });
+        });
+
+        // Function to handle button loading state
+        function handleButtonLoadingState(button) {
+            const originalText = button.textContent.trim();
+            const loadingText = getLoadingText(originalText);
+
+            // Show spinner and update button text
+            const spinner = button.querySelector('.spinner-border');
+            if (spinner) {
+                spinner.classList.remove('d-none');
+            }
+            button.querySelector('.button-text').textContent = loadingText;
+        }
+
+        // Function to reset button loading state
+        function resetButtonLoadingState(button) {
+            const originalText = button.dataset.originalText;
+            const spinner = button.querySelector('.spinner-border');
+
+            if (spinner) {
+                spinner.classList.add('d-none');
+            }
+            button.querySelector('.button-text').textContent = originalText;
+        }
+
+        // Function to derive the loading text based on the original text
+        function getLoadingText(originalText) {
+            if (originalText.endsWith('e')) {
+                return `${originalText.slice(0, -1)}ing...`;
+            } else if (originalText.endsWith('y')) {
+                return `${originalText.slice(0, -1)}ying...`;
+            }
+            return `${originalText}ing...`;
+        }
+
+        // Store original text for the button
+        const allButtons = document.querySelectorAll('button');
+        allButtons.forEach(button => {
+            button.dataset.originalText = button.textContent.trim();
         });
     });
 </script>
+
 {% endblock %}
-
-
