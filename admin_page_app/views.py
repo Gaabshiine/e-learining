@@ -7,18 +7,82 @@ import os
 from django.urls import reverse
 from datetime import datetime
 from django.utils.dateparse import parse_date
-
-
+from django.utils import timezone
+from datetime import timedelta
 
 
 
 #--------------------------------- 1) Start: Admin Dashboard---------------------------------#
 # 1.1) Admin Dashboard
+def get_percentage_change(current, previous):
+    if previous == 0:
+        return 0
+    return ((current - previous) / previous) * 100
+
 def dashboard(request):
+    # Fetching data for dashboard
+    # Total counts
+    total_students_query = "SELECT COUNT(*) AS total FROM students"
+    total_instructors_query = "SELECT COUNT(*) AS total FROM instructors"
+    total_courses_query = "SELECT COUNT(*) AS total FROM courses"
+    total_enrollments_query = "SELECT COUNT(*) AS total FROM enrollments"
+    total_revenue_query = "SELECT SUM(total_amount) AS total FROM payments"
+
+    # Activation requests
+    pending_activation_requests_query = "SELECT COUNT(*) AS total FROM activation_requests WHERE status = 'pending'"
+    approved_activation_requests_query = "SELECT COUNT(*) AS total FROM activation_requests WHERE status = 'approved'"
+
+    # Get current and previous month data
+    today = datetime.today()
+    first_day_of_current_month = today.replace(day=1)
+    first_day_of_previous_month = (first_day_of_current_month - timedelta(days=1)).replace(day=1)
+    last_day_of_previous_month = first_day_of_current_month - timedelta(days=1)
+
+    current_month_payments_query = """
+        SELECT SUM(total_amount) AS total FROM payments
+        WHERE payment_date >= %s AND payment_date < %s
     """
-    View for the admin dashboard. Retrieves admin profile and passes it to the template.
+    previous_month_payments_query = """
+        SELECT SUM(total_amount) AS total FROM payments
+        WHERE payment_date >= %s AND payment_date <= %s
     """
-    return render(request, 'admin_page_app/admin_dashboard.html')
+
+    # Execute queries
+    total_students = execute_query(total_students_query, [], fetchone=True)['total']
+    total_instructors = execute_query(total_instructors_query, [], fetchone=True)['total']
+    total_courses = execute_query(total_courses_query, [], fetchone=True)['total']
+    total_enrollments = execute_query(total_enrollments_query, [], fetchone=True)['total']
+    total_revenue = execute_query(total_revenue_query, [], fetchone=True)['total'] or 0.0
+
+    pending_activation_requests = execute_query(pending_activation_requests_query, [], fetchone=True)['total']
+    approved_activation_requests = execute_query(approved_activation_requests_query, [], fetchone=True)['total']
+
+    current_month_revenue = execute_query(current_month_payments_query, [first_day_of_current_month, today], fetchone=True)['total'] or 0.0
+    previous_month_revenue = execute_query(previous_month_payments_query, [first_day_of_previous_month, last_day_of_previous_month], fetchone=True)['total'] or 0.0
+
+    # Calculate percentage changes
+    student_percentage_change = get_percentage_change(total_students, total_students - pending_activation_requests)
+    instructor_percentage_change = get_percentage_change(total_instructors, total_instructors - approved_activation_requests)
+    course_percentage_change = get_percentage_change(total_courses, total_courses)  # Assuming no previous month data
+    enrollment_percentage_change = get_percentage_change(total_enrollments, total_enrollments - pending_activation_requests)
+    revenue_percentage_change = get_percentage_change(current_month_revenue, previous_month_revenue)
+
+    context = {
+        'dashboard_total_students': total_students,
+        'student_percentage_change': student_percentage_change,
+        'dashboard_total_instructors': total_instructors,
+        'instructor_percentage_change': instructor_percentage_change,
+        'dashboard_total_courses': total_courses,
+        'course_percentage_change': course_percentage_change,
+        'dashboard_total_enrollments': total_enrollments,
+        'enrollment_percentage_change': enrollment_percentage_change,
+        'dashboard_total_revenue': total_revenue,
+        'revenue_percentage_change': revenue_percentage_change,
+        'dashboard_pending_activation_requests': pending_activation_requests,
+        'dashboard_approved_activation_requests': approved_activation_requests,
+    }
+
+    return render(request, 'admin_page_app/admin_dashboard.html', context)
 
 #--------------------------------- End: Admin Dashboard---------------------------------#
 
