@@ -5,7 +5,7 @@ app_name = "admin_page_app"
 
 urlpatterns = [
     # Dashboard
-    path('dashboard/', views.dashboard, name='dashboard'),
+    path('', views.dashboard, name='dashboard'),
 
     # # Course management
     path('courses/', views.course_list, name='course_list'),
@@ -33,8 +33,9 @@ urlpatterns = [
     path('lessons/add/', views.add_lessons, name='add_lessons'),
     path('lessons/update/<int:lesson_id>/', views.update_lesson, name='update_lesson'),
     path('lessons/delete/<int:lesson_id>/', views.delete_lesson, name='delete_lesson'),
-    path('lessons/', views.list_lessons, name='list_lessons'),
+    path('lessons/', views.lesson_list, name='list_lessons'),
     path('courses/<int:course_id>/lessons/', views.view_course_lessons, name='view_course_lessons'),
+    path('lessons/<uuid:video_id>/', views.view_video, name='view_video'),
 
     # # Reports
     # path('reports/enrollment/', views.enrollment_report, name='enrollment_report'),

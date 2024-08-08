@@ -21,57 +21,61 @@ def execute_query(query, params=None, fetchone=False, fetchall=False):
         connection.commit()
 
 
-class BunnyCDNStorage:
+class BunnyStreamClient:
     def __init__(self):
-        self.api_key = settings.BUNNY_CDN_ACCESS_KEY
-        self.storage_zone = settings.BUNNY_CDN_STORAGE_ZONE_NAME
-        self.pull_zone = settings.BUNNY_CDN_PULL_ZONE
-        self.base_url = settings.BUNNY_CDN_BASE_URL
+        self.api_key = settings.BUNNY_STREAM_API_KEY
+        self.library_id = settings.BUNNY_STREAM_LIBRARY_ID
+        self.base_url = f'https://video.bunnycdn.com/library/{self.library_id}'
         self.headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
             'AccessKey': self.api_key,
-            'Content-Type': 'application/octet-stream',
-            'Accept': 'application/json'
         }
 
-    def create_session_with_retries(self):
-        session = requests.Session()
-        retry_strategy = Retry(
-            total=5,
-            status_forcelist=[429, 500, 502, 503, 504],
-            allowed_methods=["HEAD", "GET", "OPTIONS", "POST", "PUT"],
-            backoff_factor=1
-        )
-        adapter = HTTPAdapter(max_retries=retry_strategy)
-        session.mount("https://", adapter)
-        session.mount("http://", adapter)
-        return session
-
-    def upload_file(self, storage_path, file_content, file_name):
-        try:
-            # Create a session with retry strategy
-            session = self.create_session_with_retries()
-
-            # Construct the full storage URL
-            storage_url = f'{self.base_url}{storage_path}/{file_name}'
-            response = session.put(storage_url, data=file_content, headers=self.headers)
-            response.raise_for_status()
-
-            # Construct the CDN URL to access the uploaded file
-            cdn_url = f'https://{self.pull_zone}.b-cdn.net/{storage_path}/{file_name}'
-            return cdn_url
-        except Exception as error:
-            raise Exception(f"Failed to upload video: {error}")
-        
-    
-    def delete_object(self, file_path):
+    def upload_video(self, collection, video_path, video_title):
         """
-        Deletes an object (file) from BunnyCDN at the specified file path.
+        Upload a video to Bunny.net Stream.
+        :param collection: Collection name where video will be stored.
+        :param video_path: Path to the video file on the local machine.
+        :param video_title: Title of the video to be uploaded.
+        :return: Response containing video ID and other details.
         """
-        try:
-            session = self.create_session_with_retries()
-            url = f"{self.base_url}{file_path}"
-            response = session.delete(url, headers=self.headers)
-            response.raise_for_status()
+        # Read video file
+        with open(video_path, 'rb') as video_file:
+            # Prepare upload URL
+            url = f'{self.base_url}/videos'
+            data = {
+                'title': video_title,
+                'collection': collection,
+            }
+            files = {
+                'file': video_file
+            }
+            
+            # Send POST request to upload the video
+            response = requests.post(url, headers=self.headers, data=data, files=files)
+            if response.status_code == 201:
+                return response.json()
+            else:
+                raise Exception(f"Failed to upload video: {response.content}")
+
+    def get_video_url(self, video_id):
+        """
+        Get the playable video URL.
+        :param video_id: Video ID from Bunny.net.
+        :return: Playable video URL.
+        """
+        return f"https://iframe.mediadelivery.net/play/{self.library_id}/{video_id}"
+
+    def delete_video(self, video_id):
+        """
+        Delete a video from Bunny.net Stream.
+        :param video_id: Video ID from Bunny.net.
+        :return: Status of the deletion request.
+        """
+        url = f'{self.base_url}/videos/{video_id}'
+        response = requests.delete(url, headers=self.headers)
+        if response.status_code == 204:
             return True
-        except Exception as error:
-            raise Exception(f"Failed to delete object: {error}")
+        else:
+            raise Exception(f"Failed to delete video: {response.content}")

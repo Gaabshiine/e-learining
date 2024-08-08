@@ -10,7 +10,6 @@ from django.http import JsonResponse
 from datetime import datetime
 from django.utils.dateparse import parse_date
 from django.utils import timezone
-from django.db import transaction
 from django.db import IntegrityError
 import logging
 
@@ -645,7 +644,7 @@ def login_view(request):
 
     return render(request, 'account_app/another_login_page.html')
 
-    
+
 def admin_login_view(request):
     if request.method == 'POST':
         email_address = request.POST.get('email_address')
@@ -679,14 +678,21 @@ def admin_login_view(request):
 
     return render(request, 'account_app/admin_login.html')
 
-# 2.2) Logout
-def logout_view(request):
-    if 'admin_id' in request.session:
-        del request.session['admin_id']
-        return redirect('account_app:admin_login')
-    else:
-        request.session.flush()
-        return redirect('home_page_app:home')
+# 2.2) admin_logout
+def admin_logout_view(request):
+    # Clear the session
+    request.session.clear()
+    return redirect('account_app:admin_login')
+
+
+# 2.3) student_logout
+def student_logout_view(request):
+    # Clear the session
+    request.session.clear()
+    return redirect('account_app:login')
+
+   
+
 
 # -----------------------------------------------------> End: Login Management <-----------------------------------------------------
 

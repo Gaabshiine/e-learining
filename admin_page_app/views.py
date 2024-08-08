@@ -1,14 +1,14 @@
 from django.shortcuts import render
 from django.shortcuts import render, redirect
-from .utils import execute_query, BunnyCDNStorage
+from .utils import BunnyStreamClient, execute_query
 from django.http import JsonResponse
 from django.conf import settings
 import os
 from django.urls import reverse
 from datetime import datetime
 from django.utils.dateparse import parse_date
-from django.utils import timezone
 from datetime import timedelta
+from django.http import Http404
 
 
 
@@ -157,18 +157,17 @@ def payment_list(request):
 # 2.7) View all lessons
 # admin_page_app/views.py
 
-def list_lessons(request):
-    # Fetch all lessons with their course and category information
+def lesson_list(request):
+    # Fetch lessons with related course and category information
     lessons = execute_query("""
-        SELECT l.id, l.title, l.content, l.video_url, l.created_at, 
-               c.name AS course_name, cat.name AS category_name
+        SELECT l.id, l.title, l.content, l.video_url, l.course_id, c.name as course_name, cat.name as category_name
         FROM lessons l
         JOIN courses c ON l.course_id = c.id
         JOIN categories cat ON c.category_id = cat.id
     """, [], fetchall=True)
 
+    # Render lessons list template
     return render(request, 'admin_page_app/view_lessons.html', {'lessons': lessons})
-
 
 """
 Objective:
@@ -297,27 +296,34 @@ def view_category_courses(request, category_id):
     })
 
 def view_course_lessons(request, course_id):
-    # Fetch the course details using a raw SQL query
-    course = execute_query("SELECT * FROM courses WHERE id = %s", [course_id], fetchone=True)
-
-    if not course:
-        # Return a 404 error if the course does not exist
-        return render(request, '404.html', status=404)
-
-    # Fetch lessons related to the course using a raw SQL query
     lessons = execute_query("""
-        SELECT l.id, l.title, l.content, l.video_url, l.created_at
+        SELECT l.id, l.title, l.content, l.video_url, c.name as course_name, cat.name as category_name
         FROM lessons l
+        JOIN courses c ON l.course_id = c.id
+        JOIN categories cat ON c.category_id = cat.id
         WHERE l.course_id = %s
     """, [course_id], fetchall=True)
 
-    context = {
-        'course': course,
-        'lessons': lessons
-    }
+    return render(request, 'admin_page_app/view_course_lessons.html', {'lessons': lessons})
 
-    return render(request, 'admin_page_app/view_course_lessons.html', context)
+def view_video(request, video_id):
+    # Fetch the lesson along with course and category details
+    lesson = execute_query("""
+        SELECT l.id, l.title, l.content, l.video_url, l.video_id, l.created_at,
+               c.id as course_id, c.name as course_name, cat.name as category_name
+        FROM lessons l
+        JOIN courses c ON l.course_id = c.id
+        JOIN categories cat ON c.category_id = cat.id
+        WHERE l.video_url = %s
+    """, [str(video_id)], fetchone=True)
 
+    if not lesson:
+        raise Http404("Lesson not found")
+
+    # Construct the video URL
+    video_url = f"https://iframe.mediadelivery.net/play/{settings.BUNNY_STREAM_LIBRARY_ID}/{video_id}"
+
+    return render(request, 'admin_page_app/view_video.html', {'lesson': lesson, 'video_url': video_url})
 
 #--------------------------------- End: views and details all about the system ---------------------------------#
 
@@ -549,7 +555,6 @@ def add_payment(request):
 
 # 3.4) Add a new lesson
 def add_lessons(request):
-    # Fetch courses along with their category names
     courses = execute_query("""
         SELECT c.id, c.name AS course_name, cat.name AS category_name
         FROM courses c
@@ -557,63 +562,37 @@ def add_lessons(request):
     """, [], fetchall=True)
 
     if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        number_of_lessons = int(request.POST.get('number_of_lessons', '0'))
+        title = request.POST.get('title', '').strip()
+        content = request.POST.get('content', '').strip()
         course_id = request.POST.get('course', '').strip()
-        errors = {}
-        success = True
+        video_url = request.POST.get('video_url', '').strip()
 
         # Validate inputs
+        errors = {}
+        if not title:
+            errors['title'] = 'Title is required.'
+        if not content:
+            errors['content'] = 'Content is required.'
         if not course_id:
             errors['course'] = 'Course is required.'
-            success = False
+        if not video_url:
+            errors['video_url'] = 'Video URL is required.'
 
-        for i in range(number_of_lessons):
-            title = request.POST.get(f'title_{i}', '').strip()
-            content = request.POST.get(f'content_{i}', '').strip()
-            video_file = request.FILES.get(f'video_file_{i}')
-
-            if not title:
-                errors[f'title_{i}'] = 'Title is required.'
-                success = False
-            if not content:
-                errors[f'content_{i}'] = 'Content is required.'
-                success = False
-
-            video_url = None
-            if video_file:
-                try:
-                    # Upload video to BunnyCDN
-                    bunny_client = BunnyCDNStorage()
-
-                    # Find the course and its category for the storage path
-                    course = next((c for c in courses if str(c['id']) == course_id), None)
-                    if course:
-                        category_name = course['category_name'].replace(" ", "_")
-                        course_name = course['course_name'].replace(" ", "_")
-                        storage_path = f"{settings.BUNNY_CDN_STORAGE_ZONE_NAME}/{category_name}/{course_name}/"
-
-                        video_url = bunny_client.upload_file(storage_path, video_file, video_file.name)
-                except Exception as e:
-                    errors[f'video_file_{i}'] = f'Error uploading video: {str(e)}'
-                    success = False
-
-            if success:
-                # Insert lesson into the database
-                query = """
-                    INSERT INTO lessons (title, content, course_id, video_url, created_at)
-                    VALUES (%s, %s, %s, %s, NOW())
-                """
-                params = [title, content, course_id, video_url]
-                execute_query(query, params)
-
-        if success:
-            return JsonResponse({
-                'success': True,
-                'message': 'Lessons added successfully!',
-                'redirect_url': reverse('admin_page_app:list_lessons')
-            })
-        else:
+        if errors:
             return JsonResponse({'success': False, 'errors': errors})
+
+        # Assume video_url is directly taken as input now
+        video_id = video_url.split('/')[-1]  # Extract the video ID from URL
+
+        # Insert the lesson into the database
+        query = """
+            INSERT INTO lessons (title, content, course_id, video_url, created_at)
+            VALUES (%s, %s, %s, %s, NOW())
+        """
+        params = [title, content, course_id, video_id]
+        execute_query(query, params)
+
+        return JsonResponse({'success': True, 'redirect_url': reverse('admin_page_app:list_lessons')})
 
     return render(request, 'admin_page_app/admin_lesson_register.html', {'courses': courses})
 
@@ -816,21 +795,31 @@ def update_payment(request, payment_id):
 
 # 4.4) Update a lesson
 def update_lesson(request, lesson_id):
-    lesson = execute_query("SELECT * FROM lessons WHERE id = %s", [lesson_id], fetchone=True)
+    # Fetch the lesson details along with course and category names
+    lesson = execute_query("""
+        SELECT l.id, l.title, l.content, l.video_url, l.video_id, l.created_at,
+               c.id as course_id, c.name as course_name, cat.name as category_name
+        FROM lessons l
+        JOIN courses c ON l.course_id = c.id
+        JOIN categories cat ON c.category_id = cat.id
+        WHERE l.id = %s
+    """, [lesson_id], fetchone=True)
+
+    if not lesson:
+        raise Http404("Lesson not found")
+
+    # Fetch courses for dropdown
     courses = execute_query("""
         SELECT c.id, c.name AS course_name, cat.name AS category_name
         FROM courses c
         JOIN categories cat ON c.category_id = cat.id
     """, [], fetchall=True)
 
-    if not lesson:
-        return JsonResponse({'success': False, 'error': 'Lesson not found.'})
-
     if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         title = request.POST.get('title', '').strip()
         content = request.POST.get('content', '').strip()
         course_id = request.POST.get('course', '').strip()
-        video_file = request.FILES.get('video_file')
+        video_url = request.POST.get('video_url', '').strip()
 
         # Validate inputs
         errors = {}
@@ -840,29 +829,11 @@ def update_lesson(request, lesson_id):
             errors['content'] = 'Content is required.'
         if not course_id:
             errors['course'] = 'Course is required.'
+        if not video_url:
+            errors['video_url'] = 'Video URL is required.'
 
         if errors:
             return JsonResponse({'success': False, 'errors': errors})
-
-        # Handle video update
-        video_url = lesson['video_url']
-        if video_file:
-            bunny_client = BunnyCDNStorage()
-
-            # Delete the old video if it exists
-            if video_url:
-                video_file_path = video_url.split(f"{settings.BUNNY_CDN_HOSTNAME}/")[-1]
-                bunny_client.delete_object(video_file_path)
-
-            # Find the course and its category for the storage path
-            course = next((c for c in courses if str(c['id']) == course_id), None)
-            if course:
-                category_name = course['category_name'].replace(" ", "_")
-                course_name = course['course_name'].replace(" ", "_")
-                storage_path = f"{settings.BUNNY_CDN_STORAGE_ZONE_NAME}/{category_name}/{course_name}/"
-
-                # Upload the new video file
-                video_url = bunny_client.upload_file(storage_path, video_file, video_file.name)
 
         # Update the lesson in the database
         query = """
@@ -876,8 +847,6 @@ def update_lesson(request, lesson_id):
         return JsonResponse({'success': True, 'redirect_url': reverse('admin_page_app:list_lessons')})
 
     return render(request, 'admin_page_app/admin_lesson_update.html', {'lesson': lesson, 'courses': courses})
-
-
 
 #--------------------------------- End: update views record from the system ---------------------------------#
 
@@ -921,28 +890,12 @@ def delete_payment(request, payment_id):
 
 # 5.4) Delete a lesson
 def delete_lesson(request, lesson_id):
-    if request.method == 'POST':
-        # Fetch the lesson from the database
-        lesson = execute_query("SELECT * FROM lessons WHERE id = %s", [lesson_id], fetchone=True)
+    if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        # Delete the lesson from the database
+        query = "DELETE FROM lessons WHERE id = %s"
+        execute_query(query, [lesson_id])
 
-        if lesson:
-            # Delete video from BunnyCDN if it exists
-            if lesson['video_url']:
-                # Extract storage path and file name from video URL
-                video_file_path = lesson['video_url'].replace(f'https://{settings.BUNNY_CDN_HOSTNAME}/', '')
-                
-                try:
-                    bunny_client = BunnyCDNStorage()
-                    bunny_client.delete_object(video_file_path)
-                except Exception as error:
-                    return JsonResponse({'success': False, 'error': f"Error deleting video: {error}"})
-
-            # Delete the lesson from the database
-            execute_query("DELETE FROM lessons WHERE id = %s", [lesson_id])
-
-            return JsonResponse({'success': True, 'message': 'Lesson deleted successfully.'})
-        else:
-            return JsonResponse({'success': False, 'error': 'Lesson not found.'})
+        return JsonResponse({'success': True})
 
     return JsonResponse({'success': False, 'error': 'Invalid request method.'})
 

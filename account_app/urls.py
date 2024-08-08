@@ -8,8 +8,9 @@ app_name = "account_app"
 urlpatterns = [
     
     path('login/', views.login_view, name='login'),
-    path('logout/', views.logout_view, name='logout'),
     path('admin/login/', views.admin_login_view, name='admin_login'),
+    path('admin/logout/', views.admin_logout_view, name='admin_logout'),
+    path('student/logout/', views.student_logout_view, name='logout'),
     
 
     # registration urls

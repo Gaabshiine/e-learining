@@ -26,7 +26,9 @@ class AdminAccessMiddleware:
         if request.path in admin_public_paths:
             return self.get_response(request)
 
-        # Restrict access to the admin dashboard if not logged in
+        # Restrict access to the admin dashboard if not logged in as an admin it starts for admin_page every next path
+        
+
         if request.path.startswith('/admin_page/'):
             if not request.session.get('admin_id'):
                 return redirect(reverse('account_app:admin_login'))
